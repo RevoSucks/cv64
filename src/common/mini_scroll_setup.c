@@ -9,6 +9,7 @@
  */
 
 #include "objects/menu/miniScroll.h"
+#include "game/gfx/model.h"
 
 miniScroll* miniScroll_create(void* parent, Camera* camera, s32 param_3, s32 param_4) {
     miniScroll* obj_mini_scroll;

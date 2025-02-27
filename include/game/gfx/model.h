@@ -7,21 +7,7 @@
 #include "math.h"
 #include "nisitenma_ichigo.h"
 #include "objects/menu/miniScroll.h"
-#include "objects/menu/mfds.h"
 #include <ultra64.h>
-
-/**
- * This is used sometimes to store variables related to the
- * usage of a mini scroll
- */
-typedef struct MiniScrollParameters {
-    s32 state;
-    s32 after_quit_state; // Where to go (for example, what menu) after the scroll is destroyed
-    u32 scroll_init_delay_timer;
-    struct miniScroll* scroll;
-    struct MfdsState* textbox;
-    u8 field_0x14[44];
-} MiniScrollParameters;
 
 typedef struct Model {
     s16 type;

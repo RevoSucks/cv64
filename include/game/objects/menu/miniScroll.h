@@ -2,9 +2,12 @@
 #define MINI_SCROLL_H
 
 #include "object.h"
-#include "gfx/model.h"
 #include "gfx/camera.h"
 #include "gfx/graphic_container.h"
+
+// Forward declarations to avoid recursive includes
+struct Model;
+struct MfdsState;
 
 typedef enum miniScrollFlags {
     MINISCROLL_FLAG_DESTROY_IF_CLOSED = BIT(24),
@@ -57,6 +60,19 @@ typedef struct miniScroll {
     miniScrollVertexBuffer* vtx_buffer;
     miniScrollInner inner;
 } miniScroll;
+
+/**
+ * This is used sometimes to store variables related to the
+ * usage of a mini scroll
+ */
+typedef struct MiniScrollParameters {
+    s32 state;
+    s32 after_quit_state; // Where to go (for example, what menu) after the scroll is destroyed
+    u32 scroll_init_delay_timer;
+    miniScroll* scroll;
+    struct MfdsState* textbox;
+    u8 field_0x14[44];
+} MiniScrollParameters;
 
 miniScroll* miniScroll_create(void* parent, Camera* camera, s32 param_3, s32 param_4);
 u32 miniScroll_checkFlags(miniScroll* self, u32 flags);
