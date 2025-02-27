@@ -35,21 +35,23 @@ typedef enum ActorConfigSpawnSettings {
      */
     SPAWN_WITHOUT_CONDITIONS = 0x01,
     /**
-     * If set, an actor will become "spawnable only once" when flag `SPAWN_ONLY_ONCE` from `ActorConfigSpawnFlags`
-     * is set
+     * If set, an actor will become "spawnable only once" when flag `SPAWN_ONLY_ONCE` from
+     * `ActorConfigSpawnFlags` is set
      */
     ALLOW_SPAWN_ONLY_ONCE_MANUALLY = 0x02,
     /**
-     * If set, everytime an actor is requested to be spawned, it will alternate between being able to spawn and not
-     * in a repeated cycle.
+     * If set, everytime an actor is requested to be spawned, it will alternate between being able
+     * to spawn and not in a repeated cycle.
      *
      * For example, if an actor spawns and then it despawns, the actor won't spawn that second time.
-     * However, if you attempt to spawn it once more, it will despawn. And so on repeating the cycle.
+     * However, if you attempt to spawn it once more, it will despawn. And so on repeating the
+     * cycle.
      *
      * @note For actors *not* part of rooms, this behaviour is slightly bugged.
-     * The bug makes the game only able to despawn the actor if the player first enters its spawn radius for a single frame.
-     * The game checks if new actors should spawn everytime the player moves, so if the player moves for at least one more frame,
-     * the actor in question will spawn again.
+     * The bug makes the game only able to despawn the actor if the player first enters its spawn
+     * radius for a single frame. The game checks if new actors should spawn everytime the player
+     * moves, so if the player moves for at least one more frame, the actor in question will spawn
+     * again.
      */
     ENABLE_ALTERNATE_BETWEEN_SPAWN_AND_DESPAWN = 0x04,
     /**
