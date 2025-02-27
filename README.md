@@ -203,4 +203,4 @@ or when instructions are placed in a different order than the target assembly.
 
 [mise]: https://github.com/jdx/mise
 [research-spreadsheets]: https://docs.google.com/spreadsheets/d/1nzh_nFf26oVZy6uWeNYiYGXAto6Yz3xypZwWqwJBBJQ/edit#gid=74717405
-[lzkn64]: https://github.com/fluvian/lzkn64
+[lzkn64]: https://github.com/k64ret/k64-rom-decompressors
