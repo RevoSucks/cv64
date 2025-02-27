@@ -19,7 +19,7 @@ void func_80019BE4_1A7E4(s32, s32, s32, s32);
 void func_80019BF8_1A7F8();
 void processMeter_updateTiming(OSMesgQueue*);
 void processMeter_setSizeDivisor(f32 size_divisor);
-void processMeter_update(s32 state);
+void processMeter_update(DebugProcessMeterState state);
 void processMeter_render(Gfx** dlist);
 void processMeter_renderDivisions(Gfx** dlist, f32 division_width);
 void processMeter_renderBar(Gfx** dlist, u32 color, f32 bar_size, s32 row);

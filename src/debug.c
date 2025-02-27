@@ -82,7 +82,7 @@ void processMeter_setSizeDivisor(f32 size_divisor) {
  *
  * See the `DebugProcessMeterState` enum for all possible values.
  */
-void processMeter_update(s32 state) {
+void processMeter_update(DebugProcessMeterState state) {
     switch (state) {
         case START_GREEN_BAR:
             processMeter_greenBar_beginTime = osGetTime();
