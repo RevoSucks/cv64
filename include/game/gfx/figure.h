@@ -8,6 +8,7 @@
 #define FIGURE_H
 
 #include <ultra64.h>
+#include "cv64.h"
 
 #define FIG_SIZE      0xA8
 #define FIG_ARRAY_MAX 512
@@ -33,17 +34,19 @@
 #define FIG_TYPE_DATA                 0x8000 // Used for the `data` fields in actors
 
 // Flags
-#define FIG_FLAG_LOOK_AT_CAMERA_PITCH    0x0020
-#define FIG_FLAG_LOOK_AT_CAMERA_YAW      0x0040
-#define FIG_FLAG_0080                    0x0080
-#define FIG_FLAG_APPLY_FOG_COLOR         0x0100
-#define FIG_FLAG_APPLY_BLEND_COLOR       0x0200
-#define FIG_FLAG_APPLY_ENVIRONMENT_COLOR 0x0400
-#define FIG_FLAG_APPLY_PRIMITIVE_COLOR   0x0800
-/**
- * If this flag is set, all transformations, such as position, size, rotation, etc, changes won't be updated
- */
-#define FIG_FLAG_PAUSE_TRANSFORMATIONS 0x4000
+enum FigureFlag {
+    FIG_FLAG_LOOK_AT_CAMERA_PITCH    = BIT(5),
+    FIG_FLAG_LOOK_AT_CAMERA_YAW      = BIT(6),
+    FIG_FLAG_0080                    = BIT(7),
+    FIG_FLAG_APPLY_FOG_COLOR         = BIT(8),
+    FIG_FLAG_APPLY_BLEND_COLOR       = BIT(9),
+    FIG_FLAG_APPLY_ENVIRONMENT_COLOR = BIT(10),
+    FIG_FLAG_APPLY_PRIMITIVE_COLOR   = BIT(11),
+    /**
+     * If this flag is set, all transformations, such as position, size, rotation, etc, changes won't be updated
+     */
+    FIG_FLAG_PAUSE_TRANSFORMATIONS = BIT(14)
+};
 
 // Misc. flags that aren't part of the set above
 #define FIG_VARIABLE_TEXTURE_AND_PALETTE              0x40000000
