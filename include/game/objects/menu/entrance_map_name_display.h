@@ -23,7 +23,7 @@ typedef enum EntranceMapNameID {
 } EntranceMapNameID;
 
 // ID: 0x213A
-typedef struct entranceMapNameDisplay {
+typedef struct EntranceMapNameDisplay {
     ObjectHeader header;
     u8 field_0x20[4];
     /**
@@ -46,15 +46,15 @@ typedef struct entranceMapNameDisplay {
     EntranceMapNameID text_ID;
     u8 field_0x64[12];
     ActorConfig* settings;
-} entranceMapNameDisplay;
+} EntranceMapNameDisplay;
 
-void entranceMapNameDisplay_entrypoint(entranceMapNameDisplay* self);
-void entranceMapNameDisplay_init(entranceMapNameDisplay* self);
-void entranceMapNameDisplay_show(entranceMapNameDisplay* self);
-void entranceMapNameDisplay_idle(entranceMapNameDisplay* self);
-void entranceMapNameDisplay_hide(entranceMapNameDisplay* self);
-void entranceMapNameDisplay_destroy(entranceMapNameDisplay* self);
+void entranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self);
+void entranceMapNameDisplay_init(EntranceMapNameDisplay* self);
+void entranceMapNameDisplay_show(EntranceMapNameDisplay* self);
+void entranceMapNameDisplay_idle(EntranceMapNameDisplay* self);
+void entranceMapNameDisplay_hide(EntranceMapNameDisplay* self);
+void entranceMapNameDisplay_destroy(EntranceMapNameDisplay* self);
 
-typedef void (*entranceMapNameDisplayFuncs)(entranceMapNameDisplay*);
+typedef void (*entranceMapNameDisplayFuncs)(EntranceMapNameDisplay*);
 
 #endif

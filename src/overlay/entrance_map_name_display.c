@@ -1,7 +1,7 @@
 /**
  * @file entrance_map_name_display.c
  *
- * This file contains the code for the `entranceMapNameDisplay` object,
+ * This file contains the code for the `EntranceMapNameDisplay` object,
  * which is in charge of displaying the map's name when entering for the first time.
  */
 
@@ -107,11 +107,11 @@ entranceMapNameDisplayFuncs entranceMapNameDisplay_functions[] = {
 
 // clang-format on
 
-void entranceMapNameDisplay_entrypoint(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self) {
     ENTER(self, entranceMapNameDisplay_functions);
 }
 
-void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_init(EntranceMapNameDisplay* self) {
     Model* bg_model;
     Gfx* bg_model_dlist;
     s16 i;
@@ -149,7 +149,7 @@ void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
      * @note Because this function is only called here,
      *       it means that the game can only create the
      *       "Restart this stage" save on those maps that spawn the
-     *       `entranceMapNameDisplay` object.
+     *       `EntranceMapNameDisplay` object.
      */
     (*initSave_BeginningOfStageState)();
 
@@ -222,7 +222,7 @@ void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
     );
 }
 
-void entranceMapNameDisplay_show(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_show(EntranceMapNameDisplay* self) {
     s32 temp;
     Model* bg_model = self->bg_model;
     u16* map_name_ptr;
@@ -263,7 +263,7 @@ void entranceMapNameDisplay_show(entranceMapNameDisplay* self) {
     );
 }
 
-void entranceMapNameDisplay_idle(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_idle(EntranceMapNameDisplay* self) {
     MfdsState* map_name_textbox = self->map_name_textbox;
 
     if (self->hide_text == TRUE) {
@@ -289,7 +289,7 @@ void entranceMapNameDisplay_idle(entranceMapNameDisplay* self) {
     }
 }
 
-void entranceMapNameDisplay_hide(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_hide(EntranceMapNameDisplay* self) {
     Model* bg_model = self->bg_model;
 
     self->bg_model_transparency -= 2184.46666666666667;
@@ -305,6 +305,6 @@ void entranceMapNameDisplay_hide(entranceMapNameDisplay* self) {
     bg_model->primitive_color.a = self->bg_model_transparency / 256;
 }
 
-void entranceMapNameDisplay_destroy(entranceMapNameDisplay* self) {
+void entranceMapNameDisplay_destroy(EntranceMapNameDisplay* self) {
     self->header.destroy(self);
 }
