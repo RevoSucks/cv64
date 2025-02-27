@@ -116,7 +116,7 @@ void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
     Gfx* bg_model_dlist;
     s16 i;
     s32 display_name;
-    s32 text_ID;
+    EntranceMapNameID text_ID;
     s16 map_name_width;
 
     /**
@@ -163,9 +163,9 @@ void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
      *
      * - If the map we're in does not appear in the `entranceMapNameDisplay_mapList`,
      *   then it will display the "Forest of Silence" name, as the
-     *   `text_ID` value is assigned to 0 by default
+     *   `text_ID` value is assigned to `ENTRANCE_MAP_NAME_MORI` by default
      */
-    text_ID = 0;
+    text_ID = ENTRANCE_MAP_NAME_MORI;
     for (i = 0; entranceMapNameDisplay_mapList[i] >= MORI; i += 2) {
         if (entranceMapNameDisplay_mapList[i] == sys.SaveStruct_gameplay.map) {
             text_ID = entranceMapNameDisplay_mapList[i + 1];
