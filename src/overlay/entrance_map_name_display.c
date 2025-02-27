@@ -140,87 +140,86 @@ void entranceMapNameDisplay_init(entranceMapNameDisplay* self) {
     /**
      * Delay showing the map's name until the currently playing cutscene is over
      */
-    if (!(sys.cutscene_flags & CUTSCENE_FLAG_PLAYING)) {
-        /**
-         * Create the "Restart this stage" save
-         *
-         * @note Because this function is only called here,
-         *       it means that the game can only create the
-         *       "Restart this stage" save on those maps that spawn the
-         *       `entranceMapNameDisplay` object.
-         */
-        (*initSave_BeginningOfStageState)();
+    if (BITS_HAS(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING))
+        return;
 
-        /**
-         * Obtains the map name's text ID
-         *
-         * @note
-         *
-         * - entranceMapNameDisplay_mapList[i]: The map ID
-         *   entranceMapNameDisplay_mapList[i + 1]: The map name's text ID
-         *
-         * - If the map we're in does not appear in the `entranceMapNameDisplay_mapList`,
-         *   then it will display the "Forest of Silence" name, as the
-         *   `text_ID` value is assigned to 0 by default
-         */
-        text_ID = 0;
-        i       = 0;
-        while (entranceMapNameDisplay_mapList[i] >= 0) {
-            if (entranceMapNameDisplay_mapList[i] == sys.SaveStruct_gameplay.map) {
-                text_ID = entranceMapNameDisplay_mapList[i + 1];
-                break;
-            }
-            i += 2;
+    /**
+     * Create the "Restart this stage" save
+     *
+     * @note Because this function is only called here,
+     *       it means that the game can only create the
+     *       "Restart this stage" save on those maps that spawn the
+     *       `entranceMapNameDisplay` object.
+     */
+    (*initSave_BeginningOfStageState)();
+
+    /**
+     * Obtains the map name's text ID
+     *
+     * @note
+     *
+     * - entranceMapNameDisplay_mapList[i]: The map ID
+     *   entranceMapNameDisplay_mapList[i + 1]: The map name's text ID
+     *
+     * - If the map we're in does not appear in the `entranceMapNameDisplay_mapList`,
+     *   then it will display the "Forest of Silence" name, as the
+     *   `text_ID` value is assigned to 0 by default
+     */
+    text_ID = 0;
+    for (i = 0; entranceMapNameDisplay_mapList[i] >= MORI; i += 2) {
+        if (entranceMapNameDisplay_mapList[i] == sys.SaveStruct_gameplay.map) {
+            text_ID = entranceMapNameDisplay_mapList[i + 1];
+            break;
         }
-        self->text_ID = text_ID;
-
-        /**
-         * Setup the positions for the background model vertices,
-         * given the map name's width value
-         */
-        map_name_width = ((entranceMapNameDisplay_mapNamesWidth[text_ID] + 8) / 2) + 4;
-        entranceMapNameDisplay_bgModelVertices[1].v.ob[0] =
-            entranceMapNameDisplay_bgModelVertices[3].v.ob[0] = map_name_width;
-        entranceMapNameDisplay_bgModelVertices[0].v.ob[0] =
-            entranceMapNameDisplay_bgModelVertices[2].v.ob[0] = -map_name_width;
-
-        /**
-         * Setup the background model's display lists
-         */
-        bg_model_dlist = &entranceMapNameDisplay_bgModelDlists;
-        gDPPipeSync(bg_model_dlist++);
-        gSPDisplayList(
-            bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelMaterial1)
-        );
-        gDPPipeSync(bg_model_dlist++);
-        gSPVertex(
-            bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelVertices), 4, 0
-        );
-        gSP2Triangles(bg_model_dlist++, 2, 1, 0, 0, 3, 2, 1, 0);
-        gSPDisplayList(
-            bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelMaterial2)
-        );
-        gSPEndDisplayList(bg_model_dlist++);
-
-        /**
-         * Create and setup the background model
-         */
-        bg_model = self->bg_model =
-            (*Model_createAndSetChild)(FIG_TYPE_HUD_ELEMENT, common_camera_8009B440);
-        if (1) {
-        }
-        bg_model->assets_file = 0;
-        bg_model->dlist       = (*osVirtualToPhysical)(&entranceMapNameDisplay_bgModelDlists);
-        bg_model->flags |= FIG_FLAG_APPLY_PRIMITIVE_COLOR;
-        bg_model->primitive_color.integer = RGBA(255, 255, 255, 0);
-        self->should_hide                 = FALSE;
-        self->max_active_time             = 90;
-        self->bg_model_transparency       = 0;
-
-        (*object_curLevel_goToNextFuncAndClearTimer)(
-            self->header.current_function, &self->header.function_info_ID
-        );
     }
+    self->text_ID = text_ID;
+
+    /**
+     * Setup the positions for the background model vertices,
+     * given the map name's width value
+     */
+    map_name_width = ((entranceMapNameDisplay_mapNamesWidth[text_ID] + 8) / 2) + 4;
+    entranceMapNameDisplay_bgModelVertices[1].v.ob[0] =
+        entranceMapNameDisplay_bgModelVertices[3].v.ob[0] = map_name_width;
+    entranceMapNameDisplay_bgModelVertices[0].v.ob[0] =
+        entranceMapNameDisplay_bgModelVertices[2].v.ob[0] = -map_name_width;
+
+    /**
+     * Setup the background model's display lists
+     */
+    bg_model_dlist = &entranceMapNameDisplay_bgModelDlists;
+    gDPPipeSync(bg_model_dlist++);
+    gSPDisplayList(
+        bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelMaterial1)
+    );
+    gDPPipeSync(bg_model_dlist++);
+    gSPVertex(
+        bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelVertices), 4, 0
+    );
+    gSP2Triangles(bg_model_dlist++, 2, 1, 0, 0, 3, 2, 1, 0);
+    gSPDisplayList(
+        bg_model_dlist++, (*osVirtualToPhysical)(entranceMapNameDisplay_bgModelMaterial2)
+    );
+    gSPEndDisplayList(bg_model_dlist++);
+
+    /**
+     * Create and setup the background model
+     */
+    bg_model = self->bg_model =
+        (*Model_createAndSetChild)(FIG_TYPE_HUD_ELEMENT, common_camera_8009B440);
+    if (1) {
+    }
+    bg_model->assets_file = 0;
+    bg_model->dlist       = (*osVirtualToPhysical)(&entranceMapNameDisplay_bgModelDlists);
+    BITS_SET(bg_model->flags, FIG_FLAG_APPLY_PRIMITIVE_COLOR);
+    bg_model->primitive_color.integer = RGBA(255, 255, 255, 0);
+    self->should_hide                 = FALSE;
+    self->max_active_time             = 90;
+    self->bg_model_transparency       = 0;
+
+    (*object_curLevel_goToNextFuncAndClearTimer)(
+        self->header.current_function, &self->header.function_info_ID
+    );
 }
 
 void entranceMapNameDisplay_show(entranceMapNameDisplay* self) {
@@ -268,9 +267,9 @@ void entranceMapNameDisplay_idle(entranceMapNameDisplay* self) {
     MfdsState* map_name_textbox = self->map_name_textbox;
 
     if (self->hide_text == TRUE) {
-        map_name_textbox->flags |= MFDS_FLAG_HIDE_TEXTBOX;
+        BITS_SET(map_name_textbox->flags, MFDS_FLAG_HIDE_TEXTBOX);
     } else {
-        map_name_textbox->flags &= ~MFDS_FLAG_HIDE_TEXTBOX;
+        BITS_UNSET(map_name_textbox->flags, MFDS_FLAG_HIDE_TEXTBOX);
     }
 
     if (self->max_active_time != 0) {
@@ -283,7 +282,7 @@ void entranceMapNameDisplay_idle(entranceMapNameDisplay* self) {
 
     if ((self->should_hide) || (sys.current_opened_menu != MENU_ID_NOT_ON_MENU)) {
         map_name_textbox = self->map_name_textbox;
-        map_name_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        BITS_SET(map_name_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
@@ -297,7 +296,7 @@ void entranceMapNameDisplay_hide(entranceMapNameDisplay* self) {
 
     if (self->bg_model_transparency < 0) {
         self->bg_model_transparency = 0;
-        bg_model->type |= ~FIG_TYPE_SHOW;
+        BITS_SET(bg_model->type, ~FIG_TYPE_SHOW);
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
