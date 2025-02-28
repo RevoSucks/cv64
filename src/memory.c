@@ -205,9 +205,7 @@ void GraphicContainer_Free(void* ptr) {
 
 #pragma GLOBAL_ASM("../asm/nonmatchings/memory/func_80001338_1F38.s")
 
-void object_curLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
+void object_curLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
 
@@ -220,9 +218,7 @@ void object_curLevel_goToNextFunc(
     }
 }
 
-void object_prevLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
+void object_prevLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
 
@@ -239,9 +235,7 @@ void object_prevLevel_goToNextFunc(
     }
 }
 
-void object_nextLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
+void object_nextLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
 
@@ -259,26 +253,24 @@ void object_nextLevel_goToNextFunc(
 }
 
 void object_curLevel_goToNextFuncAndClearTimer(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID
 ) {
-    cv64_object_func_inf_t* functionInfo_entry;
-    cv64_object_func_inf_t* entry_to_clean;
+    ObjectFuncInfo* functionInfo_entry;
+    ObjectFuncInfo* entry_to_clean;
 
     functionInfo_entry = &current_functionInfo[*function_info_ID];
     functionInfo_entry->whole++;   // Set current function to the next function
     functionInfo_entry->timer = 0; // Set timer to 0
 
     for (entry_to_clean = functionInfo_entry + 1;
-         (cv64_object_func_inf_t*) entry_to_clean < (cv64_object_func_inf_t*) function_info_ID;
+         (ObjectFuncInfo*) entry_to_clean < (ObjectFuncInfo*) function_info_ID;
          entry_to_clean++) {
         entry_to_clean->whole = 0;
     }
 }
 
-void object_curLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
-    cv64_object_func_inf_t* functionInfo_entry;
+void object_curLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
+    ObjectFuncInfo* functionInfo_entry;
     u16* entry_to_clean;
 
     functionInfo_entry = &current_functionInfo[*function_info_ID];
@@ -290,9 +282,7 @@ void object_curLevel_goToPrevFunc(
     }
 }
 
-void object_prevLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
+void object_prevLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
 
@@ -309,9 +299,7 @@ void object_prevLevel_goToPrevFunc(
     }
 }
 
-void object_nextLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-) {
+void object_nextLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
 
@@ -329,7 +317,7 @@ void object_nextLevel_goToPrevFunc(
 }
 
 void object_curLevel_goToPrevFuncAndClearTimer(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID
 ) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
@@ -348,7 +336,7 @@ void object_curLevel_goToPrevFuncAndClearTimer(
 }
 
 void object_curLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 ) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
@@ -363,7 +351,7 @@ void object_curLevel_goToFunc(
 }
 
 void object_curLevel_goToFuncInLevel(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s16 level, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s16 level, s32 function
 ) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
@@ -378,7 +366,7 @@ void object_curLevel_goToFuncInLevel(
 }
 
 void object_prevLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 ) {
     u16* functionInfo_entry;
     u16* entry_to_clean;
@@ -397,7 +385,7 @@ void object_prevLevel_goToFunc(
 }
 
 void object_nextLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 ) {
     u16* functionInfo_entry;
     u16* entry_to_clean;

@@ -38,17 +38,17 @@ In this project, the object data structures and its associated functions are
 declared in `object.h`.
 
 ```c
-typedef struct cv64_object_func_inf {
+typedef struct ObjectFuncInfo {
     u8 timer;          // Could also be "number of accesses to function"
     u8 function;       // ID within the functions array
-} cv64_object_func_inf_t;
+} ObjectFuncInfo;
 
 typedef struct cv64_object_hdr {
     s16 ID;
     s16 flags;
     s16 timer;
     s16 field_0x06;
-    cv64_object_func_inf_t current_function[3];
+    ObjectFuncInfo current_function[3];
     s16 function_info_ID;
     void (*destroy)(void*); // Real name: `OBJ_destruct`
     struct ObjectHeader* parent;

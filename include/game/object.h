@@ -15,7 +15,7 @@ typedef enum ObjectExecFlag {
     OBJ_EXEC_FLAG_TOP          = 0x8000
 } ObjectExecFlag;
 
-typedef union cv64_object_func_inf {
+typedef union ObjectFuncInfo {
     struct {
         /**
          * Could also be number of accesses to function
@@ -27,7 +27,7 @@ typedef union cv64_object_func_inf {
         u8 function;
     };
     u16 whole;
-} cv64_object_func_inf_t; // Size = 0x2
+} ObjectFuncInfo; // Size = 0x2
 
 typedef struct ObjectHeader {
     s16 ID;
@@ -37,7 +37,7 @@ typedef struct ObjectHeader {
      */
     u16 timer;
     s16 field_0x06;
-    cv64_object_func_inf_t current_function[3];
+    ObjectFuncInfo current_function[3];
     s16 function_info_ID;
     /**
      * Real name: `OBJ_destruct`
@@ -111,43 +111,31 @@ void object_execute(ObjectHeader* self);
 void func_800026D8_32D8(ObjectHeader* self);
 void object_destroyChildrenAndModelInfo(ObjectHeader* self);
 void object_curLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 );
-void object_curLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
-void object_prevLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
-void object_nextLevel_goToNextFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
+void object_curLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
+void object_prevLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
+void object_nextLevel_goToNextFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
 void object_curLevel_goToNextFuncAndClearTimer(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID
 );
-void object_curLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
-void object_prevLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
-void object_nextLevel_goToPrevFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
-);
+void object_curLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
+void object_prevLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
+void object_nextLevel_goToPrevFunc(ObjectFuncInfo current_functionInfo[], s16* function_info_ID);
 void object_curLevel_goToPrevFuncAndClearTimer(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID
 );
 void object_curLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 );
 void object_curLevel_goToFuncInLevel(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s16 level, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s16 level, s32 function
 );
 void object_prevLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 );
 void object_nextLevel_goToFunc(
-    cv64_object_func_inf_t current_functionInfo[], s16* function_info_ID, s32 function
+    ObjectFuncInfo current_functionInfo[], s16* function_info_ID, s32 function
 );
 void object_doNothing(Object* self);
 void object_goToNextFuncNoCondition(Object* self);
@@ -196,7 +184,7 @@ extern Object* ptr_gameplayParentObject;
 // (so it doesn't wait for the next frame to execute the function)
 #define GO_TO_NEXT_FUNC_NOW(self, functions_array)                                                 \
     {                                                                                              \
-        cv64_object_func_inf_t* curFunc;                                                           \
+        ObjectFuncInfo* curFunc;                                                                   \
         (*object_curLevel_goToNextFuncAndClearTimer)(                                              \
             self->header.current_function, &self->header.function_info_ID                          \
         );                                                                                         \
@@ -208,7 +196,7 @@ extern Object* ptr_gameplayParentObject;
 // (so it doesn't wait for the next frame to execute the function)
 #define GO_TO_FUNC_NOW(self, functions_array, function_array_ID)                                   \
     {                                                                                              \
-        cv64_object_func_inf_t* curFunc;                                                           \
+        ObjectFuncInfo* curFunc;                                                                   \
         (*object_curLevel_goToFunc)(                                                               \
             self->header.current_function, &self->header.function_info_ID, function_array_ID       \
         );                                                                                         \
