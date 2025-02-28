@@ -3,22 +3,17 @@
 
 #include "gfx/figure.h"
 #include "gfx/graphic_container.h"
-#include "bit.h"
 #include "memory.h"
 #include "object_ID.h"
 
 #define OBJECT_ARRAY_MAX 384
 #define OBJECT_NUM_MAX   554
 
-// clang-format off
-
-typedef enum cv64_object_exec_flag {
+typedef enum ObjectExecFlag {
     OBJ_EXEC_FLAG_DONT_DESTROY = 0x0010,
     OBJ_EXEC_FLAG_PAUSE        = 0x4000,
     OBJ_EXEC_FLAG_TOP          = 0x8000
-} cv64_object_exec_flag_t;
-
-// clang-format on
+} ObjectExecFlag;
 
 typedef union cv64_object_func_inf {
     struct {
