@@ -70,7 +70,7 @@ typedef struct Object {
 #define OBJECT_FILE_INFO_FLAG_NONE 0x00
 #define OBJECT_FILE_INFO_FLAG_LAST 0x40
 
-typedef struct cv64_object_file_info {
+typedef struct ObjectFileInfo {
     /**
      * Can be either a pointer to another struct that holds the information,
      * or simply the NI file ID.
@@ -82,7 +82,7 @@ typedef struct cv64_object_file_info {
         u32 file_ID;
     };
     u32 file_padding;
-} cv64_object_file_info_t;
+} ObjectFileInfo;
 
 int object_isValid(ObjectHeader* self);
 void object_free(Object* self);
@@ -161,7 +161,7 @@ GraphicContainerHeader* allocGraphicContainerInObjectEntryList(
 
 extern Object objects_array[OBJECT_ARRAY_MAX];
 extern u16 objects_number_of_instances_per_object[OBJECT_NUM_MAX];
-extern cv64_object_file_info_t* objects_file_info[OBJECT_NUM_MAX];
+extern ObjectFileInfo* objects_file_info[OBJECT_NUM_MAX];
 
 typedef void (*cv64_object_func_t)(ObjectHeader* self);
 
