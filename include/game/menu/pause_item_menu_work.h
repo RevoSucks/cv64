@@ -2,6 +2,7 @@
 #define PAUSE_ITEM_MENU_WORK_H
 
 #include "objects/menu/scroll.h"
+#include "game/objects/menu/mfds.h"
 
 // Real name: `ITEM_CURSOL`
 typedef struct ItemCursol {
@@ -9,10 +10,9 @@ typedef struct ItemCursol {
 } ItemCursol;
 
 /**
- * @note While the code suggests this struct was named
- * `sound_menu_work`, it was likely an accident as another struct
- * with the same name already exists and is used to handle the
- * sound mode options menu instead.
+ * @note While the code suggests this struct was named `sound_menu_work`, it was likely an accident
+ * as another struct with the same name already exists and is used to handle the sound mode options
+ * menu instead.
  *
  * The name here is made up based on its usage in the code.
  */
