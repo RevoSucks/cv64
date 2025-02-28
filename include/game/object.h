@@ -163,9 +163,9 @@ extern Object objects_array[OBJECT_ARRAY_MAX];
 extern u16 objects_number_of_instances_per_object[OBJECT_NUM_MAX];
 extern ObjectFileInfo* objects_file_info[OBJECT_NUM_MAX];
 
-typedef void (*cv64_object_func_t)(ObjectHeader* self);
+typedef void (*ObjectFunc)(ObjectHeader* self);
 
-extern cv64_object_func_t Objects_functions[OBJECT_NUM_MAX];
+extern ObjectFunc Objects_functions[OBJECT_NUM_MAX];
 extern Object* object_list_free_slot;
 extern Object* ptr_gameplayParentObject;
 
