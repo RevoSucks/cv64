@@ -1060,7 +1060,7 @@ void pauseMenu_updateDigitalClockDisplay(PauseMenu* self) {
  *       that are used in the Options's Sound menu.
  */
 PauseItemMenuWork* pauseMenu_createPauseItemMenuWork(
-    PauseMenu* self, u8 ptrs_array_index, modelLighting* arg2, modelLighting* arg3, s32 arg4
+    PauseMenu* self, u8 ptrs_array_index, ModelLighting* arg2, ModelLighting* arg3, s32 arg4
 ) {
     PauseItemMenuWork* work;
     scroll_state* scroll;

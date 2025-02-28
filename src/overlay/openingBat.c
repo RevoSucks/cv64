@@ -64,7 +64,7 @@ void openingBat_createData(openingBat* self) {
 void openingBat_init(openingBat* self) {
     openingBatData* data = self->data;
     s32 temp1;
-    modelLighting* lighting;
+    ModelLighting* lighting;
     Model* model;
     Vec3f position;
     u16 variable_1;

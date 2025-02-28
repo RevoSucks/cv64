@@ -55,7 +55,7 @@ typedef struct Death {
     u8 field_0x20[4];
     Model* model;
     DeathData* data;
-    modelLighting* model_lighting;
+    ModelLighting* model_lighting;
     u8 field_0x30[40];
     void* slash_gfx; // SlashGfx*
     u8 field_0x5C[20];

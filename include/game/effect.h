@@ -2,7 +2,7 @@
 #define CV64_EFFECT_H
 
 #include "objects/effect/effect_manager.h"
-#include "objects/camera/pointLight.h"
+#include "objects/camera/point_light.h"
 #include "actor.h"
 
 /**
@@ -72,7 +72,7 @@ typedef struct EffectInfo {
     u8 environment_color_alpha;
     u8 field_0x09;
     u16 color_intensity_transition_speed;
-    pointLight* light;
+    PointLight* light;
     Model* attached_bone;
     u8 field_0x14[4];
     void (*object_destroy_function)(void*);

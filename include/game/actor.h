@@ -4,7 +4,7 @@
 #include "object.h"
 #include "gfx/model.h"
 #include "atari.h"
-#include "objects/camera/modelLighting.h"
+#include "objects/camera/model_lighting.h"
 #include "animation.h"
 #include "actor_config.h"
 
@@ -18,7 +18,7 @@ typedef struct {
     u32 flags;
     cv64_atari_base_work_t* atari_base;
     Model* model;
-    modelLighting* lighting;
+    ModelLighting* lighting;
     animationMgr animMgr;
 } actorVisualData;
 

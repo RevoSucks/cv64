@@ -2,7 +2,7 @@
 #define PAUSE_MENU_H
 
 #include "objects/menu/gameplayMenuMgr.h"
-#include "objects/camera/modelLighting.h"
+#include "objects/camera/model_lighting.h"
 #include "menu/pause_item_menu_work.h"
 #include "objects/player/player_flags.h"
 #include "gfx/light.h"
@@ -184,7 +184,7 @@ void pauseMenu_destroy(PauseMenu*);
 void pauseMenu_calcQuitMenu(PauseMenu*);
 void pauseMenu_updateDigitalClockDisplay(PauseMenu*);
 PauseItemMenuWork*
-pauseMenu_createPauseItemMenuWork(PauseMenu*, u8, modelLighting*, modelLighting*, s32);
+pauseMenu_createPauseItemMenuWork(PauseMenu*, u8, ModelLighting*, ModelLighting*, s32);
 void func_0F001BF0();
 void pauseMenu_createItemDescription(PauseMenu*);
 s32 getItemUseArrayEntry(s32);

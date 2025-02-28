@@ -8,7 +8,7 @@
 typedef struct {
     u8 field_0x00[8];
     Model* model;
-    modelLighting* lighting;
+    ModelLighting* lighting;
     animationMgr* animMgr;
 } openingBatDataInner;
 
