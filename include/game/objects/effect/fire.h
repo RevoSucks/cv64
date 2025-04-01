@@ -31,6 +31,6 @@ typedef enum FireFuncID {
 
 extern const u32 FIRE_DLIST;
 
-typedef void (*FireFuncs)(Fire*);
+typedef void (*FireFunc)(Fire*);
 
 #endif

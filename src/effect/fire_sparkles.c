@@ -15,7 +15,7 @@ Gfx FireSparkles_material_dlist[] = {
     gsSPEndDisplayList(),
 };
 
-FireSparklesFuncs FireSparkles_functions[] = {
+FireSparklesFunc FireSparkles_functions[] = {
     FireSparkles_Init,
     FireSparkles_Loop,
     FireSparkles_Destroy

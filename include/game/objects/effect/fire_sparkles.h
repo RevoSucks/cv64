@@ -28,6 +28,6 @@ typedef enum FireSparklesFuncID {
 
 extern const u32 FIRE_SPARKLES_DLIST;
 
-typedef void (*FireSparklesFuncs)(FireSparkles*);
+typedef void (*FireSparklesFunc)(FireSparkles*);
 
 #endif

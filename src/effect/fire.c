@@ -8,7 +8,7 @@
 
 // clang-format off
 
-FireFuncs Fire_functions[] = {
+FireFunc Fire_functions[] = {
     Fire_Init,
     Fire_Loop,
     Fire_Destroy
