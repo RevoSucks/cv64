@@ -2035,8 +2035,8 @@ segments:
     vram: 0x0F000000
     exclusive_ram_id: nisitenma_ichigo_overlays
     subsegments:
-      - [0x00CF6040, c, overlay/openingBat]
-      - [0x00CF6470, .data, overlay/openingBat]
+      - [0x00CF6040, c, overlay/opening_bat]
+      - [0x00CF6470, .data, overlay/opening_bat]
 
   - name: ni_ovl_flying_skull
     type: bin

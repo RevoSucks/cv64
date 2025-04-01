@@ -1,5 +1,5 @@
 /**
- * @file openingBat.c
+ * @file opening_bat.c
  *
  * Creates and initializes the bats seen in the opening cutscene
  * (the one with the camera moving around the castle).
@@ -8,7 +8,7 @@
  * said cutscene's overlay.
  */
 
-#include "objects/enemy/openingBat.h"
+#include "objects/enemy/opening_bat.h"
 #include "system_work.h"
 
 // clang-format off
@@ -34,7 +34,7 @@ Gfx openingBat_materialDlist[] = {
     gsSPEndDisplayList(),
 };
 
-openingBat_func_t openingBat_functions[] = {
+OpeningBatFunc openingBat_functions[] = {
     openingBat_createData,
     openingBat_init,
     openingBat_loop,
@@ -43,11 +43,11 @@ openingBat_func_t openingBat_functions[] = {
 
 // clang-format on
 
-void openingBat_entrypoint(openingBat* self) {
+void openingBat_entrypoint(OpeningBat* self) {
     ENTER(self, openingBat_functions);
 }
 
-void openingBat_createData(openingBat* self) {
+void openingBat_createData(OpeningBat* self) {
     openingBatData* data;
 
     data       = (openingBatData*) (*fig_allocate)(FIG_TYPE_DATA);
@@ -61,7 +61,7 @@ void openingBat_createData(openingBat* self) {
     }
 }
 
-void openingBat_init(openingBat* self) {
+void openingBat_init(OpeningBat* self) {
     openingBatData* data = self->data;
     s32 temp1;
     ModelLighting* lighting;
@@ -106,7 +106,7 @@ void openingBat_init(openingBat* self) {
     );
 }
 
-void openingBat_loop(openingBat* self) {
+void openingBat_loop(OpeningBat* self) {
     Model* model = self->model;
 
     model->type &= FIG_TYPE_SHOW;
@@ -117,6 +117,6 @@ void openingBat_loop(openingBat* self) {
     }
 }
 
-void openingBat_destroy(openingBat* self) {
+void openingBat_destroy(OpeningBat* self) {
     self->header.destroy(self);
 }

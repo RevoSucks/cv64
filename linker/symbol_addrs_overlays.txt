@@ -185,7 +185,7 @@ D_0F001350                                   = 0x0F001350; // type:f32 segment:n
 // End of src/overlay/difficulty_and_character_select.c ========================
 
 
-// src/overlay/openingBat.c ====================================================
+// src/overlay/opening_bat.c ====================================================
 // .text
 openingBat_entrypoint    = 0x0F000000; // type:func segment:ni_ovl_opening_bat
 openingBat_createData    = 0x0F000070; // type:func segment:ni_ovl_opening_bat
@@ -196,7 +196,7 @@ openingBat_destroy       = 0x0F000400; // type:func segment:ni_ovl_opening_bat
 openingBat_hierarchy     = 0x0F000430; // segment:ni_ovl_opening_bat size:0x40
 openingBat_materialDlist = 0x0F000470; // segment:ni_ovl_opening_bat size:0x30
 openingBat_functions     = 0x0F0004A0; // segment:ni_ovl_opening_bat size:0x10
-// End of src/overlay/openingBat.c =============================================
+// End of src/overlay/opening_bat.c =============================================
 
 
 // src/overlay/textbox/library_puzzle.c ========================================

@@ -19,29 +19,29 @@ typedef struct {
 } openingBatData;
 
 // ID: 0x20A6
-typedef struct {
+typedef struct OpeningBat {
     ObjectHeader header;
     u8 field_0x20[4];
     Model* model;
     openingBatData* data;
     u8 field_0x2C[68];
     ActorConfig* settings;
-} openingBat;
+} OpeningBat;
 
-void openingBat_entrypoint(openingBat* self);
-void openingBat_createData(openingBat* self);
-void openingBat_init(openingBat* self);
-void openingBat_loop(openingBat* self);
-void openingBat_destroy(openingBat* self);
+void openingBat_entrypoint(OpeningBat* self);
+void openingBat_createData(OpeningBat* self);
+void openingBat_init(OpeningBat* self);
+void openingBat_loop(OpeningBat* self);
+void openingBat_destroy(OpeningBat* self);
 
-typedef void (*openingBat_func_t)(openingBat*);
+typedef void (*OpeningBatFunc)(OpeningBat*);
 
-typedef enum openingBat_func_id {
+typedef enum OpeningBatFuncID {
     OPENINGBAT_CREATEDATA,
     OPENINGBAT_INIT,
     OPENINGBAT_LOOP,
     OPENINGBAT_DESTROY
-} openingBat_func_id_t;
+} OpeningBatFuncID;
 
 extern const u32 OPENINGBAT_DLIST;
 
