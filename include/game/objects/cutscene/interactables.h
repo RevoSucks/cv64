@@ -2,7 +2,7 @@
 #define INTERACTABLES_H
 
 #include "gfx/model.h"
-#include "objects/effect/pickableItemFlash.h"
+#include "objects/effect/pickable_item_flash.h"
 #include "objects/menu/mfds.h"
 #include "actor.h"
 #include "item.h"
@@ -254,7 +254,7 @@ typedef struct Interactable {
     s16 trigger_X_size;
     s16 trigger_Z_size;
     union {
-        pickableItemFlash* flash;
+        PickableItemFlash* flash;
         MfdsState* textbox;
     };
     Vec3f position;

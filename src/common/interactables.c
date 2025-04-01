@@ -195,7 +195,7 @@ void Interactable_Init(Interactable* self) {
 void Interactable_Main(Interactable* self) {
     Model* model;
     f32 current_height;
-    pickableItemFlash* flash_effect_obj;
+    PickableItemFlash* flash_effect_obj;
     s32 model_alpha;
     f32 temp;
     u16 item;
@@ -220,7 +220,7 @@ void Interactable_Main(Interactable* self) {
                     BITS_NOT_HAS(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING) &&
                     (self->item_doesnt_flash == FALSE)) {
                     // Create the effect
-                    self->flash = (pickableItemFlash*) (*createEffectObjectUnderEffectMgr)(
+                    self->flash = (PickableItemFlash*) (*createEffectObjectUnderEffectMgr)(
                         EFFECT_ID_PICKABLE_ITEM_FLASH, common_camera_effects, 0
                     );
                     if (self->flash != NULL) {
