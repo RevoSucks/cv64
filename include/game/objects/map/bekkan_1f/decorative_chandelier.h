@@ -4,7 +4,7 @@
 #include "actor.h"
 
 // ID 0x01AE
-typedef struct {
+typedef struct DecorativeChandelier {
     ObjectHeader header;
     u8 field_0x20[4];
     Model* decoration;
@@ -17,7 +17,7 @@ void DecorativeChandelier_Entrypoint(DecorativeChandelier* self);
 void DecorativeChandelier_Init(DecorativeChandelier* self);
 void DecorativeChandelier_PauseTransformations(DecorativeChandelier* self);
 
-typedef void (*DecorativeChandelierFuncs)(DecorativeChandelier*);
+typedef void (*DecorativeChandelierFunc)(DecorativeChandelier*);
 
 extern const u32 BEKKAN_1F_CHANDELIER_PENDANT_DL;
 extern const u32 BEKKAN_1F_CHANDELIER_DECORATION_DL;

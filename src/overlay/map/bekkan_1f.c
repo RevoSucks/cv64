@@ -26,7 +26,7 @@ Bekkan1FSquareFuncs Bekkan1FSquare_functions[] = {
     Bekkan1FSquare_Loop
 };
 
-DecorativeChandelierFuncs DecorativeChandelier_functions[] = {
+DecorativeChandelierFunc DecorativeChandelier_functions[] = {
     DecorativeChandelier_Init,
     DecorativeChandelier_PauseTransformations,
     StageProp_Loop,
