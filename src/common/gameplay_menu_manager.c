@@ -1,25 +1,25 @@
 /**
- * @file gameplay_menu_mgr.c
+ * @file gameplay_menu_manager.c
  *
- * This file contains the code for the `gameplayMenuMgr`,
+ * This file contains the code for the `GameplayMenuManager`,
  * which handles accessing menus during gameplay.
  */
 
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "objects/engine/DMAMgr.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "memory.h"
 #include "sound.h"
 #include "gamestate.h"
 #include "system_work.h"
 
-gameplayMenuMgrFuncs gameplayMenuMgr_functions[] = {
-    gameplayMenuMgr_initMainStructs,
-    gameplayMenuMgr_initHUDParams,
-    gameplayMenuMgr_outsideMenuLoop,
-    gameplayMenuMgr_initMenu,
-    gameplayMenuMgr_insideMenuLoop,
-    gameplayMenuMgr_exitMenu,
+GameplayMenuManagerFunc gameplayMenuMgr_functions[] = {
+    GameplayMenuManager_initMainStructs,
+    GameplayMenuManager_initHUDParams,
+    GameplayMenuManager_outsideMenuLoop,
+    GameplayMenuManager_initMenu,
+    GameplayMenuManager_insideMenuLoop,
+    GameplayMenuManager_exitMenu,
     object_doNothing
 };
 
@@ -29,11 +29,11 @@ u32 selection_idle_time       = 0;
 
 u32 initialize_hud_params_delay_timer;
 
-void gameplayMenuMgr_entrypoint(gameplayMenuMgr* self) {
+void GameplayMenuManager_entrypoint(GameplayMenuManager* self) {
     ENTER(self, gameplayMenuMgr_functions);
 }
 
-void gameplayMenuMgr_initMainStructs(gameplayMenuMgr* self) {
+void GameplayMenuManager_initMainStructs(GameplayMenuManager* self) {
     MfdsState* common_textbox;
     HUD* obj_hud;
 
@@ -55,7 +55,7 @@ void gameplayMenuMgr_initMainStructs(gameplayMenuMgr* self) {
      *
      * @note `obj_hud` and `HUD_params` are both contained within a union,
      * so `obj_hud` is NULLified after it's set. The variable will then be set again
-     * in `gameplayMenuMgr_initHUDParams` to the correct value for `HUD_params`.
+     * in `GameplayMenuManager_initHUDParams` to the correct value for `HUD_params`.
      */
     if (self->HUD_params == NULL) {
         if ((*objectList_findFirstObjectByID)(MENU_HUD) == NULL) {
@@ -91,7 +91,7 @@ void gameplayMenuMgr_initMainStructs(gameplayMenuMgr* self) {
     );
 }
 
-void gameplayMenuMgr_initHUDParams(gameplayMenuMgr* self) {
+void GameplayMenuManager_initHUDParams(GameplayMenuManager* self) {
     HUD* obj_hud;
 
     /**
@@ -124,7 +124,7 @@ void gameplayMenuMgr_initHUDParams(gameplayMenuMgr* self) {
     }
 }
 
-void gameplayMenuMgr_outsideMenuLoop(gameplayMenuMgr* self) {
+void GameplayMenuManager_outsideMenuLoop(GameplayMenuManager* self) {
     if (ptr_PlayerData != NULL) {
         self->current_opened_menu = sys.current_opened_menu;
 
@@ -173,7 +173,7 @@ void gameplayMenuMgr_outsideMenuLoop(gameplayMenuMgr* self) {
     }
 }
 
-void gameplayMenuMgr_initMenu(gameplayMenuMgr* self) {
+void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
     HUD* obj_hud;
     HUDParams* hud_params;
 
@@ -289,7 +289,7 @@ void gameplayMenuMgr_initMenu(gameplayMenuMgr* self) {
 }
 
 // clang-format off
-void gameplayMenuMgr_insideMenuLoop(gameplayMenuMgr* self) {
+void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
     s32 temp[2];
 
     /**
@@ -485,7 +485,7 @@ void gameplayMenuMgr_insideMenuLoop(gameplayMenuMgr* self) {
 }
 // clang-format off
 
-void gameplayMenuMgr_exitMenu(gameplayMenuMgr* self) {
+void GameplayMenuManager_exitMenu(GameplayMenuManager* self) {
     if ((*Fade_IsFading)() == FALSE) {
         (*heap_free)(HEAP_KIND_MENU_DATA);
 

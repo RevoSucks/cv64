@@ -19,7 +19,7 @@
 #include "objects/menu/contractMgr.h"
 #include "objects/player/player.h"
 #include "objects/menu/saveGame.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "random.h"
 #include "system_work.h"
 

@@ -1,7 +1,7 @@
 #ifndef PAUSE_MENU_H
 #define PAUSE_MENU_H
 
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "objects/camera/model_lighting.h"
 #include "menu/pause_item_menu_work.h"
 #include "objects/player/player_flags.h"
@@ -166,7 +166,7 @@ typedef struct PauseMenu {
      * - X: Ignored
      */
     s8 item_effect;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
     u8 field_0x70[2];
     s8 selected_item_can_be_used;
     u8 field_0x73;

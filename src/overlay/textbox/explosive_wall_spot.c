@@ -6,7 +6,7 @@
  */
 
 #include "objects/cutscene/explosive_wall_spot.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "system_work.h"
 
 // clang-format off

@@ -2,7 +2,7 @@
  * @file gameplay_common_textbox.c
  *
  * This file contains code that operates with the gameplay common textbox
- * (aka the `gameplayMenuMgr` textbox, as it is created by said object).
+ * (aka the `GameplayMenuManager` textbox, as it is created by said object).
  *
  * This textbox displays most of the messages seen during gameplay, including
  * item names, text spot messages, etc.
@@ -27,7 +27,7 @@
  *      leading to undefined behaviour.
  */
 
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "item.h"
 #include "system_work.h"
 
@@ -40,9 +40,10 @@ u16 you_cannot_carry_more_items_text[] = {
  */
 MfdsState* gameplayCommonTextbox_getIfClosed() {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {
@@ -62,9 +63,10 @@ MfdsState* gameplayCommonTextbox_getIfClosed() {
  */
 MfdsState* gameplayCommonTextbox_close() {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {
@@ -87,9 +89,10 @@ MfdsState* gameplayCommonTextbox_prepare(
     u16* text_ptr, u32 flags, u8 line, u16 width, u8 palette, s16 X_pos, s16 Y_pos, u8 display_time
 ) {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {
@@ -126,9 +129,10 @@ MfdsState* gameplayCommonTextbox_prepare(
  */
 MfdsState* gameplayCommonTextbox_addItemAndPrepareName(s32 item) {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {
@@ -193,9 +197,10 @@ MfdsState* gameplayCommonTextbox_addItemAndPrepareName(s32 item) {
  */
 MfdsState* gameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {
@@ -240,9 +245,10 @@ MfdsState* gameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
  */
 MfdsState* gameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id, u8 palette) {
     MfdsState* common_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         common_textbox = gameplay_menu_mgr->common_textbox;
     } else {

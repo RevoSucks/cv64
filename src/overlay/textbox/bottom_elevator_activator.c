@@ -5,7 +5,7 @@
  */
 
 #include "objects/cutscene/bottom_elevator_activator.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "sound.h"
 #include "system_work.h"
 

@@ -5,7 +5,7 @@
 #include "objects/menu/mfds.h"
 #include "objects/menu/HUD.h"
 
-typedef enum gameplayMenuMgrFlags {
+typedef enum GameplayMenuManagerFlag {
     IN_PAUSE_MENU   = BIT(0),
     IN_FILE_SELECT  = BIT(1),
     IN_OPTIONS_MENU = BIT(2),
@@ -13,9 +13,9 @@ typedef enum gameplayMenuMgrFlags {
     IN_QUIT_GAME    = BIT(4),
     IN_GAME_OVER    = BIT(5),
     IN_RENON_SHOP   = BIT(6)
-} gameplayMenuMgrFlags;
+} GameplayMenuManagerFlag;
 
-typedef enum gameplayMenuMgrMenuState {
+typedef enum GameplayMenuManagerMenuState {
     ENTERING_PAUSE_MENU  = BIT(0),
     ENTERING_FILE_SELECT = BIT(1), // Unused
     ENTERING_OPTION      = BIT(2),
@@ -25,11 +25,11 @@ typedef enum gameplayMenuMgrMenuState {
     ENTERING_RENON_SHOP  = BIT(6),
     MENU_STATE_100       = BIT(8), // Unused
     INIT_NEW_GAME        = BIT(9)
-} gameplayMenuMgrMenuState;
+} GameplayMenuManagerMenuState;
 
 // ID: 0x0126
 // Real name: `etc_ctrl`
-typedef struct gameplayMenuMgr {
+typedef struct GameplayMenuManager {
     ObjectHeader header;
     u8 field_0x20[32];
     s32 bought_item_from_renon_shop; // Set to `TRUE` when buying an item in Renon's shop
@@ -41,9 +41,9 @@ typedef struct gameplayMenuMgr {
     MfdsState* common_textbox;
     /**
      * `obj_hud` is only written to instead of `HUD_params`
-     * if the `HUD` object is not created during the initialization of `gameplayMenuMgr`.
+     * if the `HUD` object is not created during the initialization of `GameplayMenuManager`.
      *
-     * See `gameplayMenuMgr_initMainStructs`
+     * See `GameplayMenuManager_initMainStructs`
      */
     union {
         HUDParams* HUD_params;
@@ -53,15 +53,15 @@ typedef struct gameplayMenuMgr {
     void* assets_file_buffer_end_ptr;
     u32 flags;
     u32 menu_state;
-} gameplayMenuMgr;
+} GameplayMenuManager;
 
-void gameplayMenuMgr_entrypoint(gameplayMenuMgr* self);
-void gameplayMenuMgr_initMainStructs(gameplayMenuMgr* self);
-void gameplayMenuMgr_initHUDParams(gameplayMenuMgr* self);
-void gameplayMenuMgr_outsideMenuLoop(gameplayMenuMgr* self);
-void gameplayMenuMgr_initMenu(gameplayMenuMgr* self);
-void gameplayMenuMgr_insideMenuLoop(gameplayMenuMgr* self);
-void gameplayMenuMgr_exitMenu(gameplayMenuMgr* self);
+void GameplayMenuManager_entrypoint(GameplayMenuManager* self);
+void GameplayMenuManager_initMainStructs(GameplayMenuManager* self);
+void GameplayMenuManager_initHUDParams(GameplayMenuManager* self);
+void GameplayMenuManager_outsideMenuLoop(GameplayMenuManager* self);
+void GameplayMenuManager_initMenu(GameplayMenuManager* self);
+void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self);
+void GameplayMenuManager_exitMenu(GameplayMenuManager* self);
 u32 moveSelectionCursor(u32 button);
 
 MfdsState* gameplayCommonTextbox_getIfClosed();
@@ -77,7 +77,7 @@ u32 gameplayCommonTextbox_lensAreClosed();
 ObjMfds* gameplayCommonTextbox_getObject(s32, Object*);
 ObjMfds* gameplayCommonTextbox_getObjectFromList();
 
-typedef enum gameplayMenuMgrFuncId {
+typedef enum GameplayMenuManagerFuncID {
     GAMEPLAYMENUMGR_INIT_MAIN_STRUCTS,
     GAMEPLAYMENUMGR_INIT_HUD_PARAMS,
     GAMEPLAYMENUMGR_OUTSIDE_MENU_LOOP,
@@ -85,10 +85,10 @@ typedef enum gameplayMenuMgrFuncId {
     GAMEPLAYMENUMGR_INSIDE_MENU_LOOP,
     GAMEPLAYMENUMGR_EXIT_MENU,
     GAMEPLAYMENUMGR_DO_NOTHING
-} gameplayMenuMgrFuncId;
+} GameplayMenuManagerFuncID;
 
-typedef void (*gameplayMenuMgrFuncs)(gameplayMenuMgr*);
+typedef void (*GameplayMenuManagerFunc)(GameplayMenuManager*);
 
-extern gameplayMenuMgr* ptr_gameplayMenuMgr;
+extern GameplayMenuManager* ptr_gameplayMenuMgr;
 
 #endif

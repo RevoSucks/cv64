@@ -6,7 +6,7 @@
 
 #include "objects/cutscene/library_puzzle.h"
 #include "objects/map/honmaru_4f_minami/library_piece.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "memory.h"
 #include "sound.h"
 #include "system_work.h"
@@ -139,7 +139,7 @@ void cv64_ovl_librarypuzzletxt_show(cv64_ovl_librarypuzzletxt_t* self) {
 
             /**
              * This isn't used in practice, since the piece text is written into a new
-             * textbox, and not to gameplayMenuMgr's common textbox, which closes after
+             * textbox, and not to GameplayMenuManager's common textbox, which closes after
              * said message displays
              */
             self->message_textbox = (*gameplayCommonTextbox_getMapMessage)(

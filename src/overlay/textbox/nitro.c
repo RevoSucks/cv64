@@ -5,7 +5,7 @@
  */
 
 #include "objects/cutscene/nitro_textbox.h"
-#include "objects/menu/gameplayMenuMgr.h"
+#include "objects/menu/gameplay_menu_manager.h"
 #include "system_work.h"
 
 // clang-format off

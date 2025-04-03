@@ -100,12 +100,13 @@ void pauseMenu_init(PauseMenu* self) {
     MfdsState* textbox;
     Model* model;
     s32 temp[2];
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
 
     /**
-     * Get gameplayMenuMgr instance
+     * Get GameplayMenuManager instance
      */
-    gameplay_menu_mgr = (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+    gameplay_menu_mgr =
+        (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
     if (gameplay_menu_mgr != NULL) {
         if (gameplay_menu_mgr->assets_file_buffer_end_ptr != NULL) {
             self->gameplay_menu_mgr = gameplay_menu_mgr;
@@ -321,7 +322,7 @@ void pauseMenu_calcMainMenu(PauseMenu* self) {
     s32 temp[2];
     scroll_state* options_scroll;
     MfdsState* options_textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
     Model* scroll_background_model;
     s32 textbox_option;
 
@@ -334,7 +335,7 @@ void pauseMenu_calcMainMenu(PauseMenu* self) {
      */
     if (CONT_BTNS_PRESSED(CONT_0, CONT_B) && (options_scroll->flags & SCROLL_STATE_FLAG_OPENED)) {
         gameplay_menu_mgr =
-            (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+            (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
         if (gameplay_menu_mgr != NULL) {
             gameplay_menu_mgr->menu_state |= EXIT_MENU;
         }
@@ -370,7 +371,7 @@ void pauseMenu_calcMainMenu(PauseMenu* self) {
          */
         case PAUSE_MENU_OPTION:
             gameplay_menu_mgr =
-                (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+                (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
                 gameplay_menu_mgr->menu_state |= ENTERING_OPTION;
             }
@@ -403,7 +404,7 @@ void pauseMenu_calcMainMenu(PauseMenu* self) {
          */
         case PAUSE_MENU_BACK:
             gameplay_menu_mgr =
-                (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+                (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
                 gameplay_menu_mgr->menu_state |= EXIT_MENU;
             }
@@ -873,7 +874,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
     s32 temp;
     Model* scroll_background_model;
     MfdsState* textbox;
-    gameplayMenuMgr* gameplay_menu_mgr;
+    GameplayMenuManager* gameplay_menu_mgr;
     MfdsState* options_textbox;
     MiniScrollParameters* mini_scroll_params;
     miniScroll* mini_scroll;
@@ -966,7 +967,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
          */
         case PAUSE_QUIT_STATE_QUIT_GAME:
             gameplay_menu_mgr =
-                (gameplayMenuMgr*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+                (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
                 gameplay_menu_mgr->menu_state |= QUIT_GAME;
             }
