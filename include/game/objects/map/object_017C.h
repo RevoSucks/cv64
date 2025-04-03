@@ -21,6 +21,6 @@ void obj017C_Entrypoint(object_017C* self);
 void obj017C_Init(object_017C* self);
 void obj017C_Loop(object_017C* self);
 
-typedef void (*obj017CFuncs)(object_017C*);
+typedef void (*Obj017CFunc)(object_017C*);
 
 #endif

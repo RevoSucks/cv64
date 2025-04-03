@@ -50,7 +50,7 @@ u32* obj017C_dlists[] = {
     NULL,
 };
 
-obj017CFuncs obj017C_functions[] = {
+Obj017CFunc obj017C_functions[] = {
     obj017C_Init,
     obj017C_Loop
 };
