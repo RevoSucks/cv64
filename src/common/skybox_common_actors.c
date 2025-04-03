@@ -58,7 +58,7 @@ u32* obj8015C368_dlists[] = {
     NULL
 };
 
-obj0172Funcs obj0172_functions[] = {
+Obj0172Func obj0172_functions[] = {
     obj0172_init,
     obj0172_loop
 };
