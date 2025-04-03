@@ -8,7 +8,7 @@
 
 #include "objects/menu/mfds.h"
 #include "objects/effect/distortion.h"
-#include "objects/menu/characterSelect.h"
+#include "objects/menu/character_select.h"
 #include "system_work.h"
 
 u16 level_select_text[] = {
