@@ -62,7 +62,7 @@ Gfx entranceMapNameDisplay_bgModelDlists[16] = {0};
  * the vertices' color field (the last 4 values on each vertex, see below).
  *
  * @note The X position for each vertex is determined
- *       in function `entranceMapNameDisplay_init`
+ *       in function `EntranceMapNameDisplay_init`
  */
 Vtx entranceMapNameDisplay_bgModelVertices[] = {
     {{{     0,     -36,     0}, 0, {   0,    0}, {127, 127, 191, 255}}},
@@ -97,21 +97,21 @@ Gfx entranceMapNameDisplay_bgModelMaterial2[] = {
     gsSPEndDisplayList(),
 };
 
-entranceMapNameDisplayFuncs entranceMapNameDisplay_functions[] = {
-    entranceMapNameDisplay_init,
-    entranceMapNameDisplay_show,
-    entranceMapNameDisplay_idle,
-    entranceMapNameDisplay_hide,
-    entranceMapNameDisplay_destroy
+EntranceMapNameDisplayFunc entranceMapNameDisplay_functions[] = {
+    EntranceMapNameDisplay_init,
+    EntranceMapNameDisplay_show,
+    EntranceMapNameDisplay_idle,
+    EntranceMapNameDisplay_hide,
+    EntranceMapNameDisplay_destroy
 };
 
 // clang-format on
 
-void entranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self) {
     ENTER(self, entranceMapNameDisplay_functions);
 }
 
-void entranceMapNameDisplay_init(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_init(EntranceMapNameDisplay* self) {
     Model* bg_model;
     Gfx* bg_model_dlist;
     s16 i;
@@ -222,7 +222,7 @@ void entranceMapNameDisplay_init(EntranceMapNameDisplay* self) {
     );
 }
 
-void entranceMapNameDisplay_show(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_show(EntranceMapNameDisplay* self) {
     s32 temp;
     Model* bg_model = self->bg_model;
     u16* map_name_ptr;
@@ -263,7 +263,7 @@ void entranceMapNameDisplay_show(EntranceMapNameDisplay* self) {
     );
 }
 
-void entranceMapNameDisplay_idle(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_idle(EntranceMapNameDisplay* self) {
     MfdsState* map_name_textbox = self->map_name_textbox;
 
     if (self->hide_text == TRUE) {
@@ -289,7 +289,7 @@ void entranceMapNameDisplay_idle(EntranceMapNameDisplay* self) {
     }
 }
 
-void entranceMapNameDisplay_hide(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_hide(EntranceMapNameDisplay* self) {
     Model* bg_model = self->bg_model;
 
     self->bg_model_transparency -= 2184.46666666666667;
@@ -305,6 +305,6 @@ void entranceMapNameDisplay_hide(EntranceMapNameDisplay* self) {
     bg_model->primitive_color.a = self->bg_model_transparency / 256;
 }
 
-void entranceMapNameDisplay_destroy(EntranceMapNameDisplay* self) {
+void EntranceMapNameDisplay_destroy(EntranceMapNameDisplay* self) {
     self->header.destroy(self);
 }

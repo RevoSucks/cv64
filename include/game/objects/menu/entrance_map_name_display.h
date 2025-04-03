@@ -48,13 +48,13 @@ typedef struct EntranceMapNameDisplay {
     ActorConfig* settings;
 } EntranceMapNameDisplay;
 
-void entranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self);
-void entranceMapNameDisplay_init(EntranceMapNameDisplay* self);
-void entranceMapNameDisplay_show(EntranceMapNameDisplay* self);
-void entranceMapNameDisplay_idle(EntranceMapNameDisplay* self);
-void entranceMapNameDisplay_hide(EntranceMapNameDisplay* self);
-void entranceMapNameDisplay_destroy(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_entrypoint(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_init(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_show(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_idle(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_hide(EntranceMapNameDisplay* self);
+void EntranceMapNameDisplay_destroy(EntranceMapNameDisplay* self);
 
-typedef void (*entranceMapNameDisplayFuncs)(EntranceMapNameDisplay*);
+typedef void (*EntranceMapNameDisplayFunc)(EntranceMapNameDisplay*);
 
 #endif
