@@ -20,7 +20,7 @@
 
 // clang-format off
 
-Bekkan1FSquareFuncs Bekkan1FSquare_functions[] = {
+Bekkan1FSquareFunc Bekkan1FSquare_functions[] = {
     Bekkan1FSquare_Init,
     Bekkan1FSquare_PauseTransformations,
     Bekkan1FSquare_Loop
