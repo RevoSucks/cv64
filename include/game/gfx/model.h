@@ -6,7 +6,7 @@
 #include "map_actor_model.h"
 #include "math.h"
 #include "nisitenma_ichigo.h"
-#include "objects/menu/miniScroll.h"
+#include "objects/menu/mini_scroll.h"
 #include <ultra64.h>
 
 typedef struct Model {

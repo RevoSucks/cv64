@@ -8,7 +8,7 @@
  * `NI_OVL_MINI_SCROLL` overlay.
  */
 
-#include "objects/menu/miniScroll.h"
+#include "objects/menu/mini_scroll.h"
 #include "game/gfx/model.h"
 
 miniScroll* miniScroll_create(void* parent, Camera* camera, s32 param_3, s32 param_4) {

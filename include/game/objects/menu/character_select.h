@@ -6,7 +6,7 @@
 #include "objects/menu/mfds.h"
 #include "objects/menu/mark.h"
 #include "objects/menu/scroll.h"
-#include "objects/menu/miniScroll.h"
+#include "objects/menu/mini_scroll.h"
 #include "system_work.h"
 
 /**
