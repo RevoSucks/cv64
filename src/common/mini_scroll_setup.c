@@ -11,9 +11,9 @@
 #include "objects/menu/mini_scroll.h"
 #include "game/gfx/model.h"
 
-miniScroll* miniScroll_create(void* parent, Camera* camera, s32 param_3, s32 param_4) {
-    miniScroll* obj_mini_scroll;
-    miniScrollInner* inner;
+MiniScroll* MiniScroll_create(void* parent, Camera* camera, s32 param_3, s32 param_4) {
+    MiniScroll* obj_mini_scroll;
+    MiniScrollInner* inner;
 
     obj_mini_scroll                   = (*object_create)(parent, MENU_MINI_SCROLL);
     inner                             = &obj_mini_scroll->inner;
@@ -47,33 +47,33 @@ miniScroll* miniScroll_create(void* parent, Camera* camera, s32 param_3, s32 par
     return obj_mini_scroll;
 }
 
-void miniScroll_setPosition(miniScroll* self, f32 X, f32 Y, f32 Z) {
+void MiniScroll_setPosition(MiniScroll* self, f32 X, f32 Y, f32 Z) {
     self->inner.position.x = X;
     self->inner.position.y = Y;
     self->inner.position.z = Z;
 }
 
-void miniScroll_setScrollingParams(miniScroll* self, f32 open_max_height, s32 scrolling_speed) {
+void MiniScroll_setScrollingParams(MiniScroll* self, f32 open_max_height, s32 scrolling_speed) {
     self->inner.scrolling_speed = scrolling_speed;
     self->inner.open_max_height = open_max_height;
 }
 
-void miniScroll_setWidth(miniScroll* self, f32 X, f32 Y, f32 scroll_opened_bottom_limit) {
+void MiniScroll_setWidth(MiniScroll* self, f32 X, f32 Y, f32 scroll_opened_bottom_limit) {
     self->inner.width.x                    = X;
     self->inner.width.y                    = Y;
     self->inner.scroll_opened_bottom_limit = scroll_opened_bottom_limit;
 }
 
-Model* miniScroll_getModel(miniScroll* self) {
+Model* MiniScroll_getModel(MiniScroll* self) {
     return self->model;
 }
 
-void miniScroll_setState(miniScroll* self, u32 state) {
+void MiniScroll_setState(MiniScroll* self, u32 state) {
     self->inner.flags |= (state & 0xF);
 }
 
-void miniScroll_editFlags(miniScroll* self, u32 flags, s32 setFlags) {
-    miniScrollInner* inner = &self->inner;
+void MiniScroll_editFlags(MiniScroll* self, u32 flags, s32 setFlags) {
+    MiniScrollInner* inner = &self->inner;
 
     if (setFlags) {
         inner->flags |= flags;
@@ -82,6 +82,6 @@ void miniScroll_editFlags(miniScroll* self, u32 flags, s32 setFlags) {
     }
 }
 
-u32 miniScroll_checkFlags(miniScroll* self, u32 flags) {
+u32 MiniScroll_checkFlags(MiniScroll* self, u32 flags) {
     return self->inner.flags & flags;
 }

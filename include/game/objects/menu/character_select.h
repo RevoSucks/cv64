@@ -74,7 +74,7 @@ typedef struct {
         scroll_state* scrollState;
     };
     union {
-        miniScroll* mini_scroll;
+        MiniScroll* mini_scroll;
         WindowWork* lens;
     };
     union {

@@ -877,7 +877,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
     GameplayMenuManager* gameplay_menu_mgr;
     MfdsState* options_textbox;
     MiniScrollParameters* mini_scroll_params;
-    miniScroll* mini_scroll;
+    MiniScroll* mini_scroll;
 
     scroll_background_model = self->scroll_background_model;
     options_textbox         = self->options_textbox;
@@ -888,12 +888,12 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
          * Create the Quit submenu scroll
          */
         case PAUSE_QUIT_STATE_CREATE_SCROLL:
-            mini_scroll = (*miniScroll_create)(self, self->scrolls_borders_light, 0, 0);
+            mini_scroll = (*MiniScroll_create)(self, self->scrolls_borders_light, 0, 0);
             mini_scroll_params->scroll = mini_scroll;
-            (*miniScroll_setPosition)(mini_scroll_params->scroll, -6.0f, 26.0f, 100.0f);
-            (*miniScroll_setWidth)(mini_scroll_params->scroll, 0.7f, 0.36f, 1.0f);
-            (*miniScroll_setScrollingParams)(mini_scroll_params->scroll, 50.0f, 1);
-            (*miniScroll_setState)(mini_scroll_params->scroll, MINISCROLL_STATE_OPEN);
+            (*MiniScroll_setPosition)(mini_scroll_params->scroll, -6.0f, 26.0f, 100.0f);
+            (*MiniScroll_setWidth)(mini_scroll_params->scroll, 0.7f, 0.36f, 1.0f);
+            (*MiniScroll_setScrollingParams)(mini_scroll_params->scroll, 50.0f, 1);
+            (*MiniScroll_setState)(mini_scroll_params->scroll, MINISCROLL_STATE_OPEN);
             mini_scroll_params->state++;
             break;
 
@@ -934,7 +934,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
             break;
 
         case PAUSE_QUIT_STATE_OPEN_SCROLL:
-            if ((*miniScroll_checkFlags)(mini_scroll_params->scroll, MINISCROLL_FLAG_OPENED)) {
+            if ((*MiniScroll_checkFlags)(mini_scroll_params->scroll, MINISCROLL_FLAG_OPENED)) {
                 options_textbox->flags |= MINISCROLL_FLAG_CLOSED;
                 mini_scroll_params->state++;
                 break;
@@ -946,7 +946,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
                 /**
                  * After selecting an option, close the scroll and determine what to do next
                  */
-                (*miniScroll_setState)(mini_scroll_params->scroll, MINISCROLL_STATE_CLOSE);
+                (*MiniScroll_setState)(mini_scroll_params->scroll, MINISCROLL_STATE_CLOSE);
                 mini_scroll_params->textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
                 switch (mini_scroll_params->textbox->textbox_option - 1) {
                     // Yes
@@ -1014,8 +1014,8 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
          * Destroy the scroll and switch the pause menu state to what was set in `after_quit_state`
          */
         case PAUSE_QUIT_STATE_DESTROY_SCROLL:
-            if ((*miniScroll_checkFlags)(mini_scroll_params->scroll, MINISCROLL_FLAG_CLOSED)) {
-                (*miniScroll_editFlags)(mini_scroll_params->scroll, MINISCROLL_STATE_DESTROY, -1);
+            if ((*MiniScroll_checkFlags)(mini_scroll_params->scroll, MINISCROLL_FLAG_CLOSED)) {
+                (*MiniScroll_editFlags)(mini_scroll_params->scroll, MINISCROLL_STATE_DESTROY, -1);
                 (*object_curLevel_goToFunc)(
                     self->header.current_function,
                     &self->header.function_info_ID,

@@ -40,7 +40,7 @@ void characterSelect_entrypoint(characterSelect* self) {
 }
 
 void difficultySelect_loop(characterSelect* self) {
-    miniScroll* mini_scroll;
+    MiniScroll* mini_scroll;
     MfdsState* difficulty_text;
     characterSelectInner* inner = &self->inner;
     u8 option;
@@ -59,11 +59,11 @@ void difficultySelect_loop(characterSelect* self) {
     switch (self->inner.difficulty_select_state) {
         // Create the scroll and open it
         case CREATE_SCROLL:
-            mini_scroll        = (*miniScroll_create)(self, NULL, 0, 0);
+            mini_scroll        = (*MiniScroll_create)(self, NULL, 0, 0);
             inner->mini_scroll = mini_scroll;
-            (*miniScroll_setPosition)(inner->mini_scroll, 0.0f, 53.0f, 80.0f);
-            (*miniScroll_setWidth)(inner->mini_scroll, 1.1599999666214f, 0.689999997615814f, 1.0f);
-            (*miniScroll_setState)(inner->mini_scroll, MINISCROLL_STATE_OPEN);
+            (*MiniScroll_setPosition)(inner->mini_scroll, 0.0f, 53.0f, 80.0f);
+            (*MiniScroll_setWidth)(inner->mini_scroll, 1.1599999666214f, 0.689999997615814f, 1.0f);
+            (*MiniScroll_setState)(inner->mini_scroll, MINISCROLL_STATE_OPEN);
             if (BITS_HAS(sys.SaveStruct_gameplay.flags, SAVE_FLAG_HARD_MODE_UNLOCKED)) {
                 inner->difficulty_select_state = CREATE_TEXT_HARD_MODE;
             } else {
@@ -120,7 +120,7 @@ void difficultySelect_loop(characterSelect* self) {
             break;
         // Wait until scroll is opened
         case WAIT_UNTIL_SCROLL_IS_OPENED:
-            if ((*miniScroll_checkFlags)(inner->mini_scroll, MINISCROLL_FLAG_OPENED)) {
+            if ((*MiniScroll_checkFlags)(inner->mini_scroll, MINISCROLL_FLAG_OPENED)) {
                 inner->difficulty_select_state++;
             }
             break;
@@ -153,7 +153,7 @@ void difficultySelect_loop(characterSelect* self) {
             break;
         // Exit to the character selection screen
         case EXIT:
-            (*miniScroll_setState)(inner->mini_scroll, MINISCROLL_STATE_DESTROY);
+            (*MiniScroll_setState)(inner->mini_scroll, MINISCROLL_STATE_DESTROY);
             BITS_SET(inner->difficulty_text->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             inner->difficulty_select_state = CREATE_SCROLL;
             inner->difficulty_text         = NULL;
