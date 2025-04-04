@@ -60,15 +60,9 @@ EnemyListEntry* EnemyList_addOrModifyEntry(Actor* actor, u16 flags) {
         return NULL;
     }
 
-    entry = ARRAY_START(enemy_list.enemies);
-    i     = 0;
-    if (enemy_list.num_enemies > 0) {
-        do {
-            if (actor == entry->enemy)
-                break;
-            i++;
-            entry++;
-        } while (i < enemy_list.num_enemies);
+    for (entry = ARRAY_START(enemy_list.enemies), i = 0; i < enemy_list.num_enemies; i++, entry++) {
+        if (actor == entry->enemy)
+            break;
     }
 
     /**
@@ -95,28 +89,22 @@ void EnemyList_removeEntry(Actor* actor) {
     EnemyListEntry* entry;
     EnemyListEntry* last_entry;
 
-    entry = ARRAY_START(enemy_list.enemies);
-    i     = 0;
-    if (enemy_list.num_enemies > 0) {
-        do {
-            if (actor == entry->enemy) {
-                // If the enemy found is the last one on the list
-                if ((i + 1) == enemy_list.num_enemies) {
-                    EnemyList_clearEntry(entry);
-                    enemy_list.num_enemies--;
-                }
-                // Otherwise copy the last entry into the removed enemy's slot and clear the last entry
-                else {
-                    last_entry = &enemy_list.enemies[enemy_list.num_enemies - 1];
-                    *entry     = *last_entry;
-                    EnemyList_clearEntry(last_entry);
-                    enemy_list.num_enemies--;
-                }
-                break;
+    for (entry = ARRAY_START(enemy_list.enemies), i = 0; i < enemy_list.num_enemies; i++, entry++) {
+        if (actor == entry->enemy) {
+            // If the enemy found is the last one on the list
+            if ((i + 1) == enemy_list.num_enemies) {
+                EnemyList_clearEntry(entry);
+                enemy_list.num_enemies--;
             }
-            i++;
-            entry++;
-        } while (i < enemy_list.num_enemies);
+            // Otherwise copy the last entry into the removed enemy's slot and clear the last entry
+            else {
+                last_entry = &enemy_list.enemies[enemy_list.num_enemies - 1];
+                *entry     = *last_entry;
+                EnemyList_clearEntry(last_entry);
+                enemy_list.num_enemies--;
+            }
+            break;
+        }
     }
 }
 
@@ -141,11 +129,7 @@ void EnemyList_printEnemyState(u16 flags, char* string) {
     u16 j;
 
     for (i = 0, j = 1; i < 5; i++, j <<= 1) {
-        if (flags & j) {
-            string[i] = EnemyList_enemyStates[i];
-        } else {
-            string[i] = ' ';
-        }
+        string[i] = BITS_HAS(flags, j) ? EnemyList_enemyStates[i] : ' ';
     }
 
     string[i] = '\0';
@@ -173,7 +157,7 @@ s32 EnemyList_getNumberOfActiveEnemies() {
     for (num_active_enemies = 0, i = 0, entry = ARRAY_START(enemy_list.enemies);
          i < enemy_list.num_enemies;
          i++, entry++) {
-        if (entry->flags & (ENEMY_ALIVE | ENEMY_ACTIVE)) {
+        if (BITS_HAS(entry->flags, ENEMY_ALIVE | ENEMY_ACTIVE)) {
             num_active_enemies++;
         }
     }
@@ -192,31 +176,21 @@ s32 EnemyList_isAnyEnemyWithinRange(Vec3f* position, f32 max_XZ_distance, f32 ma
     f32 height_difference;
     Model* enemy_model;
 
-    entry = ARRAY_START(enemy_list.enemies);
-    i     = 0;
-    if (enemy_list.num_enemies > 0) {
-        do {
-            if (entry->flags & (ENEMY_ALIVE | ENEMY_ACTIVE)) {
-                enemy_model = entry->enemy->model;
-                if (enemy_model != NULL) {
-                    vec3f_substractFloats(&pos_difference, &enemy_model->position, position);
-                    if (pos_difference.y < 0.0f) {
-                        height_difference = -pos_difference.y;
-                    } else {
-                        height_difference = pos_difference.y;
-                    }
-                    if ((height_difference <= max_height) &&
-                        (((pos_difference.z * pos_difference.z) +
-                          (pos_difference.x * pos_difference.x)) <=
-                         (max_XZ_distance * max_XZ_distance))) {
-                        return TRUE;
-                    }
+    for (entry = ARRAY_START(enemy_list.enemies), i = 0; i < enemy_list.num_enemies; i++, entry++) {
+        if (BITS_HAS(entry->flags, ENEMY_ALIVE | ENEMY_ACTIVE)) {
+            enemy_model = entry->enemy->model;
+            if (enemy_model != NULL) {
+                vec3f_substractFloats(&pos_difference, &enemy_model->position, position);
+                height_difference = pos_difference.y < 0.0f ? -pos_difference.y : pos_difference.y;
+                if ((height_difference <= max_height) &&
+                    (((pos_difference.z * pos_difference.z) + (pos_difference.x * pos_difference.x)
+                     ) <= (max_XZ_distance * max_XZ_distance))) {
+                    return TRUE;
                 }
             }
-            i++;
-            entry++;
-        } while (i < enemy_list.num_enemies);
+        }
     }
+
     return FALSE;
 }
 
