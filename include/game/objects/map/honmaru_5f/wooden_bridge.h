@@ -16,7 +16,7 @@ typedef struct WoodenBridge {
 
 void WoodenBridge_Entrypoint(WoodenBridge* self);
 void WoodenBridge_Init(WoodenBridge* self);
-void WoodenBridge_Calc(WoodenBridge* self);
+void WoodenBridge_Loop(WoodenBridge* self);
 
 typedef void (*WoodenBridgeFunc)(WoodenBridge*);
 
