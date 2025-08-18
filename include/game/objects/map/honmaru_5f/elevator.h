@@ -10,7 +10,7 @@ typedef struct ElevatorInner {
     f32 height;
     f32 speed;
     s16 player_inside_elevator;
-    s16 down_idle_time;
+    s16 bottom_idle_time;
     u8 field_0x50[20];
 } ElevatorInner;
 
@@ -31,12 +31,12 @@ void Elevator_Entrypoint(Elevator* self);
 void Elevator_Init(Elevator* self);
 void Elevator_Main(Elevator* self);
 void Elevator_Main_Ascending(Elevator* self);
-void Elevator_Main_UpIdleInsideElevator(Elevator* self);
-void Elevator_Main_UpIdleOutsideElevator(Elevator* self);
+void Elevator_Main_TopIdleInsideElevator(Elevator* self);
+void Elevator_Main_TopIdleOutsideElevator(Elevator* self);
 void Elevator_Main_Descending(Elevator* self);
-void Elevator_Main_FinishDescending(Elevator* self);
+void Elevator_Main_BottomIdle(Elevator* self);
 s32 Elevator_MoveActor(Elevator* self, Model* actor_model);
-s32 Elevator_IsPlayerInsideElevator(Model* model, Vec3f positions[]);
+s32 Elevator_IsPlayerInsideElevator(Model* model, Vec3f bounding_box[]);
 
 typedef void (*ElevatorFunc)(Elevator*);
 
@@ -47,10 +47,10 @@ typedef enum ElevatorFuncId {
 
 typedef enum ElevatorMainFuncId {
     ELEVATOR_MAIN_ASCENDING,
-    ELEVATOR_MAIN_UP_IDLE_INSIDE_ELEVATOR,
-    ELEVATOR_MAIN_UP_IDLE_OUTSIDE_ELEVATOR,
+    ELEVATOR_MAIN_TOP_IDLE_INSIDE_ELEVATOR,
+    ELEVATOR_MAIN_TOP_IDLE_OUTSIDE_ELEVATOR,
     ELEVATOR_MAIN_DESCENDING,
-    ELEVATOR_MAIN_FINISH_DESCENDING
+    ELEVATOR_MAIN_BOTTOM_IDLE
 } ElevatorMainFuncId;
 
 extern const u32 HONMARU_5F_ELEVATOR_DL;

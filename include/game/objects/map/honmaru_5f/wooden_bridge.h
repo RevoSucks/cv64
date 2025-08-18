@@ -20,7 +20,7 @@ void WoodenBridge_Loop(WoodenBridge* self);
 
 typedef void (*WoodenBridgeFunc)(WoodenBridge*);
 
-extern const u32 HONMARU_5F_WOODEN_BRIDGE_REINHARDT_DL;
-extern const u32 HONMARU_5F_WOODEN_BRIDGE_CARRIE_DL;
+extern const u32 HONMARU_5F_WOODEN_BRIDGE_FULL;
+extern const u32 HONMARU_5F_WOODEN_BRIDGE_BROKEN;
 
 #endif
