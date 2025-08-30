@@ -7,7 +7,7 @@
 
 #include "objects/menu/necronomicon.h"
 
-NecroWork* necroWork_create(ObjectHeader* parent, FigureLight* light, u8 flags, s32 arg3) {
+NecroWork* NecroWork_create(ObjectHeader* parent, FigureLight* light, u8 flags, s32 arg3) {
     NecroWork* work;
     Necronomicon* necro_obj;
 

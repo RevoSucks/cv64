@@ -11,21 +11,21 @@
 // clang-format off
 
 NecroFunc necro_functions[] = {
-    necro_isWorkCreated,
-    necro_init,
-    necro_loop,
-    necro_close,
-    necro_finishedClosing,
-    necro_destroy
+    Necro_isWorkCreated,
+    Necro_init,
+    Necro_loop,
+    Necro_close,
+    Necro_finishedClosing,
+    Necro_destroy
 };
 
 // clang-format on
 
-void necro_entrypoint(Necronomicon* self) {
+void Necro_entrypoint(Necronomicon* self) {
     ENTER(self, necro_functions);
 }
 
-void necro_isWorkCreated(Necronomicon* self) {
+void Necro_isWorkCreated(Necronomicon* self) {
     if (self->work != NULL) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
@@ -33,7 +33,7 @@ void necro_isWorkCreated(Necronomicon* self) {
     }
 }
 
-void necro_init(Necronomicon* self) {
+void Necro_init(Necronomicon* self) {
     Model* full_model;
     Model* book_cover;
     NecroWork* work = self->work;
@@ -92,7 +92,7 @@ void necro_init(Necronomicon* self) {
     );
 }
 
-void necro_loop(Necronomicon* self) {
+void Necro_loop(Necronomicon* self) {
     NecroWork* work;
     PageWork* page;
     PageWork* page_2;
@@ -186,7 +186,7 @@ void necro_loop(Necronomicon* self) {
     }
 }
 
-void necro_close(Necronomicon* self) {
+void Necro_close(Necronomicon* self) {
     s32 temp[4];
     Model* book_cover;
     Vec3f position;
@@ -276,7 +276,7 @@ void necro_close(Necronomicon* self) {
     }
 }
 
-void necro_finishedClosing(Necronomicon* self) {
+void Necro_finishedClosing(Necronomicon* self) {
     s32 temp[4];
     NecroWork* work;
     Vec3f position;
@@ -354,6 +354,6 @@ void necro_finishedClosing(Necronomicon* self) {
     }
 }
 
-void necro_destroy(Necronomicon* self) {
+void Necro_destroy(Necronomicon* self) {
     self->header.destroy(self);
 }

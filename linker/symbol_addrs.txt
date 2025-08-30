@@ -3124,23 +3124,29 @@ isSoundVolumeDecreased = 0x80013574;
 decreaseSoundVolume = 0x80013518;
 prepareSoundForPlay_defaultSettings = 0x80079d7c;
 
-// src/common/necronomicon.c =============================================================
+// src/common/necronomicon.c ===================================================
 
 // .text
-necro_entrypoint = 0x8014e830; // type:func  segment:common
-necro_isWorkCreated = 0x8014e8a0; // type:func  segment:common
-necro_init = 0x8014e8d8; // type:func  segment:common
-necro_loop = 0x8014eb38; // type:func  segment:common
-necro_close = 0x8014ee0c; // type:func  segment:common
-necro_finishedClosing = 0x8014f19c; // type:func  segment:common
-necro_destroy = 0x8014f3d0; // type:func  segment:common
+Necro_entrypoint      = 0x8014e830; // type:func  segment:common
+Necro_isWorkCreated   = 0x8014e8a0; // type:func  segment:common
+Necro_init            = 0x8014e8d8; // type:func  segment:common
+Necro_loop            = 0x8014eb38; // type:func  segment:common
+Necro_close           = 0x8014ee0c; // type:func  segment:common
+Necro_finishedClosing = 0x8014f19c; // type:func  segment:common
+Necro_destroy         = 0x8014f3d0; // type:func  segment:common
 // .data
-necro_functions = 0x801815a0;          // segment:common size:0x18
+necro_functions       = 0x801815a0; // segment:common size:0x18
 // .rodata
-D_8018bdd0 = 0x8018bdd0;          // type:f64 segment:common
-D_8018bdd8 = 0x8018bdd8;          // type:f64 segment:common
+D_8018BDD0            = 0x8018BDD0; // type:f64 segment:common
+D_8018BDD8            = 0x8018BDD8; // type:f64 segment:common
 
-// End of src/common/necronomicon.c ======================================================
+// End of src/common/necronomicon.c ============================================
 
-necroWork_create = 0x8014f400;    // type:func  segment:common
-D_8018bde0 = 0x8018bde0;          // type:asciz segment:common
+// src/common/necro_work.c =====================================================
+
+// .text
+NecroWork_create = 0x8014F400; // type:func  segment:common
+// .rodata
+D_8018BDE0       = 0x8018BDE0; // type:asciz segment:common
+
+// End of src/common/necro_work.c ==============================================
