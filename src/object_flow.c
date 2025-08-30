@@ -91,7 +91,7 @@ void GameStateMgr_setupGameState(GameStateMgr* self) {
 void GameStateMgr_executeGameStateUncappedFramerate(GameStateMgr* self) {
     s32* currentSlot;
     s32 slotData;
-    void (*function)();
+    void (*function)(void);
 
     for (currentSlot = ARRAY_START(self->current_game_state_slots);
          currentSlot < ARRAY_END(self->current_game_state_slots);
@@ -102,10 +102,10 @@ void GameStateMgr_executeGameStateUncappedFramerate(GameStateMgr* self) {
             break;
 
         if (slotData < 0) {
-            function = BITS_MASK(slotData, 0x803FFFFF);
+            function = (void (*)(void)) BITS_MASK(slotData, 0x803FFFFF);
             function();
         } else {
-            object_execute(K0BASE | BITS_MASK(slotData, 0x803FFFFF));
+            object_execute((ObjectHeader*) (K0BASE | BITS_MASK(slotData, 0x803FFFFF)));
         }
     }
 }
@@ -113,7 +113,7 @@ void GameStateMgr_executeGameStateUncappedFramerate(GameStateMgr* self) {
 void GameStateMgr_executeGameStateCappedFramerate(GameStateMgr* self, u32 execution_flags) {
     s32* currentSlot;
     s32 slotData;
-    void (*function)();
+    void (*function)(void);
 
     for (currentSlot = ARRAY_START(self->current_game_state_slots);
          currentSlot < ARRAY_END(self->current_game_state_slots);
@@ -125,10 +125,10 @@ void GameStateMgr_executeGameStateCappedFramerate(GameStateMgr* self, u32 execut
 
         if (BITS_HAS(slotData, execution_flags)) {
             if (slotData < 0) {
-                function = BITS_MASK(slotData, 0x803FFFFF);
+                function = (void (*)(void)) BITS_MASK(slotData, 0x803FFFFF);
                 function();
             } else {
-                object_execute(K0BASE | BITS_MASK(slotData, 0x803FFFFF));
+                object_execute((ObjectHeader*) (K0BASE | BITS_MASK(slotData, 0x803FFFFF)));
             }
         }
     }

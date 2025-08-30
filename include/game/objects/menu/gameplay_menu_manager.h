@@ -64,18 +64,18 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self);
 void GameplayMenuManager_exitMenu(GameplayMenuManager* self);
 u32 moveSelectionCursor(u32 button);
 
-MfdsState* gameplayCommonTextbox_getIfClosed();
-MfdsState* gameplayCommonTextbox_close();
+MfdsState* gameplayCommonTextbox_getIfClosed(void);
+MfdsState* gameplayCommonTextbox_close(void);
 MfdsState* gameplayCommonTextbox_prepare(
     u16* text_ptr, u32 flags, u8 line, u16 width, u8 palette, s16 X_pos, s16 Y_pos, u8 display_time
 );
 MfdsState* gameplayCommonTextbox_addItemAndPrepareName(s32);
 MfdsState* gameplayCommonTextbox_getMapMessage(u16, u8);
 MfdsState* gameplayCommonTextbox_getMessageFromPool(u16*, u8, u8);
-u32 gameplayCommonTextbox_lensAreOpened();
-u32 gameplayCommonTextbox_lensAreClosed();
+u32 gameplayCommonTextbox_lensAreOpened(void);
+u32 gameplayCommonTextbox_lensAreClosed(void);
 ObjMfds* gameplayCommonTextbox_getObject(s32, Object*);
-ObjMfds* gameplayCommonTextbox_getObjectFromList();
+ObjMfds* gameplayCommonTextbox_getObjectFromList(void);
 
 typedef enum GameplayMenuManagerFuncID {
     GAMEPLAYMENUMGR_INIT_MAIN_STRUCTS,

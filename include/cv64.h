@@ -70,19 +70,19 @@ typedef enum MenuID {
     MENU_ID_GAME_OVER   = 14
 } MenuID;
 
-extern void end_master_display_list();
+extern void end_master_display_list(void);
 extern s32 menuButton_selectNextOption(s32* option, s16* param_2, s16 number_of_options);
-extern void func_800010A0_1CA0();
-extern void func_8001248C_1308C();
-extern void func_8000C6D0();
-extern void updateGameSound();
-extern void drawFog();
-extern void func_80005658();
+extern void func_800010A0_1CA0(void);
+extern void func_8001248C_1308C(void);
+extern void func_8000C6D0(void);
+extern void updateGameSound(void);
+extern void drawFog(void);
+extern void func_80005658(void);
 extern u32 getMapEventFlagID(s16 stage_ID);
 s32 func_8001A250_1AE50(s32* arg0, u16* arg1, s16 arg2);
 extern void func_80066400(s32);
-extern void Map_SetCameraParams();
-extern void player_status_init();
+extern void Map_SetCameraParams(void);
+extern void player_status_init(void);
 
 #define NPTR 0
 // Gets the offset of a struct member variable

@@ -170,6 +170,6 @@ typedef struct SaveData {
     u32 gold_spent_on_Renon;
 } SaveData; // Size = 0xE0
 
-extern void initSave_BeginningOfStageState();
+extern void initSave_BeginningOfStageState(void);
 
 #endif

@@ -86,9 +86,9 @@ typedef struct ObjectFileInfo {
 
 int object_isValid(ObjectHeader* self);
 void object_free(Object* self);
-void clearAllObjects();
+void clearAllObjects(void);
 ObjectHeader* object_allocate(ObjectID ID);
-void updateObjectListFreeSlot();
+void updateObjectListFreeSlot(void);
 ObjectHeader* object_create(ObjectHeader* parent, ObjectID ID);
 ObjectHeader* object_createAndSetChild(ObjectHeader* parent, ObjectID ID);
 Object* object_findFirstObjectByID(ObjectID ID, Object* current_object);

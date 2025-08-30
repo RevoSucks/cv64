@@ -73,7 +73,7 @@ typedef struct Figure {
 } Figure; // Size = 0xA8
 
 extern FigureHeader* fig_allocate(s16 type);
-extern void clearAllFigs();
+extern void clearAllFigs(void);
 extern void Figure_Update();
 extern void Figure_UpdateMatrices();
 extern void figure_showModelAndChildren(FigureHeader*, u16);

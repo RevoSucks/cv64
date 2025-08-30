@@ -204,7 +204,7 @@ typedef struct cv64_atari_only_work {
     u8 field_0x9B;
 } cv64_atari_only_work_t;
 
-extern void atari_work_table_init();
+extern void atari_work_table_init(void);
 extern cv64_atari_base_work_t* atariBaseWork_create(Model* attached_bone);
 extern cv64_atari_data_work_t* atariDataWork_create(Model* attached_bone, u16 param_2);
 extern cv64_atari_only_work_t*

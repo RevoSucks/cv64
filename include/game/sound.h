@@ -20,20 +20,20 @@ play_sound_in_position_and_set_volume(u16 sound_ID, Vec3f* position, f32 volume_
 extern u8 func_800139D4(u16 sound_ID, f32, f32 volume);
 extern u8 isValidBGM(u16 bgm_ID);
 extern u8 setBGM(u16 bgm_ID);
-extern u8 resetCurrentBGMAndStopBGM();
-extern u32 setPreviousBGMAndStopBGM();
+extern u8 resetCurrentBGMAndStopBGM(void);
+extern u32 setPreviousBGMAndStopBGM(void);
 extern u32 setNewBGM(u16 bgm_ID);
-extern u8 isBGMNotNothing();
+extern u8 isBGMNotNothing(void);
 extern u32 isBGMPlaying(u16 bgm_ID);
 extern u8 wasMusicPlaying();
 extern u8 pauseBGM(s32 setAudioToStandby);
 extern u8 decreaseBGMVolume(s32 decreaseAudioVolume);
 extern u8 increaseBGMSpeed(s32 increaseBGMSpeed);
-extern u16 getCurrentBGM();
-extern u8 resetCurrentBGM();
-extern u32 setPreviousBGM();
+extern u16 getCurrentBGM(void);
+extern u8 resetCurrentBGM(void);
+extern u32 setPreviousBGM(void);
 extern s32 audioControlFadeOutType_setType(u32 type);
-extern u8 isSoundVolumeDecreased();
+extern u8 isSoundVolumeDecreased(void);
 extern void decreaseSoundVolume(u8 decrease);
 extern void prepareSoundForPlay_defaultSettings(u32 sound_ID);
 
