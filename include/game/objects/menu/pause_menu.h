@@ -193,7 +193,7 @@ s32 pauseMenu_checkIfItemCanBeUsed(PauseMenu*);
 
 typedef void (*PauseMenuFuncs)(PauseMenu*);
 
-typedef enum PauseMenuFuncId {
+typedef enum PauseMenuFuncID {
     PAUSE_MENU_DECREASE_SOUND_VOLUME,
     PAUSE_MENU_INIT,
     PAUSE_MENU_CREATE_MAIN_MENU,
@@ -204,7 +204,7 @@ typedef enum PauseMenuFuncId {
     PAUSE_MENU_DESTROY,
     PAUSE_MENU_CALC_QUIT_MENU,
     PAUSE_MENU_DO_NOTHING
-} PauseMenuFuncId;
+} PauseMenuFuncID;
 
 extern const u32 PAUSE_SCROLL_BG_MODEL_DL;
 extern const u32 PAUSE_CHARACTER_PORTRAIT_MATERIAL_DL;
