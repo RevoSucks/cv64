@@ -51,16 +51,16 @@ ItemUseSettings item_use_settings_array[] = {
 
 s32 sound_volume_decreased = FALSE;
 
-PauseMenuFuncs pauseMenu_functions[] = {
-    pauseMenu_decreaseSoundVolume,
-    pauseMenu_init,
-    pauseMenu_createMainMenu,
-    pauseMenu_calcMainMenu,
-    pauseMenu_createItemList,
-    pauseMenu_calcItemList,
-    pauseMenu_calcItemSelectedMenu,
-    pauseMenu_destroy,
-    pauseMenu_calcQuitMenu,
+PauseMenuFunc pauseMenu_functions[] = {
+    PauseMenu_decreaseSoundVolume,
+    PauseMenu_init,
+    PauseMenu_createMainMenu,
+    PauseMenu_calcMainMenu,
+    PauseMenu_createItemList,
+    PauseMenu_calcItemList,
+    PauseMenu_calcItemSelectedMenu,
+    PauseMenu_destroy,
+    PauseMenu_calcQuitMenu,
     object_doNothing
 };
 
@@ -73,14 +73,14 @@ u32 D_0F002FBC[NUM_CHARACTERS] = {10, 10};
 
 const char pauseMenu_unusedString1[] = "Status: Now In!!\n";
 
-void pauseMenu_entrypoint(PauseMenu* self) {
+void PauseMenu_entrypoint(PauseMenu* self) {
     ENTER(self, pauseMenu_functions);
 }
 
 /**
  * Decrease the sound volume when entering the menu
  */
-void pauseMenu_decreaseSoundVolume(PauseMenu* self) {
+void PauseMenu_decreaseSoundVolume(PauseMenu* self) {
     if (sys.file_load_array_ID == 0) {
         sound_volume_decreased = FALSE;
         if ((*isSoundVolumeDecreased)() == FALSE) {
@@ -93,7 +93,7 @@ void pauseMenu_decreaseSoundVolume(PauseMenu* self) {
     }
 }
 
-void pauseMenu_init(PauseMenu* self) {
+void PauseMenu_init(PauseMenu* self) {
     u32 character_portraits_dlists[2] = character_portraits;
     FigureLight* light;
     s32 scroll_bg_model_type;
@@ -245,7 +245,7 @@ void pauseMenu_init(PauseMenu* self) {
     (*textbox_setDimensions)(textbox, 1, 32, 0, 0);
     (*allocStructInObjectEntryList)("Digital_Clock", self, sizeof(DigitalClock), 12);
     if (self->digital_clock_text != NULL) {
-        pauseMenu_updateDigitalClockDisplay(self);
+        PauseMenu_updateDigitalClockDisplay(self);
     } else {
         self->header.destroy(self);
     }
@@ -267,7 +267,7 @@ const char pauseMenu_unusedString6[] = "Status: Exit!!\n";
 const char pauseMenu_unusedString7[] = "wait scroll to end\n";
 const char pauseMenu_unusedString8[] = "i_no : %d\n";
 
-void pauseMenu_createMainMenu(PauseMenu* self) {
+void PauseMenu_createMainMenu(PauseMenu* self) {
     scroll_state* scroll;
     MfdsState* textbox;
 
@@ -318,7 +318,7 @@ void pauseMenu_createMainMenu(PauseMenu* self) {
     }
 }
 
-void pauseMenu_calcMainMenu(PauseMenu* self) {
+void PauseMenu_calcMainMenu(PauseMenu* self) {
     s32 temp[2];
     scroll_state* options_scroll;
     MfdsState* options_textbox;
@@ -422,9 +422,9 @@ void pauseMenu_calcMainMenu(PauseMenu* self) {
 /**
  * Requests the creation of the Item menu
  */
-void pauseMenu_createItemList(PauseMenu* self) {
+void PauseMenu_createItemList(PauseMenu* self) {
     if ((*objectList_findFirstObjectByID)(MENU_SCROLL) == NULL) {
-        pauseMenu_createPauseItemMenuWork(
+        PauseMenu_createPauseItemMenuWork(
             self, 2, self->scrolls_borders_light, self->scrolls_background_light, 0
         );
         (*object_curLevel_goToNextFuncAndClearTimer)(
@@ -433,7 +433,7 @@ void pauseMenu_createItemList(PauseMenu* self) {
     }
 }
 
-void pauseMenu_calcItemList(PauseMenu* self) {
+void PauseMenu_calcItemList(PauseMenu* self) {
     MfdsState* textbox;
     Model* item_model;
     s32 temp[2];
@@ -465,7 +465,7 @@ void pauseMenu_calcItemList(PauseMenu* self) {
              * Create the selected item submenu
              */
             self->selected_item = selected_item_in_item_list;
-            pauseMenu_createItemDescription(self);
+            PauseMenu_createItemDescription(self);
 
             // Create the item model scroll
             item_scroll = (*createScrollState)(
@@ -581,7 +581,7 @@ const char pauseMenu_unusedString15[] = "Sub Ok(%d)!!\n";
 const char pauseMenu_unusedString16[] = "Scroll On Status Menu\n";
 const char pauseMenu_unusedString17[] = "YS step :%d\n";
 
-void pauseMenu_calcItemSelectedMenu(PauseMenu* self) {
+void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
     MfdsState* options_textbox;
     MfdsState* selection_arrow_textbox;
     scroll_state* item_model_scroll;
@@ -597,7 +597,7 @@ void pauseMenu_calcItemSelectedMenu(PauseMenu* self) {
     options_text_scroll     = self->options_text_scroll;
     item_description_scroll = self->item_description_scroll;
     item_model              = self->item_model;
-    temp                    = pauseMenu_checkIfItemCanBeUsed(self);
+    temp                    = PauseMenu_checkIfItemCanBeUsed(self);
     options_textbox         = self->options_textbox;
 
     /**
@@ -646,7 +646,7 @@ void pauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                 item_description->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
                 self->options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
                 selection_arrow_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
-                pauseMenu_createPauseItemMenuWork(
+                PauseMenu_createPauseItemMenuWork(
                     self, 2, self->scrolls_borders_light, self->scrolls_background_light, 0
                 );
                 (*object_curLevel_goToFunc)(
@@ -680,7 +680,7 @@ void pauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                      *       to 0:00
                      */
                     if (self->target_hour != 0) {
-                        pauseMenu_updateClock(self);
+                        PauseMenu_updateClock(self);
                         return;
                     }
 
@@ -858,7 +858,7 @@ void pauseMenu_calcItemSelectedMenu(PauseMenu* self) {
     }
 }
 
-void pauseMenu_destroy(PauseMenu* self) {
+void PauseMenu_destroy(PauseMenu* self) {
     if (((*objectList_findFirstObjectByID)(MENU_SCROLL) == NULL) && ((*Fade_IsFading)() == FALSE)) {
         // Increase sound volume back
         if (sound_volume_decreased) {
@@ -870,7 +870,7 @@ void pauseMenu_destroy(PauseMenu* self) {
     }
 }
 
-void pauseMenu_calcQuitMenu(PauseMenu* self) {
+void PauseMenu_calcQuitMenu(PauseMenu* self) {
     s32 temp;
     Model* scroll_background_model;
     MfdsState* textbox;
@@ -1029,7 +1029,7 @@ void pauseMenu_calcQuitMenu(PauseMenu* self) {
 /**
  * Updates the digital clock text with the internal time values
  */
-void pauseMenu_updateDigitalClockDisplay(PauseMenu* self) {
+void PauseMenu_updateDigitalClockDisplay(PauseMenu* self) {
     DigitalClock* digital_clock = self->digital_clock_text;
     s8 first_digit;
     s32 second_digit;
@@ -1060,7 +1060,7 @@ void pauseMenu_updateDigitalClockDisplay(PauseMenu* self) {
  *       when `sound_menu_work` in reality corresponds to the struct that contains parameters
  *       that are used in the Options's Sound menu.
  */
-PauseItemMenuWork* pauseMenu_createPauseItemMenuWork(
+PauseItemMenuWork* PauseMenu_createPauseItemMenuWork(
     PauseMenu* self, u8 ptrs_array_index, ModelLighting* arg2, ModelLighting* arg3, s32 arg4
 ) {
     PauseItemMenuWork* work;
@@ -1112,7 +1112,7 @@ void func_0F001BF0() {}
 /**
  * Creates the item description text when selecting an item
  */
-void pauseMenu_createItemDescription(PauseMenu* self) {
+void PauseMenu_createItemDescription(PauseMenu* self) {
     scroll_state* scroll;
     MfdsState* textbox;
 
@@ -1184,7 +1184,7 @@ s32 getItemUseArrayEntry(s32 item) {
 /**
  * Update the clock while it's spinning after using a time card
  */
-void pauseMenu_updateClock(PauseMenu* self) {
+void PauseMenu_updateClock(PauseMenu* self) {
     sys.SaveStruct_gameplay.minute += 5.0f;
     if (sys.SaveStruct_gameplay.minute >= 60) {
         sys.SaveStruct_gameplay.minute -= 60;
@@ -1212,7 +1212,7 @@ void pauseMenu_updateClock(PauseMenu* self) {
     /**
      * Update the digital clock text with the new time values
      */
-    pauseMenu_updateDigitalClockDisplay(self);
+    PauseMenu_updateDigitalClockDisplay(self);
     (*textbox_setMessagePtr)(self->digital_clock_textbox, self->digital_clock_text, NULL, 0);
     self->digital_clock_textbox->flags |= MFDS_FLAG_UPDATE_STRING;
 }
@@ -1220,7 +1220,7 @@ void pauseMenu_updateClock(PauseMenu* self) {
 /**
  * Returns 0 if the selected item can be used. Otherwise returns -1
  */
-s32 pauseMenu_checkIfItemCanBeUsed(PauseMenu* self) {
+s32 PauseMenu_checkIfItemCanBeUsed(PauseMenu* self) {
     s32 item_amount;
     s32 curable_statuses;
     s32 temp;

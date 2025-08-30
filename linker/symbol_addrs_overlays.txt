@@ -398,23 +398,23 @@ D_0F000AA8                              = 0x0F000AA8; // type:f64 segment:ni_ovl
 
 // src/overlay/pause_menu.c ====================================================
 // .text
-pauseMenu_entrypoint                = 0x0F000000; // type:func segment:ni_ovl_pause_menu
-pauseMenu_decreaseSoundVolume       = 0x0F000070; // type:func segment:ni_ovl_pause_menu
-pauseMenu_init                      = 0x0F0000E4; // type:func segment:ni_ovl_pause_menu
-pauseMenu_createMainMenu            = 0x0F0005E8; // type:func segment:ni_ovl_pause_menu
-pauseMenu_calcMainMenu              = 0x0F000798; // type:func segment:ni_ovl_pause_menu
-pauseMenu_checkScrollObjExists      = 0x0F000A18; // type:func segment:ni_ovl_pause_menu
-pauseMenu_calcItemList              = 0x0F000A7C; // type:func segment:ni_ovl_pause_menu
-pauseMenu_calcItemSelectedMenu      = 0x0F000E4C; // type:func segment:ni_ovl_pause_menu
-pauseMenu_destroy                   = 0x0F0014DC; // type:func segment:ni_ovl_pause_menu
-pauseMenu_calcQuitMenu              = 0x0F00155C; // type:func segment:ni_ovl_pause_menu
-pauseMenu_updateDigitalClockDisplay = 0x0F0019F4; // type:func segment:ni_ovl_pause_menu
-pauseMenu_createPauseItemMenuWork   = 0x0F001AC8; // type:func segment:ni_ovl_pause_menu
+PauseMenu_entrypoint                = 0x0F000000; // type:func segment:ni_ovl_pause_menu
+PauseMenu_decreaseSoundVolume       = 0x0F000070; // type:func segment:ni_ovl_pause_menu
+PauseMenu_init                      = 0x0F0000E4; // type:func segment:ni_ovl_pause_menu
+PauseMenu_createMainMenu            = 0x0F0005E8; // type:func segment:ni_ovl_pause_menu
+PauseMenu_calcMainMenu              = 0x0F000798; // type:func segment:ni_ovl_pause_menu
+PauseMenu_checkScrollObjExists      = 0x0F000A18; // type:func segment:ni_ovl_pause_menu
+PauseMenu_calcItemList              = 0x0F000A7C; // type:func segment:ni_ovl_pause_menu
+PauseMenu_calcItemSelectedMenu      = 0x0F000E4C; // type:func segment:ni_ovl_pause_menu
+PauseMenu_destroy                   = 0x0F0014DC; // type:func segment:ni_ovl_pause_menu
+PauseMenu_calcQuitMenu              = 0x0F00155C; // type:func segment:ni_ovl_pause_menu
+PauseMenu_updateDigitalClockDisplay = 0x0F0019F4; // type:func segment:ni_ovl_pause_menu
+PauseMenu_createPauseItemMenuWork   = 0x0F001AC8; // type:func segment:ni_ovl_pause_menu
 func_0F001BF0                       = 0x0F001BF0; // type:func segment:ni_ovl_pause_menu
-pauseMenu_createItemDescription     = 0x0F001BF8; // type:func segment:ni_ovl_pause_menu
+PauseMenu_createItemDescription     = 0x0F001BF8; // type:func segment:ni_ovl_pause_menu
 getItemUseArrayEntry                = 0x0F001DA0; // type:func segment:ni_ovl_pause_menu
-pauseMenu_updateClock               = 0x0F001DEC; // type:func segment:ni_ovl_pause_menu
-pauseMenu_checkIfItemCanBeUsed      = 0x0F001F0C; // type:func segment:ni_ovl_pause_menu
+PauseMenu_updateClock               = 0x0F001DEC; // type:func segment:ni_ovl_pause_menu
+PauseMenu_checkIfItemCanBeUsed      = 0x0F001F0C; // type:func segment:ni_ovl_pause_menu
 // .data
 item_descriptions                   = 0x0F002090; // segment:ni_ovl_pause_menu size:0xE0C
 options_text                        = 0x0F002E9C; // segment:ni_ovl_pause_menu size:0x3C

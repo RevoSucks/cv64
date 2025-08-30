@@ -132,7 +132,7 @@ typedef struct PauseMenu {
      * Healing Item Cancel bug (https://www.youtube.com/watch?v=UgzXJejaf_8).
      *
      * When using a healing item, the new player health value is calculated
-     * (see `pauseMenu_calcItemSelectedMenu`). After doing so, another check
+     * (see `PauseMenu_calcItemSelectedMenu`). After doing so, another check
      * in that same function runs to stop healing after the player's life is equal
      * or higher than `target_health`, which in turns enabled back the usage of the
      * B button to go back to the item menu.
@@ -172,26 +172,26 @@ typedef struct PauseMenu {
     u8 field_0x73;
 } PauseMenu;
 
-void pauseMenu_entrypoint(PauseMenu*);
-void pauseMenu_decreaseSoundVolume(PauseMenu*);
-void pauseMenu_init(PauseMenu*);
-void pauseMenu_createMainMenu(PauseMenu*);
-void pauseMenu_calcMainMenu(PauseMenu*);
-void pauseMenu_createItemList(PauseMenu*);
-void pauseMenu_calcItemList(PauseMenu*);
-void pauseMenu_calcItemSelectedMenu(PauseMenu*);
-void pauseMenu_destroy(PauseMenu*);
-void pauseMenu_calcQuitMenu(PauseMenu*);
-void pauseMenu_updateDigitalClockDisplay(PauseMenu*);
+void PauseMenu_entrypoint(PauseMenu*);
+void PauseMenu_decreaseSoundVolume(PauseMenu*);
+void PauseMenu_init(PauseMenu*);
+void PauseMenu_createMainMenu(PauseMenu*);
+void PauseMenu_calcMainMenu(PauseMenu*);
+void PauseMenu_createItemList(PauseMenu*);
+void PauseMenu_calcItemList(PauseMenu*);
+void PauseMenu_calcItemSelectedMenu(PauseMenu*);
+void PauseMenu_destroy(PauseMenu*);
+void PauseMenu_calcQuitMenu(PauseMenu*);
+void PauseMenu_updateDigitalClockDisplay(PauseMenu*);
 PauseItemMenuWork*
-pauseMenu_createPauseItemMenuWork(PauseMenu*, u8, ModelLighting*, ModelLighting*, s32);
+PauseMenu_createPauseItemMenuWork(PauseMenu*, u8, ModelLighting*, ModelLighting*, s32);
 void func_0F001BF0();
-void pauseMenu_createItemDescription(PauseMenu*);
+void PauseMenu_createItemDescription(PauseMenu*);
 s32 getItemUseArrayEntry(s32);
-void pauseMenu_updateClock(PauseMenu*);
-s32 pauseMenu_checkIfItemCanBeUsed(PauseMenu*);
+void PauseMenu_updateClock(PauseMenu*);
+s32 PauseMenu_checkIfItemCanBeUsed(PauseMenu*);
 
-typedef void (*PauseMenuFuncs)(PauseMenu*);
+typedef void (*PauseMenuFunc)(PauseMenu*);
 
 typedef enum PauseMenuFuncID {
     PAUSE_MENU_DECREASE_SOUND_VOLUME,
