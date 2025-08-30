@@ -1,4 +1,5 @@
 [tools]
+clangd = '20.1'
 cmake = '3.28'
 make = '4.4'
 ninja = '1.12'
