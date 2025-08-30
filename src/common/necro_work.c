@@ -8,12 +8,11 @@
 #include "objects/menu/necronomicon.h"
 
 NecroWork* NecroWork_create(ObjectHeader* parent, FigureLight* light, u8 flags, s32 arg3) {
-    NecroWork* work;
-    Necronomicon* necro_obj;
+    NecroWork* work         = NULL;
+    Necronomicon* necro_obj = (Necronomicon*) (*object_create)(parent, MENU_NECRONOMICON);
 
-    necro_obj = (Necronomicon*) (*object_create)(parent, MENU_NECRONOMICON);
     if (necro_obj != NULL) {
-        (*allocStructInObjectEntryList)("necro_work", necro_obj, sizeof(NecroWork), 15);
+        (*allocStructInObjectEntryList)("necro_work", (Object*) necro_obj, sizeof(NecroWork), 15);
         work = necro_obj->work;
         if (work != NULL) {
             work->flags                             = flags;
@@ -31,5 +30,6 @@ NecroWork* NecroWork_create(ObjectHeader* parent, FigureLight* light, u8 flags, 
     } else {
         return NULL;
     }
+
     return work;
 }

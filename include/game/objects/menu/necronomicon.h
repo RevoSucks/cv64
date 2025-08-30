@@ -1,6 +1,7 @@
 #ifndef NECRONOMICON_H
 #define NECRONOMICON_H
 
+#include "object.h"
 #include "objects/menu/page.h"
 #include "bit.h"
 
