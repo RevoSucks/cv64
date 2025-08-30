@@ -61,7 +61,7 @@ PauseMenuFunc pauseMenu_functions[] = {
     PauseMenu_calcItemSelectedMenu,
     PauseMenu_destroy,
     PauseMenu_calcQuitMenu,
-    object_doNothing
+    (PauseMenuFunc) object_doNothing
 };
 
 // clang-format on
@@ -100,19 +100,15 @@ void PauseMenu_init(PauseMenu* self) {
     MfdsState* textbox;
     Model* model;
     s32 temp[2];
-    GameplayMenuManager* gameplay_menu_mgr;
-
-    /**
-     * Get GameplayMenuManager instance
-     */
-    gameplay_menu_mgr =
+    // Get GameplayMenuManager instance
+    GameplayMenuManager* gameplay_menu_mgr =
         (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
+
     if (gameplay_menu_mgr != NULL) {
-        if (gameplay_menu_mgr->assets_file_buffer_end_ptr != NULL) {
-            self->gameplay_menu_mgr = gameplay_menu_mgr;
-        } else {
+        if (gameplay_menu_mgr->assets_file_buffer_end_ptr == NULL)
             return;
-        }
+
+        self->gameplay_menu_mgr = gameplay_menu_mgr;
     }
 
     /**
@@ -140,21 +136,21 @@ void PauseMenu_init(PauseMenu* self) {
      * Create and setup the lights
      */
     light                       = (*light_create)(FIG_TYPE_LIGHT);
-    self->scrolls_borders_light = light;
-    (*figure_setChild)(light, common_camera_8009B44C);
+    self->scrolls_borders_light = (Light*) light;
+    (*figure_setChild)((FigureHeader*) light, (FigureHeader*) common_camera_8009B44C);
     light->ambient_color.r = light->ambient_color.g = light->ambient_color.b = 160;
     light->number_of_lights                                                  = 1;
     light->lights[0].color.r                                                 = 207;
     light->lights[0].color.g                                                 = 207;
     light->lights[0].color.b                                                 = 207;
-    light->lights[0].direction[0]                                            = 240;
+    light->lights[0].direction[0]                                            = (s8) 240;
     light->lights[0].direction[1]                                            = 0;
     light->lights[0].direction[2]                                            = 16;
 
     scroll_bg_model_type           = FIG_TYPE_HUD_ELEMENT;
     light                          = (*light_create)(FIG_TYPE_LIGHT);
-    self->scrolls_background_light = light;
-    (*figure_setChild)(light, common_camera_8009B448);
+    self->scrolls_background_light = (Light*) light;
+    (*figure_setChild)((FigureHeader*) light, (FigureHeader*) common_camera_8009B448);
     light->ambient_color.r        = 160;
     light->ambient_color.g        = 160;
     light->ambient_color.b        = 160;
@@ -162,7 +158,7 @@ void PauseMenu_init(PauseMenu* self) {
     light->lights[0].color.r      = 207;
     light->lights[0].color.g      = 207;
     light->lights[0].color.b      = 207;
-    light->lights[0].direction[0] = 240;
+    light->lights[0].direction[0] = (s8) 240;
     light->lights[0].direction[1] = 16;
     light->lights[0].direction[2] = 16;
 
@@ -173,7 +169,7 @@ void PauseMenu_init(PauseMenu* self) {
     self->scroll_background_model = model;
     model->dlist                  = (u32) &PAUSE_SCROLL_BG_MODEL_DL;
     model->assets_file            = NI_ASSETS_GAMEPLAY_HUD;
-    model->flags |= FIG_FLAG_APPLY_PRIMITIVE_COLOR;
+    BITS_SET(model->flags, FIG_FLAG_APPLY_PRIMITIVE_COLOR);
     model->primitive_color.integer = RGBA(80, 80, 80, 255);
     model->position.x              = 0.0f;
     model->position.y              = 0.0f;
@@ -194,7 +190,7 @@ void PauseMenu_init(PauseMenu* self) {
         character_portraits_dlists[sys.SaveStruct_gameplay.character]
     );
     model->assets_file = NI_ASSETS_GAMEPLAY_HUD;
-    model->flags |= FIG_FLAG_APPLY_PRIMITIVE_COLOR;
+    BITS_SET(model->flags, FIG_FLAG_APPLY_PRIMITIVE_COLOR);
     model->primitive_color.integer = RGBA(255, 255, 255, 255);
     model->texture                 = 0;
     model->palette                 = 0;
@@ -209,15 +205,17 @@ void PauseMenu_init(PauseMenu* self) {
      * Create and setup the character name's text
      */
     textbox = (*textbox_create)(
-        self,
+        (ObjectHeader*) self,
         common_camera_HUD,
         MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED | MFDS_FLAG_FAST_TEXT_SPEED |
             MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP | MFDS_FLAG_00000008 |
             MFDS_FLAG_MENU_TEXT_ID_PRINTS_MENU_STRING
     );
+
     if (textbox == NULL) {
         self->header.destroy(self);
     }
+
     self->character_name_textbox = textbox;
     textbox->palette             = TEXT_COLOR_BEIGE;
     (*textbox_setPos)(textbox, 85, 17, 1);
@@ -231,24 +229,28 @@ void PauseMenu_init(PauseMenu* self) {
      * Create and setup the digital clock's text
      */
     textbox = (*textbox_create)(
-        self,
+        (ObjectHeader*) self,
         common_camera_HUD,
         MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED | MFDS_FLAG_FAST_TEXT_SPEED |
             MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP | MFDS_FLAG_00000008
     );
+
     if (textbox == NULL) {
         self->header.destroy(self);
     }
+
     self->digital_clock_textbox = textbox;
     textbox->palette            = TEXT_COLOR_BEIGE;
     (*textbox_setPos)(textbox, 90, 60, 1);
     (*textbox_setDimensions)(textbox, 1, 32, 0, 0);
-    (*allocStructInObjectEntryList)("Digital_Clock", self, sizeof(DigitalClock), 12);
+    (*allocStructInObjectEntryList)("Digital_Clock", (Object*) self, sizeof(DigitalClock), 12);
+
     if (self->digital_clock_text != NULL) {
         PauseMenu_updateDigitalClockDisplay(self);
     } else {
         self->header.destroy(self);
     }
+
     (*textbox_setMessagePtr)(textbox, self->digital_clock_text->clock_text, NULL, 0);
 
     self->delay_before_being_able_to_select_option = 7;
@@ -292,19 +294,21 @@ void PauseMenu_createMainMenu(PauseMenu* self) {
         scroll->width.x = 0.5f;
         scroll->width.y = 0.5f;
         scroll->width.z = 0.44999999f;
-        scroll->flags &= ~SCROLL_STATE_FLAG_CLOSING;
-        scroll->flags |= SCROLL_STATE_FLAG_OPENING;
+        BITS_UNSET(scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+        BITS_SET(scroll->flags, SCROLL_STATE_FLAG_OPENING);
         self->options_scroll = scroll;
 
         textbox = (*textbox_create)(
-            self,
-            self->scrolls_borders_light,
+            (ObjectHeader*) self,
+            (Camera*) self->scrolls_borders_light,
             MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED | MFDS_FLAG_FAST_TEXT_SPEED |
                 MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP
         );
         self->options_textbox = textbox;
+
         if (textbox) {
         }
+
         textbox->palette = TEXT_COLOR_WHITE;
         (*textbox_setPos)(textbox, 95, 90, 1);
         (*textbox_setDimensions)(textbox, 5, 100, 0, 0);
@@ -333,16 +337,18 @@ void PauseMenu_calcMainMenu(PauseMenu* self) {
      * Exit back to gameplay after pressing B
      * (wait until the scroll is opened before being able to back out)
      */
-    if (CONT_BTNS_PRESSED(CONT_0, CONT_B) && (options_scroll->flags & SCROLL_STATE_FLAG_OPENED)) {
+    if (CONT_BTNS_PRESSED(CONT_0, CONT_B) &&
+        BITS_HAS(options_scroll->flags, SCROLL_STATE_FLAG_OPENED)) {
         gameplay_menu_mgr =
             (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
         if (gameplay_menu_mgr != NULL) {
-            gameplay_menu_mgr->menu_state |= EXIT_MENU;
+            BITS_SET(gameplay_menu_mgr->menu_state, EXIT_MENU);
         }
 
-        (*Fade_SetSettings)(FADE_OUT, 15, 0, 0, 0);
-        options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        (*Fade_SetSettings)((FadeFlags) FADE_OUT, 15, 0, 0, 0);
+        BITS_SET(options_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
         self->options_scroll->flags = SCROLL_STATE_FLAG_HIDE;
+
         (*object_curLevel_goToFunc)(
             self->header.current_function, &self->header.function_info_ID, PAUSE_MENU_DESTROY
         );
@@ -354,12 +360,13 @@ void PauseMenu_calcMainMenu(PauseMenu* self) {
     if (textbox_option == TEXTBOX_OPTION_IDLE) {
         return;
     }
+
     switch (textbox_option) {
         /**
          * Go to Item menu
          */
         case PAUSE_MENU_ITEM:
-            options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+            BITS_SET(options_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             self->options_scroll->flags = SCROLL_STATE_FLAG_HIDE;
             (*object_curLevel_goToNextFuncAndClearTimer)(
                 self->header.current_function, &self->header.function_info_ID
@@ -373,11 +380,11 @@ void PauseMenu_calcMainMenu(PauseMenu* self) {
             gameplay_menu_mgr =
                 (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
-                gameplay_menu_mgr->menu_state |= ENTERING_OPTION;
+                BITS_SET(gameplay_menu_mgr->menu_state, ENTERING_OPTION);
             }
 
-            (*Fade_SetSettings)(FADE_OUT, 15, 0, 0, 0);
-            options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+            (*Fade_SetSettings)((FadeFlags) FADE_OUT, 15, 0, 0, 0);
+            BITS_SET(options_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             self->options_scroll->flags = SCROLL_STATE_FLAG_HIDE;
             (*object_curLevel_goToFunc)(
                 self->header.current_function, &self->header.function_info_ID, PAUSE_MENU_DESTROY
@@ -406,12 +413,12 @@ void PauseMenu_calcMainMenu(PauseMenu* self) {
             gameplay_menu_mgr =
                 (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
-                gameplay_menu_mgr->menu_state |= EXIT_MENU;
+                BITS_SET(gameplay_menu_mgr->menu_state, EXIT_MENU);
             }
 
-            options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+            BITS_SET(options_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             self->options_scroll->flags = SCROLL_STATE_FLAG_HIDE;
-            (*Fade_SetSettings)(FADE_OUT, 15, 0, 0, 0);
+            (*Fade_SetSettings)((FadeFlags) FADE_OUT, 15, 0, 0, 0);
             (*object_curLevel_goToFunc)(
                 self->header.current_function, &self->header.function_info_ID, PAUSE_MENU_DESTROY
             );
@@ -425,7 +432,11 @@ void PauseMenu_calcMainMenu(PauseMenu* self) {
 void PauseMenu_createItemList(PauseMenu* self) {
     if ((*objectList_findFirstObjectByID)(MENU_SCROLL) == NULL) {
         PauseMenu_createPauseItemMenuWork(
-            self, 2, self->scrolls_borders_light, self->scrolls_background_light, 0
+            self,
+            2,
+            (ModelLighting*) self->scrolls_borders_light,
+            (ModelLighting*) self->scrolls_background_light,
+            0
         );
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
@@ -483,8 +494,8 @@ void PauseMenu_calcItemList(PauseMenu* self) {
             item_scroll->width.x = 0.6f;
             item_scroll->width.y = 0.3f;
             item_scroll->width.z = 0.27f;
-            item_scroll->flags &= ~SCROLL_STATE_FLAG_CLOSING;
-            item_scroll->flags |= SCROLL_STATE_FLAG_OPENING;
+            BITS_UNSET(item_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+            BITS_SET(item_scroll->flags, SCROLL_STATE_FLAG_OPENING);
             self->item_model_scroll = item_scroll;
 
             // Create the options text scroll
@@ -503,20 +514,22 @@ void PauseMenu_calcItemList(PauseMenu* self) {
             options_scroll->width.x = 0.69999999f;
             options_scroll->width.y = 0.3f;
             options_scroll->width.z = 0.27f;
-            options_scroll->flags &= ~SCROLL_STATE_FLAG_CLOSING;
-            options_scroll->flags |= SCROLL_STATE_FLAG_OPENING;
+            BITS_UNSET(options_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+            BITS_SET(options_scroll->flags, SCROLL_STATE_FLAG_OPENING);
             self->options_text_scroll = options_scroll;
 
             // Create and setup the options text
             textbox = (*textbox_create)(
-                self,
-                self->scrolls_background_light,
+                (ObjectHeader*) self,
+                (Camera*) self->scrolls_background_light,
                 MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED |
                     MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP
             );
             self->options_textbox = textbox;
+
             if (textbox) {
             }
+
             textbox->palette = TEXT_COLOR_BEIGE;
             (*textbox_setPos)(textbox, 165, 100, 1);
             (*textbox_setDimensions)(textbox, 3, 100, 0, 0);
@@ -527,14 +540,16 @@ void PauseMenu_calcItemList(PauseMenu* self) {
 
             // Create and setup the options selection arrow
             textbox = (*textbox_create)(
-                self,
-                self->scrolls_background_light,
+                (ObjectHeader*) self,
+                (Camera*) self->scrolls_background_light,
                 MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED |
                     MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP
             );
             self->selection_arrow_textbox = textbox;
+
             if (textbox) {
             }
+
             textbox->palette = TEXT_COLOR_RED;
             (*textbox_setPos)(textbox, 160, 100, 1);
             (*textbox_setDimensions)(textbox, 1, 16, 0, 0);
@@ -626,28 +641,32 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
     }
     // Display the options text set above
     if (temp != self->selected_item_can_be_used) {
-        options_textbox->flags |= MFDS_FLAG_UPDATE_STRING;
+        BITS_SET(options_textbox->flags, MFDS_FLAG_UPDATE_STRING);
         self->selected_item_can_be_used = temp;
     }
 
-    if (options_text_scroll->flags & SCROLL_STATE_FLAG_OPENED) {
+    if (BITS_HAS(options_text_scroll->flags, SCROLL_STATE_FLAG_OPENED)) {
         item_description = self->item_description;
 
         /**
          * Go back to the item list submenu
          */
         if (self->outside_item_selected_menu) {
-            if (!(item_model_scroll->flags & SCROLL_STATE_FLAG_CLOSING) &&
-                !(options_text_scroll->flags & SCROLL_STATE_FLAG_CLOSING) &&
-                !(item_description_scroll->flags & SCROLL_STATE_FLAG_CLOSING)) {
+            if (BITS_NOT_HAS(item_model_scroll->flags, SCROLL_STATE_FLAG_CLOSING) &&
+                BITS_NOT_HAS(options_text_scroll->flags, SCROLL_STATE_FLAG_CLOSING) &&
+                BITS_NOT_HAS(item_description_scroll->flags, SCROLL_STATE_FLAG_CLOSING)) {
                 item_model_scroll->flags       = SCROLL_STATE_FLAG_HIDE;
                 options_text_scroll->flags     = SCROLL_STATE_FLAG_HIDE;
                 item_description_scroll->flags = SCROLL_STATE_FLAG_HIDE;
-                item_description->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
-                self->options_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
-                selection_arrow_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+                BITS_SET(item_description->flags, MFDS_FLAG_CLOSE_TEXTBOX);
+                BITS_SET(self->options_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
+                BITS_SET(selection_arrow_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
                 PauseMenu_createPauseItemMenuWork(
-                    self, 2, self->scrolls_borders_light, self->scrolls_background_light, 0
+                    self,
+                    2,
+                    (ModelLighting*) self->scrolls_borders_light,
+                    (ModelLighting*) self->scrolls_background_light,
+                    0
                 );
                 (*object_curLevel_goToFunc)(
                     self->header.current_function,
@@ -659,7 +678,7 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
             /**
              * Display the item model
              */
-            (*figure_showModelAndChildren)(item_model, 0);
+            (*figure_showModelAndChildren)((FigureHeader*) item_model, 0);
 
             /**
              * If an option was selected, or the cursor is moving...
@@ -730,13 +749,13 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                      */
                     if ((self->option_selection_inside_selected_item != 0) ||
                         CONT_BTNS_PRESSED(CONT_0, B_BUTTON)) {
-                        item_model_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                        item_model_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                        options_text_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                        options_text_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                        item_description_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                        item_description_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                        (*figure_destroySelfAndChildren_2)(item_model, 0);
+                        BITS_UNSET(item_model_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                        BITS_SET(item_model_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                        BITS_UNSET(options_text_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                        BITS_SET(options_text_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                        BITS_UNSET(item_description_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                        BITS_SET(item_description_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                        (*figure_destroySelfAndChildren_2)((FigureHeader*) item_model, 0);
                         self->outside_item_selected_menu = TRUE;
                         return;
                     }
@@ -791,11 +810,17 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                                  * Set the `SAVE_FLAG_VAMP_CURED_USING_ITEM` save flag when curing
                                  * the VAMP status
                                  */
-                                if ((self->item_effect &
-                                     CURABLE_FLAG_TO_PLAYER_FLAG(PLAYER_FLAG_VAMP)) &&
-                                    (sys.SaveStruct_gameplay.player_status & PLAYER_FLAG_VAMP)) {
-                                    sys.SaveStruct_gameplay.flags |=
-                                        SAVE_FLAG_VAMP_CURED_USING_ITEM;
+                                if (BITS_HAS(
+                                        self->item_effect,
+                                        CURABLE_FLAG_TO_PLAYER_FLAG(PLAYER_FLAG_VAMP)
+                                    ) &&
+                                    BITS_HAS(
+                                        sys.SaveStruct_gameplay.player_status, PLAYER_FLAG_VAMP
+                                    )) {
+                                    BITS_SET(
+                                        sys.SaveStruct_gameplay.flags,
+                                        SAVE_FLAG_VAMP_CURED_USING_ITEM
+                                    );
                                 }
 
                                 /**
@@ -822,7 +847,7 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                             /**
                              * If using an time card...
                              */
-                            if ((self->item_effect & TIME_CARD) &&
+                            if (BITS_HAS(self->item_effect, TIME_CARD) &&
                                 ((self->item_use_settings_target_value !=
                                   sys.SaveStruct_gameplay.hour) ||
                                  (sys.SaveStruct_gameplay.minute != 0) ||
@@ -844,13 +869,13 @@ void PauseMenu_calcItemSelectedMenu(PauseMenu* self) {
                  * Close the scroll, textboxes and remove the item model
                  */
                 else if (CONT_BTNS_PRESSED(CONT_0, B_BUTTON) || (self->option_selection_inside_selected_item < 0) || (sys.SaveStruct_gameplay.items.array[self->selected_item - 1] == 0)) {
-                    item_model_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                    item_model_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                    options_text_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                    options_text_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                    item_description_scroll->flags &= ~SCROLL_STATE_FLAG_OPENING;
-                    item_description_scroll->flags |= SCROLL_STATE_FLAG_CLOSING;
-                    (*figure_destroySelfAndChildren_2)(item_model, 0);
+                    BITS_UNSET(item_model_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                    BITS_SET(item_model_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                    BITS_UNSET(options_text_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                    BITS_SET(options_text_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                    BITS_UNSET(item_description_scroll->flags, SCROLL_STATE_FLAG_OPENING);
+                    BITS_SET(item_description_scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+                    (*figure_destroySelfAndChildren_2)((FigureHeader*) item_model, 0);
                     self->outside_item_selected_menu = TRUE;
                 }
             }
@@ -888,7 +913,7 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
          * Create the Quit submenu scroll
          */
         case PAUSE_QUIT_STATE_CREATE_SCROLL:
-            mini_scroll = (*MiniScroll_create)(self, self->scrolls_borders_light, 0, 0);
+            mini_scroll = (*MiniScroll_create)(self, (Camera*) self->scrolls_borders_light, 0, 0);
             mini_scroll_params->scroll = mini_scroll;
             (*MiniScroll_setPosition)(mini_scroll_params->scroll, -6.0f, 26.0f, 100.0f);
             (*MiniScroll_setWidth)(mini_scroll_params->scroll, 0.7f, 0.36f, 1.0f);
@@ -914,8 +939,8 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
          */
         case PAUSE_QUIT_STATE_CREATE_TEXTBOX:
             textbox = (*textbox_create)(
-                self,
-                self->scrolls_borders_light,
+                (ObjectHeader*) self,
+                (Camera*) self->scrolls_borders_light,
                 MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED
             );
             mini_scroll_params->textbox = textbox;
@@ -935,7 +960,7 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
 
         case PAUSE_QUIT_STATE_OPEN_SCROLL:
             if ((*MiniScroll_checkFlags)(mini_scroll_params->scroll, MINISCROLL_FLAG_OPENED)) {
-                options_textbox->flags |= MINISCROLL_FLAG_CLOSED;
+                BITS_SET(options_textbox->flags, MINISCROLL_FLAG_CLOSED);
                 mini_scroll_params->state++;
                 break;
             }
@@ -947,7 +972,7 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
                  * After selecting an option, close the scroll and determine what to do next
                  */
                 (*MiniScroll_setState)(mini_scroll_params->scroll, MINISCROLL_STATE_CLOSE);
-                mini_scroll_params->textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+                BITS_SET(mini_scroll_params->textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
                 switch (mini_scroll_params->textbox->textbox_option - 1) {
                     // Yes
                     case 0:
@@ -969,14 +994,14 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
             gameplay_menu_mgr =
                 (GameplayMenuManager*) (*objectList_findFirstObjectByID)(MENU_GAMEPLAY_MENUMGR);
             if (gameplay_menu_mgr != NULL) {
-                gameplay_menu_mgr->menu_state |= QUIT_GAME;
+                BITS_SET(gameplay_menu_mgr->menu_state, QUIT_GAME);
             }
 
             textbox = mini_scroll_params->textbox;
-            textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+            BITS_SET(textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
 
             self->options_scroll->flags = SCROLL_STATE_FLAG_HIDE;
-            (*Fade_SetSettings)(FADE_OUT, 15, 0, 0, 0);
+            (*Fade_SetSettings)((FadeFlags) FADE_OUT, 15, 0, 0, 0);
             (*player_status_init)();
 
             mini_scroll_params->after_quit_state = PAUSE_MENU_DESTROY;
@@ -989,20 +1014,24 @@ void PauseMenu_calcQuitMenu(PauseMenu* self) {
         case PAUSE_QUIT_STATE_CLOSE_QUIT_SUBMENU:
             mini_scroll_params->after_quit_state = PAUSE_MENU_CALC_MAIN_MENU;
             textbox                              = (*textbox_create)(
-                self,
-                self->scrolls_borders_light,
+                (ObjectHeader*) self,
+                (Camera*) self->scrolls_borders_light,
                 MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED |
                     MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP
             );
             self->options_textbox = textbox;
             textbox->palette      = TEXT_COLOR_WHITE;
             options_textbox       = textbox;
+
             if (options_textbox) {
             }
+
             (*textbox_setPos)(textbox, 95, 90, 1);
             (*textbox_setDimensions)(options_textbox, 5, 100, 0, 0);
+
             if (options_textbox) {
             }
+
             (*textbox_setScaleParameters)(options_textbox, 2, 2, 11.0f, 1.0f, 1.0f, FALSE, TRUE);
             (*textbox_setMessagePtr)(
                 options_textbox, GET_UNMAPPED_ADDRESS(NI_OVL_PAUSE_MENU, &options_text), NULL, 0
@@ -1063,12 +1092,12 @@ void PauseMenu_updateDigitalClockDisplay(PauseMenu* self) {
 PauseItemMenuWork* PauseMenu_createPauseItemMenuWork(
     PauseMenu* self, u8 ptrs_array_index, ModelLighting* arg2, ModelLighting* arg3, s32 arg4
 ) {
-    PauseItemMenuWork* work;
+    PauseItemMenuWork* work = NULL;
     scroll_state* scroll;
 
     if (self != NULL) {
         (*allocStructInObjectEntryList)(
-            "sound_menu_work", self, sizeof(PauseItemMenuWork), ptrs_array_index
+            "sound_menu_work", (Object*) self, sizeof(PauseItemMenuWork), ptrs_array_index
         );
         work = ((Object*) self)->alloc_data[ptrs_array_index];
         if (work != NULL) {
@@ -1093,8 +1122,8 @@ PauseItemMenuWork* PauseMenu_createPauseItemMenuWork(
             scroll->width.z = 0.6f;
             scroll->width.y = 0.6f;
             scroll->width.x = 1.5f;
-            scroll->flags &= ~SCROLL_STATE_FLAG_CLOSING;
-            scroll->flags |= SCROLL_STATE_FLAG_OPENING;
+            BITS_UNSET(scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+            BITS_SET(scroll->flags, SCROLL_STATE_FLAG_OPENING);
             work->scroll = scroll;
         } else {
             return NULL;
@@ -1102,6 +1131,7 @@ PauseItemMenuWork* PauseMenu_createPauseItemMenuWork(
     } else {
         return NULL;
     }
+
     return work;
 }
 
@@ -1134,22 +1164,24 @@ void PauseMenu_createItemDescription(PauseMenu* self) {
     scroll->width.x = 1.5f;
     scroll->width.y = 0.5f;
     scroll->width.z = 0.33f;
-    scroll->flags &= ~SCROLL_STATE_FLAG_CLOSING;
-    scroll->flags |= SCROLL_STATE_FLAG_OPENING;
+    BITS_UNSET(scroll->flags, SCROLL_STATE_FLAG_CLOSING);
+    BITS_SET(scroll->flags, SCROLL_STATE_FLAG_OPENING);
     self->item_description_scroll = scroll;
 
     /**
      * Create and setup the item description textbox
      */
     textbox = (*textbox_create)(
-        self,
-        self->scrolls_background_light,
+        (ObjectHeader*) self,
+        (Camera*) self->scrolls_background_light,
         MFDS_FLAG_OPEN_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED |
             MFDS_FLAG_ALLOC_TEXTBOX_IN_MENU_DATA_HEAP
     );
     self->item_description = textbox;
+
     if (textbox) {
     }
+
     textbox->palette = TEXT_COLOR_BROWN;
     (*textbox_setPos)(textbox, 30, 157, 1);
     (*textbox_setDimensions)(textbox, 3, 255, 0, 0);
@@ -1178,6 +1210,7 @@ s32 getItemUseArrayEntry(s32 item) {
             return entry_idx;
         }
     }
+
     return -1;
 }
 
@@ -1213,8 +1246,8 @@ void PauseMenu_updateClock(PauseMenu* self) {
      * Update the digital clock text with the new time values
      */
     PauseMenu_updateDigitalClockDisplay(self);
-    (*textbox_setMessagePtr)(self->digital_clock_textbox, self->digital_clock_text, NULL, 0);
-    self->digital_clock_textbox->flags |= MFDS_FLAG_UPDATE_STRING;
+    (*textbox_setMessagePtr)(self->digital_clock_textbox, (u16*) self->digital_clock_text, NULL, 0);
+    BITS_SET(self->digital_clock_textbox->flags, MFDS_FLAG_UPDATE_STRING);
 }
 
 /**
@@ -1249,7 +1282,7 @@ s32 PauseMenu_checkIfItemCanBeUsed(PauseMenu* self) {
     /**
      * If the selected item is a healing item...
      */
-    if (self->item_effect & HEALING) {
+    if (BITS_HAS(self->item_effect, HEALING)) {
         /**
          * Get the statuses that items can cure (VAMP, POISON and STO in practice),
          * then check if the player has that status (`temp`)
@@ -1272,7 +1305,7 @@ s32 PauseMenu_checkIfItemCanBeUsed(PauseMenu* self) {
          * if under the VAMP status
          */
         if ((self->item_use_settings_target_value != 0) &&
-            (sys.SaveStruct_gameplay.player_status & PLAYER_FLAG_VAMP)) {
+            BITS_HAS(sys.SaveStruct_gameplay.player_status, PLAYER_FLAG_VAMP)) {
             return -1;
         }
 
@@ -1293,7 +1326,7 @@ s32 PauseMenu_checkIfItemCanBeUsed(PauseMenu* self) {
         /**
      * If the selected item is a Sun or Moon card...
      */
-    } else if (self->item_effect & TIME_CARD) {
+    } else if (BITS_HAS(self->item_effect, TIME_CARD)) {
         /**
          * Don't allow using a card if we're already in the target hour o'clock
          */
