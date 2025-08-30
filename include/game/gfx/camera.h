@@ -11,6 +11,7 @@ typedef struct {
     s16 field3_0x6;
     s16 screen_offset_X;
     s16 screen_offset_Y;
+    // Vec2 screen_offset;
     s16 field6_0xc;
     s16 field7_0xe;
     s16 field8_0x10;

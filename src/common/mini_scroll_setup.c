@@ -38,11 +38,7 @@ MiniScroll* MiniScroll_create(void* parent, Camera* camera, s32 param_3, s32 par
 
     inner->field_0x34 = 0;
 
-    if (camera != NULL) {
-        inner->display_camera = camera;
-    } else {
-        inner->display_camera = NULL;
-    }
+    inner->display_camera = camera != NULL ? camera : NULL;
 
     return obj_mini_scroll;
 }
@@ -69,19 +65,19 @@ Model* MiniScroll_getModel(MiniScroll* self) {
 }
 
 void MiniScroll_setState(MiniScroll* self, u32 state) {
-    self->inner.flags |= (state & 0xF);
+    BITS_SET(self->inner.flags, state & 0xF);
 }
 
 void MiniScroll_editFlags(MiniScroll* self, u32 flags, s32 setFlags) {
     MiniScrollInner* inner = &self->inner;
 
     if (setFlags) {
-        inner->flags |= flags;
+        BITS_SET(inner->flags, flags);
     } else {
-        inner->flags &= ~flags;
+        BITS_UNSET(inner->flags, flags);
     }
 }
 
 u32 MiniScroll_checkFlags(MiniScroll* self, u32 flags) {
-    return self->inner.flags & flags;
+    return BITS_HAS(self->inner.flags, flags);
 }
