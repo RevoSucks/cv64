@@ -71,7 +71,7 @@ void Necro_init(Necronomicon* self) {
      * Create the first page as `PAGE_1`, then create a random page
      * between `PAGE_2` and `PAGE_3`
      */
-    second_page = (*pageWork_create)(
+    second_page = (*PageWork_create)(
         self, work->necro_light, ((*guRandom)() % 3) + 1, 0.0f, 0.0f, 2.0f, 0, 5.0f
     );
     self->pages[1] = second_page;
@@ -80,7 +80,7 @@ void Necro_init(Necronomicon* self) {
     }
 
     first_page =
-        (*pageWork_create)(self, work->necro_light, PAGE_FLAG_PAGE_1, 0.0f, 0.0f, 2.0f, 7, 5.0f);
+        (*PageWork_create)(self, work->necro_light, PAGE_FLAG_PAGE_1, 0.0f, 0.0f, 2.0f, 7, 5.0f);
     self->pages[0] = first_page;
     if (first_page == NULL) {
         self->header.destroy(self);
@@ -151,7 +151,7 @@ void Necro_loop(Necronomicon* self) {
             }
 
             page =
-                (*pageWork_create)(self, work->necro_light, page_type, 0.0f, 0.0f, 2.0f, 0, 5.0f);
+                (*PageWork_create)(self, work->necro_light, page_type, 0.0f, 0.0f, 2.0f, 0, 5.0f);
             self->pages[1] = page;
             if (page == NULL) {
                 self->header.destroy(self);

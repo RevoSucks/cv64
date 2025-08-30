@@ -58,19 +58,19 @@ u8 page_flip_anim_rot_data[9][28] = {
 };
 
 PageFunc page_functions[] = {
-    page_isWorkCreated,
-    page_init,
-    page_loop,
-    page_destroy
+    Page_isWorkCreated,
+    Page_init,
+    Page_loop,
+    Page_destroy
 };
 
 // clang-format on
 
-void page_entrypoint(Page* self) {
+void Page_entrypoint(Page* self) {
     ENTER(self, page_functions);
 }
 
-void page_isWorkCreated(Page* self) {
+void Page_isWorkCreated(Page* self) {
     if (self->work != NULL) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
@@ -78,7 +78,7 @@ void page_isWorkCreated(Page* self) {
     }
 }
 
-void page_init(Page* self) {
+void Page_init(Page* self) {
     Model* model;
     animationMgr* animMgr             = &self->animMgr;
     animation_info* current_anim_info = &animMgr->current_anim;
@@ -136,7 +136,7 @@ void page_init(Page* self) {
     );
 }
 
-void page_loop(Page* self) {
+void Page_loop(Page* self) {
     Model* model;
     u8 work_flags;
     PageWork* work                    = self->work;
@@ -176,6 +176,6 @@ void page_loop(Page* self) {
     }
 }
 
-void page_destroy(Page* self) {
+void Page_destroy(Page* self) {
     self->header.destroy(self);
 }

@@ -7,7 +7,7 @@
 
 #include "objects/menu/page.h"
 
-PageWork* pageWork_create(
+PageWork* PageWork_create(
     ObjectHeader* parent,
     FigureLight* page_light,
     u8 flags,

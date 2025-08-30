@@ -45,12 +45,12 @@ typedef struct Page {
     PageWork* work;
 } Page;
 
-void page_entrypoint(Page* self);
-void page_isWorkCreated(Page* self);
-void page_init(Page* self);
-void page_loop(Page* self);
-void page_destroy(Page* self);
-PageWork* pageWork_create(
+void Page_entrypoint(Page* self);
+void Page_isWorkCreated(Page* self);
+void Page_init(Page* self);
+void Page_loop(Page* self);
+void Page_destroy(Page* self);
+PageWork* PageWork_create(
     ObjectHeader* parent,
     FigureLight* page_light,
     u8 flags,

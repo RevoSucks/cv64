@@ -1617,15 +1617,15 @@ cutsceneMgr_functions                      = 0x8016B580;
 // src/common/page.c ===========================================================
 
 // .text
-page_entrypoint         = 0x8014f4b0; // type:func segment:common
-page_isWorkCreated      = 0x8014f520; // type:func segment:common
-page_init               = 0x8014f558; // type:func segment:common
-page_loop               = 0x8014f748; // type:func segment:common
-page_destroy            = 0x8014f830; // type:func segment:common
+Page_entrypoint         = 0x8014F4B0; // type:func segment:common
+Page_isWorkCreated      = 0x8014F520; // type:func segment:common
+Page_init               = 0x8014F558; // type:func segment:common
+Page_loop               = 0x8014F748; // type:func segment:common
+Page_destroy            = 0x8014F830; // type:func segment:common
 
 // .data
-page_1_hierarchy        = 0x801815c0; // segment:common size:0x4C
-page_2_hierarchy        = 0x8018160c; // segment:common size:0x4C
+page_1_hierarchy        = 0x801815C0; // segment:common size:0x4C
+page_2_hierarchy        = 0x8018160C; // segment:common size:0x4C
 page_3_hierarchy        = 0x80181658; // segment:common size:0x4C
 page_flip_anim_rot_data = 0x801816A4; // segment:common size:0xFC
 page_functions          = 0x801817A0; // segment:common size:0x10
@@ -1636,10 +1636,10 @@ page_functions          = 0x801817A0; // segment:common size:0x10
 // src/common/page_work.c ======================================================
 
 // .text
-pageWork_create = 0x8014f860; // type:func segment:common
+PageWork_create = 0x8014F860; // type:func segment:common
 
 // .rodata
-D_8018BDF0      = 0x8018bdf0; // type:asciz segment:common size:0x0A
+D_8018BDF0      = 0x8018BDF0; // type:asciz segment:common size:0x0A
 
 // End of src/common/page_work.c ===============================================
 
