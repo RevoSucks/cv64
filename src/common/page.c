@@ -71,11 +71,12 @@ void Page_entrypoint(Page* self) {
 }
 
 void Page_isWorkCreated(Page* self) {
-    if (self->work != NULL) {
-        (*object_curLevel_goToNextFuncAndClearTimer)(
-            self->header.current_function, &self->header.function_info_ID
-        );
-    }
+    if (self->work == NULL)
+        return;
+
+    (*object_curLevel_goToNextFuncAndClearTimer)(
+        self->header.current_function, &self->header.function_info_ID
+    );
 }
 
 void Page_init(Page* self) {
@@ -114,13 +115,16 @@ void Page_init(Page* self) {
 
     // Assign the model's lighting
     // Set model flags, size and visibility
-    (*figure_setChild)(model, work->page_light);
+    (*figure_setChild)((FigureHeader*) model, (FigureHeader*) work->page_light);
+
     BITS_SET(model->flags, FIG_FLAG_0080);
+
     model->size.z = 1.0f;
     model->size.y = 1.0f;
     model->size.x = 1.0f;
-    if (work->flags & PAGE_FLAG_HIDE) {
-        (*figure_hideSelfAndChildren)(model, 0);
+
+    if (BITS_HAS(work->flags, PAGE_FLAG_HIDE)) {
+        (*figure_hideSelfAndChildren)((FigureHeader*) model, 0);
     }
 
     // Setup animation
@@ -144,19 +148,19 @@ void Page_loop(Page* self) {
     animation_info* current_anim_info = &animMgr->current_anim;
     s8 anim_state;
 
-    if (work->flags & PAGE_FLAG_ANIMATE) {
+    if (BITS_HAS(work->flags, PAGE_FLAG_ANIMATE)) {
         model = self->model;
         // Pause the page animation if it's invisible
-        if (work->flags & PAGE_FLAG_HIDE) {
-            current_anim_info->flags |= ANIM_INFO_FLAG_PAUSE;
+        if (BITS_HAS(work->flags, PAGE_FLAG_HIDE)) {
+            BITS_SET(current_anim_info->flags, ANIM_INFO_FLAG_PAUSE);
         }
 
         anim_state = (*animationInfo_animateFrame)(current_anim_info, model);
         // Animation has ended overall
         if (anim_state == -1) {
-            work->flags = work->flags & ~PAGE_FLAG_ANIMATE;
-            if (work->flags & PAGE_FLAG_DESTROY_AFTER_ANIMATION_FINISHES) {
-                work->flags = work->flags | PAGE_FLAG_DESTROY_PAGE;
+            BITS_UNSET(work->flags, PAGE_FLAG_ANIMATE);
+            if (BITS_HAS(work->flags, PAGE_FLAG_DESTROY_AFTER_ANIMATION_FINISHES)) {
+                BITS_SET(work->flags, PAGE_FLAG_DESTROY_PAGE);
             }
         }
         work_flags = work->flags;
@@ -169,7 +173,7 @@ void Page_loop(Page* self) {
         } else {
             work->flags = work_flags & ~PAGE_FLAG_ANIM_END_KEYFRAME;
         }
-    } else if (work->flags & PAGE_FLAG_DESTROY_PAGE) {
+    } else if (BITS_HAS(work->flags, PAGE_FLAG_DESTROY_PAGE)) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );

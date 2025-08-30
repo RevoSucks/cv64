@@ -17,12 +17,11 @@ PageWork* PageWork_create(
     u8 flip_anim_keyframe,
     f32 anim_speed
 ) {
-    PageWork* work;
-    Page* page_obj;
+    PageWork* work = NULL;
+    Page* page_obj = (Page*) (*object_create)(parent, MENU_PAGE);
 
-    page_obj = (Page*) (*object_create)(parent, MENU_PAGE);
     if (page_obj != NULL) {
-        (*allocStructInObjectEntryList)("page_work", page_obj, sizeof(PageWork), 15);
+        (*allocStructInObjectEntryList)("page_work", (Object*) page_obj, sizeof(PageWork), 15);
         work = page_obj->work;
         if (work != NULL) {
             work->page_light         = page_light;
@@ -38,5 +37,6 @@ PageWork* PageWork_create(
     } else {
         return NULL;
     }
+
     return work;
 }
