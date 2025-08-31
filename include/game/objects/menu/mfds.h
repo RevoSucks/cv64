@@ -9,7 +9,7 @@
 #include "gfx/model.h"
 #include "gfx/graphic_container.h"
 #include "objects/menu/lens.h"
-#include "objects/menu/textboxAdvanceArrow.h"
+#include "objects/menu/textbox_advance_arrow.h"
 #include "window.h"
 
 /**

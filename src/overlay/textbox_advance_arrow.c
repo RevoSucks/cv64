@@ -8,11 +8,11 @@
  */
 
 #include "gfx/camera.h"
-#include "objects/menu/textboxAdvanceArrow.h"
+#include "objects/menu/textbox_advance_arrow.h"
 
 // clang-format off
 
-cv64_ovl_textboxadvancearrow_func_t cv64_ovl_textboxadvancearrow_funcs[] = {
+TextboxAdvanceArrowFunc cv64_ovl_textboxadvancearrow_funcs[] = {
     TextboxAdvanceArrow_init,
     TextboxAdvanceArrow_loop,
     TextboxAdvanceArrow_destroy
