@@ -43,13 +43,8 @@ void GameplayMenuManager_initMainStructs(GameplayMenuManager* self) {
      * @note The `HUD` object is not created at this point in the code, so this will always result
      * in `self->HUD_params = NULL` in practice
      */
-    obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
-    if (obj_hud != NULL) {
-        self->HUD_params = obj_hud->params;
-    } else {
-        self->HUD_params = NULL;
-    }
-
+    obj_hud          = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
+    self->HUD_params = (obj_hud != NULL) ? obj_hud->params : NULL;
     /**
      * Create the `HUD` object
      *
@@ -109,69 +104,67 @@ void GameplayMenuManager_initHUDParams(GameplayMenuManager* self) {
 
     initialize_hud_params_delay_timer = 0;
 
-    obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
-    if (obj_hud != NULL) {
-        self->HUD_params = obj_hud->params;
-    } else {
-        self->HUD_params = NULL;
-    }
+    obj_hud          = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
+    self->HUD_params = (obj_hud != NULL) ? obj_hud->params : NULL;
 
-    if (self->HUD_params != NULL) {
-        self->menu_state                        = 0;
-        self->update_assets_heap_block_max_size = FALSE;
-        self->flags                             = IN_GAMEPLAY;
-        (*object_curLevel_goToNextFuncAndClearTimer)(
-            self->header.current_function, &self->header.function_info_ID
-        );
-    }
+    if (self->HUD_params == NULL)
+        return;
+
+    self->menu_state                        = 0;
+    self->update_assets_heap_block_max_size = FALSE;
+    self->flags                             = IN_GAMEPLAY;
+    (*object_curLevel_goToNextFuncAndClearTimer)(
+        self->header.current_function, &self->header.function_info_ID
+    );
 }
 
 void GameplayMenuManager_outsideMenuLoop(GameplayMenuManager* self) {
-    if (ptr_PlayerData != NULL) {
-        self->current_opened_menu = sys.current_opened_menu;
+    if (ptr_PlayerData == NULL)
+        return;
 
+    self->current_opened_menu = sys.current_opened_menu;
+
+    /**
+     * Checks for determining if the pause menu should open or not.
+     *
+     * If pressed Start
+     */
+    if ((CONT_BTNS_PRESSED(CONT_0, START_BUTTON | RECENTER_BUTTON)) &&
         /**
-         * Checks for determining if the pause menu should open or not.
-         *
-         * If pressed Start
+         * If we're in gameplay and there's no cutscene playing
          */
-        if ((CONT_BTNS_PRESSED(CONT_0, START_BUTTON | RECENTER_BUTTON)) &&
-            /**
-             * If we're in gameplay and there's no cutscene playing
-             */
-            !(sys.cutscene_flags & CUTSCENE_FLAG_PLAYING) && (sys.map_is_setup) &&
-            /**
-             * If the player nor the gameplay are frozen (for example, when reading textboxes)
-             */
-            (sys.FREEZE_PLAYER == FALSE) && (sys.FREEZE_GAMEPLAY == FALSE)) {
-            /**
-             * If the player is idling or moving
-             */
-            if ((sys.ptr_PlayerObject->header.current_function[0].function == PLAYER_IDLE) ||
-                (sys.ptr_PlayerObject->header.current_function[0].function == PLAYER_MOVING)) {
-                sys.current_opened_menu = MENU_ID_PAUSE;
-            }
+        BITS_NOT_HAS(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING) && (sys.map_is_setup) &&
+        /**
+         * If the player nor the gameplay are frozen (for example, when reading textboxes)
+         */
+        (sys.FREEZE_PLAYER == FALSE) && (sys.FREEZE_GAMEPLAY == FALSE)) {
+        /**
+         * If the player is idling or moving
+         */
+        if ((sys.ptr_PlayerObject->header.current_function[0].function == PLAYER_IDLE) ||
+            (sys.ptr_PlayerObject->header.current_function[0].function == PLAYER_MOVING)) {
+            sys.current_opened_menu = MENU_ID_PAUSE;
+        }
+    }
+
+    /**
+     * If the game requests opening a menu, open it
+     */
+    if (self->current_opened_menu != MENU_ID_NOT_ON_MENU) {
+        /**
+         * Make sure to close the common textbox beforehand
+         */
+        if (BITS_HAS(self->common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
+            self->hide_common_textbox_window = TRUE;
+            gameplayCommonTextbox_close();
+            BITS_SET(self->common_textbox->flags, MFDS_FLAG_HIDE_TEXTBOX);
+        } else {
+            self->hide_common_textbox_window = FALSE;
         }
 
-        /**
-         * If the game requests opening a menu, open it
-         */
-        if (self->current_opened_menu != MENU_ID_NOT_ON_MENU) {
-            /**
-             * Make sure to close the common textbox beforehand
-             */
-            if (self->common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
-                self->hide_common_textbox_window = TRUE;
-                gameplayCommonTextbox_close();
-                self->common_textbox->flags |= MFDS_FLAG_HIDE_TEXTBOX;
-            } else {
-                self->hide_common_textbox_window = FALSE;
-            }
-
-            (*object_curLevel_goToNextFuncAndClearTimer)(
-                self->header.current_function, &self->header.function_info_ID
-            );
-        }
+        (*object_curLevel_goToNextFuncAndClearTimer)(
+            self->header.current_function, &self->header.function_info_ID
+        );
     }
 }
 
@@ -184,7 +177,7 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
      */
     if (self->hide_common_textbox_window) {
         if (gameplayCommonTextbox_lensAreClosed() == FALSE) {
-            gameplayCommonTextbox_getObjectFromList()->window->flags |= WINDOW_HIDE;
+            BITS_SET(gameplayCommonTextbox_getObjectFromList()->window->flags, WINDOW_HIDE);
         }
         self->hide_common_textbox_window = FALSE;
     }
@@ -205,14 +198,14 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
      */
     switch (self->current_opened_menu) {
         case MENU_ID_PAUSE:
-            self->menu_state |= ENTERING_PAUSE_MENU;
+            BITS_SET(self->menu_state, ENTERING_PAUSE_MENU);
             self->assets_file_buffer_start_ptr =
                 (*heap_alloc)(HEAP_KIND_MENU_DATA, NI_ASSETS_MENU_BUFFER_SIZE);
             self->update_assets_heap_block_max_size = TRUE;
             DMAMgr_loadNisitenmaIchigoFile(
                 ptr_DMAMgr,
                 NI_ASSETS_MENU,
-                self->assets_file_buffer_start_ptr,
+                (u32) self->assets_file_buffer_start_ptr,
                 &self->assets_file_buffer_end_ptr
             );
             NisitenmaIchigo_checkAndStoreLoadedFile(NI_ASSETS_MENU);
@@ -220,21 +213,17 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
             break;
 
         case MENU_ID_RENON_SHOP:
-            self->menu_state |= ENTERING_RENON_SHOP;
+            BITS_SET(self->menu_state, ENTERING_RENON_SHOP);
 
-            obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
-            if (obj_hud != NULL) {
-                hud_params = obj_hud->params;
-            } else {
-                hud_params = NULL;
-            }
+            obj_hud          = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
+            hud_params       = (obj_hud != NULL) ? obj_hud->params : NULL;
             self->HUD_params = hud_params;
 
             /**
              * Hide the HUD when entering Renon's shop
              */
             if (hud_params != NULL) {
-                hud_params->flags |= HUD_PARAMS_HIDE_HUD;
+                BITS_SET(hud_params->flags, HUD_PARAMS_HIDE_HUD);
             }
 
             self->assets_file_buffer_start_ptr =
@@ -243,28 +232,24 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
             DMAMgr_loadNisitenmaIchigoFile(
                 ptr_DMAMgr,
                 NI_ASSETS_MENU,
-                self->assets_file_buffer_start_ptr,
+                (u32) self->assets_file_buffer_start_ptr,
                 &self->assets_file_buffer_end_ptr
             );
             NisitenmaIchigo_checkAndStoreLoadedFile(NI_ASSETS_MENU);
             break;
 
         case MENU_ID_GAME_OVER:
-            self->menu_state |= ENTERING_GAME_OVER;
+            BITS_SET(self->menu_state, ENTERING_GAME_OVER);
 
-            obj_hud = (*objectList_findFirstObjectByID)(MENU_HUD);
-            if (obj_hud != NULL) {
-                hud_params = obj_hud->params;
-            } else {
-                hud_params = NULL;
-            }
+            obj_hud          = (*objectList_findFirstObjectByID)(MENU_HUD);
+            hud_params       = (obj_hud != NULL) ? obj_hud->params : NULL;
             self->HUD_params = hud_params;
 
             /**
              * Hide the HUD when entering the Game over menu
              */
             if (hud_params != NULL) {
-                hud_params->flags |= HUD_PARAMS_HIDE_HUD;
+                BITS_SET(hud_params->flags, HUD_PARAMS_HIDE_HUD);
             }
 
             (*heap_free)(HEAP_KIND_MENU_DATA);
@@ -315,36 +300,36 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
         /**
          * If we're currently in gameplay
          */
-        if (self->flags & IN_GAMEPLAY) {
-            if (self->menu_state & ENTERING_PAUSE_MENU) {
+        if (BITS_HAS(self->flags, IN_GAMEPLAY)) {
+            if (BITS_HAS(self->menu_state, ENTERING_PAUSE_MENU)) {
                 if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
-                    object_createAndSetChild(self, MENU_PAUSE);
-                    self->menu_state &= ~ENTERING_PAUSE_MENU; self->flags &= ~IN_GAMEPLAY; self->flags |= IN_PAUSE_MENU;
+                    object_createAndSetChild((ObjectHeader*) self, MENU_PAUSE);
+                    BITS_UNSET(self->menu_state, ENTERING_PAUSE_MENU); BITS_UNSET(self->flags, IN_GAMEPLAY); BITS_SET(self->flags, IN_PAUSE_MENU);
                     if ((*Fade_IsFading)() == FALSE) {
                         (*Fade_SetSettings)(FADE_IN, 22, 0, 0, 0);
                     }
                     if (self->HUD_params != NULL) {
                         // Change the HUD's position to fit the Pause menu
-                        self->HUD_params->flags ^= HUD_PARAMS_ENTERED_PAUSE_MENU;
+                        BITS_TOGGLE(self->HUD_params->flags, HUD_PARAMS_ENTERED_PAUSE_MENU);
                     }
                 }
             }
-            else if (self->menu_state & ENTERING_RENON_SHOP) {
+            else if (BITS_HAS(self->menu_state, ENTERING_RENON_SHOP)) {
                 if (objectList_findFirstObjectByID(MENU_RENON_SHOP) == NULL) {
-                    object_createAndSetChild(self, MENU_RENON_SHOP);
+                    object_createAndSetChild((ObjectHeader*) self, MENU_RENON_SHOP);
                     if (1) {}
-                    self->menu_state &= ~ENTERING_RENON_SHOP; self->flags &= ~IN_GAMEPLAY; self->flags |= IN_RENON_SHOP;
-                    sys.cutscene_flags |= CUTSCENE_FLAG_PLAYING;
+                    BITS_UNSET(self->menu_state, ENTERING_RENON_SHOP); BITS_UNSET(self->flags, IN_GAMEPLAY); BITS_SET(self->flags, IN_RENON_SHOP);
+                    BITS_SET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
                 }
             }
-            else if (self->menu_state & ENTERING_GAME_OVER) {
+            else if (BITS_HAS(self->menu_state, ENTERING_GAME_OVER)) {
                 if (objectList_findFirstObjectByID(ENGINE_GAME_OVER) == NULL) {
-                    object_createAndSetChild(self, ENGINE_GAME_OVER);
-                    self->menu_state &= ~ENTERING_GAME_OVER; self->flags &= ~IN_GAMEPLAY; self->flags |= IN_GAME_OVER;
+                    object_createAndSetChild((ObjectHeader*) self, ENGINE_GAME_OVER);
+                    BITS_UNSET(self->menu_state, ENTERING_GAME_OVER); BITS_UNSET(self->flags, IN_GAMEPLAY); BITS_SET(self->flags, IN_GAME_OVER);
                     if ((*Fade_IsFading)() == FALSE) {
                         (*Fade_SetSettings)(FADE_IN, 15, 0, 0, 0);
                     }
-                    sys.cutscene_flags |= CUTSCENE_FLAG_PLAYING;
+                    BITS_SET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
                 }
             }
         }
@@ -352,35 +337,35 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
         /**
          * If we're currently in the pause menu
          */
-        else if (self->flags & IN_PAUSE_MENU) {
+        else if (BITS_HAS(self->flags, IN_PAUSE_MENU)) {
             if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
-                if (self->menu_state & ENTERING_FILE_SELECT) {
+                if (BITS_HAS(self->menu_state, ENTERING_FILE_SELECT)) {
                     if (objectList_findFirstObjectByID(MENU_FILE_SELECT_CONTROLLER) == NULL) {
-                        object_createAndSetChild(self, MENU_FILE_SELECT_CONTROLLER);
-                        self->menu_state &= ~ENTERING_FILE_SELECT; self->flags &= ~IN_PAUSE_MENU; self->flags |= IN_FILE_SELECT;
+                        object_createAndSetChild((ObjectHeader*) self, MENU_FILE_SELECT_CONTROLLER);
+                        BITS_UNSET(self->menu_state, ENTERING_FILE_SELECT); BITS_UNSET(self->flags, IN_PAUSE_MENU); BITS_SET(self->flags, IN_FILE_SELECT);
                         (*Fade_SetSettings)(FADE_IN, 45, 0, 0, 0);
-                        sys.cutscene_flags |= CUTSCENE_FLAG_PLAYING;
+                        BITS_SET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
                         return;
                     }
                 }
-                else if (self->menu_state & ENTERING_OPTION) {
+                else if (BITS_HAS(self->menu_state, ENTERING_OPTION)) {
                     if (objectList_findFirstObjectByID(MENU_OPTIONS_CONTROLLER) == NULL) {
-                        object_createAndSetChild(self, MENU_OPTIONS_CONTROLLER);
-                        self->menu_state &= ~ENTERING_OPTION; self->flags &= ~IN_PAUSE_MENU; self->flags |= IN_OPTIONS_MENU;
+                        object_createAndSetChild((ObjectHeader*) self, MENU_OPTIONS_CONTROLLER);
+                        BITS_UNSET(self->menu_state, ENTERING_OPTION); BITS_UNSET(self->flags, IN_PAUSE_MENU); BITS_SET(self->flags, IN_OPTIONS_MENU);
                         (*Fade_SetSettings)(FADE_IN, 60, 0, 0, 0);
-                        sys.cutscene_flags |= CUTSCENE_FLAG_PLAYING;
+                        BITS_SET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
                     }
                 }
-                else if (self->menu_state & EXIT_MENU) {
+                else if (BITS_HAS(self->menu_state, EXIT_MENU)) {
                     if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
                         if (self->HUD_params != NULL) {
                             // Restore the regular HUD positioning
-                            self->HUD_params->flags ^= HUD_PARAMS_ENTERED_PAUSE_MENU;
+                            BITS_TOGGLE(self->HUD_params->flags, HUD_PARAMS_ENTERED_PAUSE_MENU);
                         }
                         (*object_curLevel_goToNextFuncAndClearTimer)(self->header.current_function, &self->header.function_info_ID);
                     }
                 }
-                else if (self->menu_state & QUIT_GAME) {
+                else if (BITS_HAS(self->menu_state, QUIT_GAME)) {
                     if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
                         (*object_curLevel_goToNextFuncAndClearTimer)(self->header.current_function, &self->header.function_info_ID);
                     }
@@ -398,11 +383,11 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
          * On this state, none of the visible options will work, except for the "Exit" option,
          * which returns the player back to the Pause menu.
          */
-        else if (self->flags & IN_FILE_SELECT) {
-            if (self->menu_state & ENTERING_PAUSE_MENU) {
+        else if (BITS_HAS(self->flags, IN_FILE_SELECT)) {
+            if (BITS_HAS(self->menu_state, ENTERING_PAUSE_MENU)) {
                 if ((objectList_findFirstObjectByID(MENU_FILE_SELECT_CONTROLLER) == NULL) && (objectList_findFirstObjectByID(MENU_PAUSE) == NULL)) {
-                    object_createAndSetChild(self, MENU_PAUSE);
-                    self->menu_state &= ~ENTERING_PAUSE_MENU; self->flags &= ~IN_FILE_SELECT; self->flags |= IN_PAUSE_MENU;
+                    object_createAndSetChild((ObjectHeader*) self, MENU_PAUSE);
+                    BITS_UNSET(self->menu_state, ENTERING_PAUSE_MENU); BITS_UNSET(self->flags, IN_FILE_SELECT); BITS_SET(self->flags, IN_PAUSE_MENU);
                     (*Fade_SetSettings)(FADE_IN, 15, 0, 0, 0);
                 }
             }
@@ -412,10 +397,10 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
              *
              * Triggering it, however, just returns the player back to the Pause menu
              */
-            else if (self->menu_state & INIT_NEW_GAME) {
+            else if (BITS_HAS(self->menu_state, INIT_NEW_GAME)) {
                 if ((objectList_findFirstObjectByID(MENU_FILE_SELECT_CONTROLLER) == NULL) && (objectList_findFirstObjectByID(MENU_PAUSE) == NULL)) {
-                    object_createAndSetChild(self, MENU_PAUSE);
-                    self->menu_state &= ~ENTERING_PAUSE_MENU; self->flags &= ~IN_FILE_SELECT; self->flags |= IN_PAUSE_MENU;
+                    object_createAndSetChild((ObjectHeader*) self, MENU_PAUSE);
+                    BITS_UNSET(self->menu_state, ENTERING_PAUSE_MENU); BITS_UNSET(self->flags, IN_FILE_SELECT); BITS_SET(self->flags, IN_PAUSE_MENU);
                     (*Fade_SetSettings)(FADE_IN, 15, 0, 0, 0);
                 }
             }
@@ -424,10 +409,10 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
              *
              * Triggering it just returns the player back to the Pause menu
              */
-            else if (self->menu_state & MENU_STATE_100) {
+            else if (BITS_HAS(self->menu_state, MENU_STATE_100)) {
                 if ((objectList_findFirstObjectByID(MENU_FILE_SELECT_CONTROLLER) == NULL) && (objectList_findFirstObjectByID(MENU_PAUSE) == NULL)) {
-                    object_createAndSetChild(self, MENU_PAUSE);
-                    self->menu_state &= ~ENTERING_PAUSE_MENU; self->flags &= ~IN_FILE_SELECT; self->flags |= IN_PAUSE_MENU;
+                    object_createAndSetChild((ObjectHeader*) self, MENU_PAUSE);
+                    BITS_UNSET(self->menu_state, ENTERING_PAUSE_MENU); BITS_UNSET(self->flags, IN_FILE_SELECT); BITS_SET(self->flags, IN_PAUSE_MENU);
                     (*Fade_SetSettings)(FADE_IN, 15, 0, 0, 0);
                 }
             }
@@ -436,11 +421,11 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
         /**
          * If we're currently in the options menu
          */
-        else if (self->flags & IN_OPTIONS_MENU) {
-            if (self->menu_state & ENTERING_PAUSE_MENU) {
+        else if (BITS_HAS(self->flags, IN_OPTIONS_MENU)) {
+            if (BITS_HAS(self->menu_state, ENTERING_PAUSE_MENU)) {
                 if ((objectList_findFirstObjectByID(MENU_OPTIONS_CONTROLLER) == NULL) && (objectList_findFirstObjectByID(MENU_PAUSE) == NULL)) {
-                    object_createAndSetChild(self, MENU_PAUSE);
-                    self->menu_state &= ~ENTERING_PAUSE_MENU; self->flags &= ~IN_OPTIONS_MENU; self->flags |= IN_PAUSE_MENU;
+                    object_createAndSetChild((ObjectHeader*) self, MENU_PAUSE);
+                    BITS_UNSET(self->menu_state, ENTERING_PAUSE_MENU); BITS_UNSET(self->flags, IN_OPTIONS_MENU); BITS_SET(self->flags, IN_PAUSE_MENU);
                     (*Fade_SetSettings)(FADE_IN, 15, 0, 0, 0);
                 }
             }
@@ -449,8 +434,8 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
         /**
          * If we're currently in Renon's shop
          */
-        else if (self->flags & IN_RENON_SHOP) {
-            if (self->menu_state & EXIT_MENU) {
+        else if (BITS_HAS(self->flags, IN_RENON_SHOP)) {
+            if (BITS_HAS(self->menu_state, EXIT_MENU)) {
                 if (objectList_findFirstObjectByID(MENU_RENON_SHOP) == NULL) {
                     (*object_curLevel_goToNextFuncAndClearTimer)(self->header.current_function, &self->header.function_info_ID);
                 }
@@ -463,7 +448,7 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
          * @note This goes unused because the Game over is not accessed through a separate menu.
          * Rather, it is its own game state.
          */
-        else if (self->flags & IN_GAME_OVER) {
+        else if (BITS_HAS(self->flags, IN_GAME_OVER)) {
             /**
              * @note Because the Game over is its own game state, it's not actually possible in the final game
              * to return to gameplay after entering the Game over screen and still preserve the current gameplay state.
@@ -472,12 +457,12 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
              * On this particular case, if exiting back to gameplay, then gameplay will resume, but the Game over
              * screen will still be present on the screen
              */
-            if (self->menu_state & EXIT_MENU) {
+            if (BITS_HAS(self->menu_state, EXIT_MENU)) {
                 if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
                     (*object_curLevel_goToNextFuncAndClearTimer)(self->header.current_function, &self->header.function_info_ID);
                 }
             }
-            else if (self->menu_state & QUIT_GAME) {
+            else if (BITS_HAS(self->menu_state, QUIT_GAME)) {
                 if (objectList_findFirstObjectByID(MENU_PAUSE) == NULL) {
                     (*object_curLevel_goToNextFuncAndClearTimer)(self->header.current_function, &self->header.function_info_ID);
                 }
@@ -485,48 +470,50 @@ void GameplayMenuManager_insideMenuLoop(GameplayMenuManager* self) {
         }
     }
 }
-// clang-format off
+// clang-format on
 
 void GameplayMenuManager_exitMenu(GameplayMenuManager* self) {
-    if ((*Fade_IsFading)() == FALSE) {
-        (*heap_free)(HEAP_KIND_MENU_DATA);
+    if ((*Fade_IsFading)() != FALSE)
+        return;
 
+    (*heap_free)(HEAP_KIND_MENU_DATA);
+
+    /**
+     * Return back to gameplay
+     */
+    if (BITS_HAS(self->menu_state, EXIT_MENU)) {
+        // clang-format off
+        BITS_UNSET(self->menu_state, EXIT_MENU); BITS_UNSET(self->flags, IN_PAUSE_MENU); BITS_SET(self->flags, IN_GAMEPLAY);
+        // clang-format on
+        sys.current_opened_menu = sys.NOT_ON_MENU;
         /**
-         * Return back to gameplay
+         * Restore previous background color
          */
-        if (self->menu_state & EXIT_MENU) {
-            // clang-format off
-            self->menu_state &= ~EXIT_MENU; self->flags &= ~IN_PAUSE_MENU; self->flags |= IN_GAMEPLAY;
-            // clang-format on
-            sys.current_opened_menu = sys.NOT_ON_MENU;
-            /**
-             * Restore previous background color
-             */
-            sys.background_color.integer = self->background_color.integer;
-            sys.cutscene_flags &= ~CUTSCENE_FLAG_PLAYING;
-            /**
-         * Exit the game using the Pause menu's "Quit" option
-         */
-        } else if (self->menu_state & QUIT_GAME) {
-            // clang-format off
-            self->menu_state &= ~QUIT_GAME; self->flags &= ~IN_PAUSE_MENU; self->flags |= IN_QUIT_GAME;
-            // clang-format on
-            (*play_sound)(SD_CTRL_RESET_AUDIO_TRACK_STATE);
-            gamestate_change(GAMESTATE_KONAMI_LOGO);
-            (*Fade_SetSettings)(FADE_IN, 30, 0, 0, 0);
-            sys.current_opened_menu = sys.NOT_ON_MENU;
-            (*object_curLevel_goToNextFuncAndClearTimer)(
-                self->header.current_function, &self->header.function_info_ID
-            );
-            return;
-        }
-
-        (*object_curLevel_goToFunc)(
-            self->header.current_function,
-            &self->header.function_info_ID,
-            GAMEPLAYMENUMGR_OUTSIDE_MENU_LOOP
-        );
+        sys.background_color.integer = self->background_color.integer;
+        BITS_UNSET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
     }
+    /**
+     * Exit the game using the Pause menu's "Quit" option
+     */
+    else if (BITS_HAS(self->menu_state, QUIT_GAME)) {
+        // clang-format off
+        BITS_UNSET(self->menu_state, QUIT_GAME); BITS_UNSET(self->flags, IN_PAUSE_MENU); BITS_SET(self->flags, IN_QUIT_GAME);
+        // clang-format on
+        (*play_sound)(SD_CTRL_RESET_AUDIO_TRACK_STATE);
+        gamestate_change(GAMESTATE_KONAMI_LOGO);
+        (*Fade_SetSettings)(FADE_IN, 30, 0, 0, 0);
+        sys.current_opened_menu = sys.NOT_ON_MENU;
+        (*object_curLevel_goToNextFuncAndClearTimer)(
+            self->header.current_function, &self->header.function_info_ID
+        );
+        return;
+    }
+
+    (*object_curLevel_goToFunc)(
+        self->header.current_function,
+        &self->header.function_info_ID,
+        GAMEPLAYMENUMGR_OUTSIDE_MENU_LOOP
+    );
 }
 
 /**
@@ -543,28 +530,31 @@ u32 moveSelectionCursor(u32 button) {
          * Check for the joystick directional inputs
          */
         if (GET_CONTROLLER(CONT_0).joy_y > 40) {
-            selection_input |= U_JPAD;
+            BITS_SET(selection_input, U_JPAD);
         }
         if (GET_CONTROLLER(CONT_0).joy_y < -40) {
-            selection_input |= D_JPAD;
+            BITS_SET(selection_input, D_JPAD);
         }
         if (GET_CONTROLLER(CONT_0).joy_x > 40) {
-            selection_input |= R_JPAD;
+            BITS_SET(selection_input, R_JPAD);
         }
         if (GET_CONTROLLER(CONT_0).joy_x < -40) {
-            selection_input |= L_JPAD;
+            BITS_SET(selection_input, L_JPAD);
         }
 
-        selection_buttons_pressed = (previous_selection_input ^ selection_input) & selection_input;
-        previous_selection_input  = selection_input;
+        selection_buttons_pressed =
+            BITS_MASK((previous_selection_input ^ selection_input), selection_input);
+        previous_selection_input = selection_input;
 
-        if (selection_input & (U_JPAD | D_JPAD | R_JPAD | L_JPAD)) {
+        if (BITS_HAS(selection_input, (U_JPAD | D_JPAD | R_JPAD | L_JPAD))) {
             /**
              * Make it so that only one of the directional inputs can be pressed
              * at any time
              */
             selection_buttons_pressed =
-                (GET_CONTROLLER(CONT_0).btns_pressed & ~(U_JPAD | D_JPAD | R_JPAD | L_JPAD)) |
+                BITS_MASK(
+                    GET_CONTROLLER(CONT_0).btns_pressed, ~(U_JPAD | D_JPAD | R_JPAD | L_JPAD)
+                ) |
                 selection_buttons_pressed;
         } else {
             selection_buttons_pressed =
@@ -576,5 +566,6 @@ u32 moveSelectionCursor(u32 button) {
 
     if (selection_buttons_pressed) {
     }
-    return selection_buttons_pressed & button;
+
+    return BITS_HAS(selection_buttons_pressed, button);
 }
