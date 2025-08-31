@@ -61,7 +61,7 @@ specialTextbox* Player_getActorCurrentlyInteractingWith() {
 
                 // Return the instance (item)
             } else {
-                return (Interactable*) actor;
+                return (specialTextbox*) actor;
             }
         }
 

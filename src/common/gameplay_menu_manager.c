@@ -20,7 +20,7 @@ GameplayMenuManagerFunc gameplayMenuMgr_functions[] = {
     GameplayMenuManager_initMenu,
     GameplayMenuManager_insideMenuLoop,
     GameplayMenuManager_exitMenu,
-    object_doNothing
+    (GameplayMenuManagerFunc) object_doNothing
 };
 
 u32 selection_buttons_pressed = 0;
@@ -43,7 +43,7 @@ void GameplayMenuManager_initMainStructs(GameplayMenuManager* self) {
      * @note The `HUD` object is not created at this point in the code, so this will always result
      * in `self->HUD_params = NULL` in practice
      */
-    obj_hud = (*objectList_findFirstObjectByID)(MENU_HUD);
+    obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
     if (obj_hud != NULL) {
         self->HUD_params = obj_hud->params;
     } else {
@@ -59,7 +59,7 @@ void GameplayMenuManager_initMainStructs(GameplayMenuManager* self) {
      */
     if (self->HUD_params == NULL) {
         if ((*objectList_findFirstObjectByID)(MENU_HUD) == NULL) {
-            self->obj_hud = (*object_createAndSetChild)(self, MENU_HUD);
+            self->obj_hud = (HUD*) (*object_createAndSetChild)((ObjectHeader*) self, MENU_HUD);
         }
         self->HUD_params = NULL;
     }
@@ -71,7 +71,9 @@ void GameplayMenuManager_initMainStructs(GameplayMenuManager* self) {
      * For instance, item names, text spots messages, etc.
      */
     common_textbox = textbox_create(
-        self, common_camera_HUD, MFDS_FLAG_GAMEPLAYMENUMGR_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED
+        (ObjectHeader*) self,
+        common_camera_HUD,
+        MFDS_FLAG_GAMEPLAYMENUMGR_TEXTBOX | MFDS_FLAG_ALLOW_VARIABLE_SPEED
     );
     self->common_textbox = common_textbox;
     if (1) {
@@ -107,7 +109,7 @@ void GameplayMenuManager_initHUDParams(GameplayMenuManager* self) {
 
     initialize_hud_params_delay_timer = 0;
 
-    obj_hud = (*objectList_findFirstObjectByID)(MENU_HUD);
+    obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
     if (obj_hud != NULL) {
         self->HUD_params = obj_hud->params;
     } else {
@@ -220,7 +222,7 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
         case MENU_ID_RENON_SHOP:
             self->menu_state |= ENTERING_RENON_SHOP;
 
-            obj_hud = (*objectList_findFirstObjectByID)(MENU_HUD);
+            obj_hud = (HUD*) (*objectList_findFirstObjectByID)(MENU_HUD);
             if (obj_hud != NULL) {
                 hud_params = obj_hud->params;
             } else {

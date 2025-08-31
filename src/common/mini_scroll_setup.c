@@ -15,7 +15,7 @@ MiniScroll* MiniScroll_create(void* parent, Camera* camera, s32 param_3, s32 par
     MiniScroll* obj_mini_scroll;
     MiniScrollInner* inner;
 
-    obj_mini_scroll                   = (*object_create)(parent, MENU_MINI_SCROLL);
+    obj_mini_scroll                   = (MiniScroll*) (*object_create)(parent, MENU_MINI_SCROLL);
     inner                             = &obj_mini_scroll->inner;
     inner->flags                      = 0;
     inner->scrolling_timer            = 320;

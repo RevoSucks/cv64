@@ -75,7 +75,7 @@ void cutsceneMgr_createCutscene(cutsceneMgr* self) {
 
     cutscene_overlay = cutscene_settings[self->cutscene_ID - 1].overlay;
     if (BITS_HAS(cutscene_overlay, CUTSCENE_OVERLAY_FADE)) {
-        (*Fade_SetSettings)(FADE_OUT, 10, 0, 0, 0);
+        (*Fade_SetSettings)((FadeFlags) FADE_OUT, 10, 0, 0, 0);
     }
 
     cutscene_overlay = cutscene_settings[self->cutscene_ID - 1].overlay;
@@ -85,11 +85,12 @@ void cutsceneMgr_createCutscene(cutsceneMgr* self) {
         sys.cutscene_flags = cutscene_flags | CUTSCENE_FLAG_FILM_REEL_EFFECT;
         if ((self && self) && self) {
         }
-        self->cs_film_reel = (CSFilmReel*) object_createAndSetChild(self, CUTSCENE_CS_FILM_REEL);
+        self->cs_film_reel =
+            (CSFilmReel*) object_createAndSetChild((ObjectHeader*) self, CUTSCENE_CS_FILM_REEL);
     }
 
     self->cutscene_object = (Cutscene*) object_createAndSetChild(
-        self, cutscene_settings[(*cutscene_ID_ptr) - 1].object_ID
+        (ObjectHeader*) self, cutscene_settings[(*cutscene_ID_ptr) - 1].object_ID
     );
     if (self->cutscene_object != NULL) {
         BITS_SET(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING);
