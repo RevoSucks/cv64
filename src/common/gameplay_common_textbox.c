@@ -51,11 +51,12 @@ MfdsState* GameplayCommonTextbox_getIfClosed() {
     }
 
     if (common_textbox != NULL) {
-        if (common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
+        if (BITS_HAS(common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
             return NULL;
         }
         return common_textbox;
     }
+    // Matching code does not have a return statement for the case where `common_textbox` is `NULL`.
 }
 
 /**
@@ -74,11 +75,12 @@ MfdsState* GameplayCommonTextbox_close() {
     }
 
     if (common_textbox != NULL) {
-        if (!(common_textbox->flags & MFDS_FLAG_CLOSE_TEXTBOX)) {
-            common_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        if (BITS_NOT_HAS(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX)) {
+            BITS_SET(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
         }
         return common_textbox;
     }
+
     return NULL;
 }
 
@@ -100,18 +102,20 @@ MfdsState* GameplayCommonTextbox_prepare(
     }
 
     if (common_textbox != NULL) {
-        if (common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
-            if (!(common_textbox->flags & MFDS_FLAG_CLOSE_TEXTBOX)) {
-                common_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        if (BITS_HAS(common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
+            if (BITS_NOT_HAS(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX)) {
+                BITS_SET(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             }
             return NULL;
         }
 
-        common_textbox->flags &=
-            ~(MFDS_FLAG_SLOW_TEXT_SPEED |
-              (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED));
-        common_textbox->flags |= MFDS_FLAG_SLOW_TEXT_SPEED;
-        common_textbox->flags |= (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX) | flags;
+        BITS_UNSET(
+            common_textbox->flags,
+            (MFDS_FLAG_SLOW_TEXT_SPEED |
+             (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED))
+        );
+        BITS_SET(common_textbox->flags, MFDS_FLAG_SLOW_TEXT_SPEED);
+        BITS_SET(common_textbox->flags, (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX) | flags);
         (*textbox_setPos)(common_textbox, X_pos, Y_pos, 1);
         (*textbox_setDimensions)(common_textbox, line, width, 0, 0);
         (*textbox_setMessagePtr)(common_textbox, text_ptr, NULL, 0);
@@ -119,6 +123,7 @@ MfdsState* GameplayCommonTextbox_prepare(
         common_textbox->display_time = display_time;
         return common_textbox;
     }
+    // Matching code does not have a return statement for the case where `common_textbox` is `NULL`.
 }
 
 /**
@@ -140,17 +145,18 @@ MfdsState* GameplayCommonTextbox_addItemAndPrepareName(s32 item) {
     }
 
     if (common_textbox != NULL) {
-        if (common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
-            if (!(common_textbox->flags & MFDS_FLAG_CLOSE_TEXTBOX)) {
-                common_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        if (BITS_HAS(common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
+            if (BITS_NOT_HAS(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX)) {
+                BITS_SET(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             }
             return NULL;
         }
-        common_textbox->flags |= (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX);
-        common_textbox->flags &=
-            ~(MFDS_FLAG_SLOW_TEXT_SPEED |
-              (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED));
-
+        BITS_SET(common_textbox->flags, (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX));
+        BITS_UNSET(
+            common_textbox->flags,
+            (MFDS_FLAG_SLOW_TEXT_SPEED |
+             (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED))
+        );
         /**
          * Add the given item to the inventory.
          *
@@ -158,7 +164,7 @@ MfdsState* GameplayCommonTextbox_addItemAndPrepareName(s32 item) {
          * display the "You cannot carry more items" text.
          */
         if (item_addAmountToInventory(item, 1) < 0) {
-            common_textbox->flags |= MFDS_FLAG_ALLOW_VARIABLE_SPEED;
+            BITS_SET(common_textbox->flags, MFDS_FLAG_ALLOW_VARIABLE_SPEED);
             textbox_setPos(common_textbox, 38, 160, 1);
             textbox_setDimensions(common_textbox, 3, 240, 0, 0);
             common_textbox->display_time = 60;
@@ -173,12 +179,14 @@ MfdsState* GameplayCommonTextbox_addItemAndPrepareName(s32 item) {
         }
 
         if (item == ITEM_ID_WHITE_JEWEL) {
-            common_textbox->flags |= MFDS_FLAG_ALLOW_VARIABLE_SPEED;
+            BITS_SET(common_textbox->flags, MFDS_FLAG_ALLOW_VARIABLE_SPEED);
             textbox_setPos(common_textbox, 38, 140, 1);
             textbox_setDimensions(common_textbox, 4, 240, 0, 0);
             common_textbox->display_time = 0;
         } else {
-            common_textbox->flags |= (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED);
+            BITS_SET(
+                common_textbox->flags, (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED)
+            );
             textbox_setPos(common_textbox, 40, 170, 1);
             textbox_setDimensions(common_textbox, 1, 150, 0, 0);
             common_textbox->display_time = 90;
@@ -189,6 +197,7 @@ MfdsState* GameplayCommonTextbox_addItemAndPrepareName(s32 item) {
         common_textbox->palette = TEXT_COLOR_BEIGE;
         return common_textbox;
     }
+    // Matching code does not have a return statement for the case where `common_textbox` is `NULL`.
 }
 
 /**
@@ -208,17 +217,19 @@ MfdsState* GameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
     }
 
     if (common_textbox != NULL) {
-        if (common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
-            if (!(common_textbox->flags & MFDS_FLAG_CLOSE_TEXTBOX)) {
-                common_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        if (BITS_HAS(common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
+            if (BITS_NOT_HAS(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX)) {
+                BITS_SET(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             }
             return NULL;
         }
-        common_textbox->flags &=
-            ~(MFDS_FLAG_SLOW_TEXT_SPEED |
-              (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED));
-        common_textbox->flags |= MFDS_FLAG_ALLOW_VARIABLE_SPEED;
-        common_textbox->flags |= (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX);
+        BITS_UNSET(
+            common_textbox->flags,
+            (MFDS_FLAG_SLOW_TEXT_SPEED |
+             (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED))
+        );
+        BITS_SET(common_textbox->flags, MFDS_FLAG_ALLOW_VARIABLE_SPEED);
+        BITS_SET(common_textbox->flags, (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX));
         textbox_setPos(common_textbox, 38, 140, 1);
         textbox_setDimensions(common_textbox, 4, 240, 0, 0);
         textbox_setMessagePtr(
@@ -231,6 +242,7 @@ MfdsState* GameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
         common_textbox->display_time = display_time * 30.0f;
         return common_textbox;
     }
+    // Matching code does not have a return statement for the case where `common_textbox` is `NULL`.
 }
 
 /**
@@ -256,17 +268,19 @@ MfdsState* GameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id
     }
 
     if (common_textbox != NULL) {
-        if (common_textbox->flags & MFDS_FLAG_OPEN_TEXTBOX) {
-            if (!(common_textbox->flags & MFDS_FLAG_CLOSE_TEXTBOX)) {
-                common_textbox->flags |= MFDS_FLAG_CLOSE_TEXTBOX;
+        if (BITS_HAS(common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
+            if (BITS_NOT_HAS(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX)) {
+                BITS_SET(common_textbox->flags, MFDS_FLAG_CLOSE_TEXTBOX);
             }
             return NULL;
         }
-        common_textbox->flags &=
-            ~(MFDS_FLAG_SLOW_TEXT_SPEED |
-              (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED));
-        common_textbox->flags |= MFDS_FLAG_ALLOW_VARIABLE_SPEED;
-        common_textbox->flags |= (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX);
+        BITS_UNSET(
+            common_textbox->flags,
+            (MFDS_FLAG_SLOW_TEXT_SPEED |
+             (MFDS_FLAG_FAST_TEXT_SPEED | MFDS_FLAG_ALLOW_VARIABLE_SPEED))
+        );
+        BITS_SET(common_textbox->flags, MFDS_FLAG_ALLOW_VARIABLE_SPEED);
+        BITS_SET(common_textbox->flags, (MFDS_FLAG_OPEN_LENS | MFDS_FLAG_OPEN_TEXTBOX));
         textbox_setPos(common_textbox, 38, 140, 1);
         textbox_setDimensions(common_textbox, 4, 240, 0, 0);
         textbox_setMessagePtr(
@@ -276,6 +290,7 @@ MfdsState* GameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id
         common_textbox->display_time = 0;
         return common_textbox;
     }
+    // Matching code does not have a return statement for the case where `common_textbox` is `NULL`.
 }
 
 /**
@@ -290,12 +305,13 @@ u32 GameplayCommonTextbox_lensAreOpened() {
     lens           = common_textbox->window;
     if (lens != NULL) {
         flags = lens->flags;
-        if ((((flags & 0xC000) >> 0xE) == 0) &&
-            ((((flags & 0x3000) >> 0xC) != 0) || (((flags & 0x300) >> 8) != 0))) {
+        if (((BITS_HAS(flags, 0xC000) >> 0xE) == 0) &&
+            (((BITS_HAS(flags, 0x3000) >> 0xC) != 0) || ((BITS_HAS(flags, 0x300) >> 0x8) != 0))) {
             return TRUE;
         }
         return FALSE;
     }
+    // Matching code does not have a return statement for the case where `lens` is `NULL`.
 }
 
 /**
@@ -310,11 +326,12 @@ u32 GameplayCommonTextbox_lensAreClosed() {
     lens           = common_textbox->window;
     if (lens != NULL) {
         flags = lens->flags;
-        if ((((flags & 0xC000) >> 0xE) == 3) && (((flags & 0x3000) >> 0xC) == 3)) {
+        if (((BITS_HAS(flags, 0xC000) >> 0xE) == 3) && ((BITS_HAS(flags, 0x3000) >> 0xC) == 3)) {
             return TRUE;
         }
         return FALSE;
     }
+    // Matching code does not have a return statement for the case where `lens` is `NULL`.
 }
 
 /**
@@ -329,8 +346,8 @@ ObjMfds* GameplayCommonTextbox_getObject(s32 id, Object* current_object) {
     for (current_object++; current_object < ARRAY_END(objects_array); current_object++) {
         if (BITS_MASK(current_object->header.ID, 0x07FF) == id) {
             textbox = ((ObjMfds*) current_object)->state;
-            if (textbox->flags & MFDS_FLAG_GAMEPLAYMENUMGR_TEXTBOX) {
-                return current_object;
+            if (BITS_HAS(textbox->flags, MFDS_FLAG_GAMEPLAYMENUMGR_TEXTBOX)) {
+                return (ObjMfds*) current_object;
             }
         }
     }
