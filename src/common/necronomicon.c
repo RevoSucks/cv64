@@ -26,11 +26,12 @@ void Necro_entrypoint(Necronomicon* self) {
 }
 
 void Necro_isWorkCreated(Necronomicon* self) {
-    if (self->work != NULL) {
-        (*object_curLevel_goToNextFuncAndClearTimer)(
-            self->header.current_function, &self->header.function_info_ID
-        );
-    }
+    if (self->work == NULL)
+        return;
+
+    (*object_curLevel_goToNextFuncAndClearTimer)(
+        self->header.current_function, &self->header.function_info_ID
+    );
 }
 
 void Necro_init(Necronomicon* self) {
@@ -44,8 +45,8 @@ void Necro_init(Necronomicon* self) {
     self->full_model        = full_model;
     full_model->dlist       = (u32) &NECRO_FULL_MODEL_DL;
     full_model->assets_file = NI_ASSETS_NECRONOMICON;
-    full_model->flags |= FIG_FLAG_0080;
-    full_model->flags |= FIG_FLAG_APPLY_PRIMITIVE_COLOR;
+    BITS_SET(full_model->flags, FIG_FLAG_0080);
+    BITS_SET(full_model->flags, FIG_FLAG_APPLY_PRIMITIVE_COLOR);
     full_model->primitive_color.integer = RGBA(85, 85, 85, 255);
     full_model->size.z                  = 1.0f;
     full_model->size.y                  = 1.0f;
@@ -58,7 +59,7 @@ void Necro_init(Necronomicon* self) {
     self->book_cover        = book_cover;
     book_cover->dlist       = (u32) &NECRO_BOOK_COVER_DL;
     book_cover->assets_file = NI_ASSETS_NECRONOMICON;
-    book_cover->flags |= FIG_FLAG_0080;
+    BITS_SET(book_cover->flags, FIG_FLAG_0080);
     book_cover->size.z     = 1.0f;
     book_cover->size.y     = 1.0f;
     book_cover->size.x     = 1.0f;
@@ -72,15 +73,16 @@ void Necro_init(Necronomicon* self) {
      * between `PAGE_2` and `PAGE_3`
      */
     second_page = (*PageWork_create)(
-        self, work->necro_light, ((*guRandom)() % 3) + 1, 0.0f, 0.0f, 2.0f, 0, 5.0f
+        (ObjectHeader*) self, work->necro_light, ((*guRandom)() % 3) + 1, 0.0f, 0.0f, 2.0f, 0, 5.0f
     );
     self->pages[1] = second_page;
     if (second_page == NULL) {
         self->header.destroy(self);
     }
 
-    first_page =
-        (*PageWork_create)(self, work->necro_light, PAGE_FLAG_PAGE_1, 0.0f, 0.0f, 2.0f, 7, 5.0f);
+    first_page = (*PageWork_create)(
+        (ObjectHeader*) self, work->necro_light, PAGE_FLAG_PAGE_1, 0.0f, 0.0f, 2.0f, 7, 5.0f
+    );
     self->pages[0] = first_page;
     if (first_page == NULL) {
         self->header.destroy(self);
@@ -102,18 +104,18 @@ void Necro_loop(Necronomicon* self) {
     work = self->work;
 
     // Request the closure of the necronomicon
-    if (work->flags & NECRO_WORK_FLAG_CLOSE) {
+    if (BITS_HAS(work->flags, NECRO_WORK_FLAG_CLOSE)) {
         // Skip flipping the pages over and directly close the book
-        if (work->flags & NECRO_WORK_FLAG_DONT_FLIP_PAGES_BEFORE_CLOSING) {
+        if (BITS_HAS(work->flags, NECRO_WORK_FLAG_DONT_FLIP_PAGES_BEFORE_CLOSING)) {
             work->pages_to_flip_before_closing = NECRO_NUM_PAGES(self);
         }
 
         // After flipping 10 pages, close the book
         if (work->pages_to_flip_before_closing < NECRO_NUM_PAGES(self)) {
-            work->flags |= NECRO_WORK_FLAG_FLIP_PAGES;
+            BITS_SET(work->flags, NECRO_WORK_FLAG_FLIP_PAGES);
         } else {
             page = self->pages[1];
-            page->flags |= PAGE_FLAG_ANIMATE;
+            BITS_SET(page->flags, PAGE_FLAG_ANIMATE);
             (*object_curLevel_goToNextFuncAndClearTimer)(
                 self->header.current_function, &self->header.function_info_ID
             );
@@ -124,19 +126,19 @@ void Necro_loop(Necronomicon* self) {
         // Destroy the page if it has finished flipping over
         if (self->pages[i] != NULL) {
             page = self->pages[i];
-            if (page->flags & PAGE_FLAG_ANIM_END_KEYFRAME) {
+            if (BITS_HAS(page->flags, PAGE_FLAG_ANIM_END_KEYFRAME)) {
                 page = self->pages[0];
-                page->flags &= ~PAGE_FLAG_ANIMATE;
-                page->flags |= PAGE_FLAG_DESTROY_PAGE;
+                BITS_UNSET(page->flags, PAGE_FLAG_ANIMATE);
+                BITS_SET(page->flags, PAGE_FLAG_DESTROY_PAGE);
                 page_2         = self->pages[i];
                 self->pages[0] = page_2;
                 self->pages[i] = NULL;
             }
             // Create the next page when `time_before_flipping_another_page` reaches 0
-        } else if ((work->flags & NECRO_WORK_FLAG_FLIP_PAGES) && (work->time_before_flipping_another_page == 0)) {
+        } else if (BITS_HAS(work->flags, NECRO_WORK_FLAG_FLIP_PAGES) && (work->time_before_flipping_another_page == 0)) {
             page           = self->pages[1];
             self->pages[i] = self->pages[1];
-            page->flags |= PAGE_FLAG_ANIMATE;
+            BITS_SET(page->flags, PAGE_FLAG_ANIMATE);
             if (1) {
             }
 
@@ -150,17 +152,18 @@ void Necro_loop(Necronomicon* self) {
                 page_type                                 = (guRandom() % 2) + 2;
             }
 
-            page =
-                (*PageWork_create)(self, work->necro_light, page_type, 0.0f, 0.0f, 2.0f, 0, 5.0f);
+            page = (*PageWork_create)(
+                (ObjectHeader*) self, work->necro_light, page_type, 0.0f, 0.0f, 2.0f, 0, 5.0f
+            );
             self->pages[1] = page;
             if (page == NULL) {
                 self->header.destroy(self);
             }
 
-            work->flags &= ~NECRO_WORK_FLAG_FLIP_PAGES;
+            BITS_UNSET(work->flags, NECRO_WORK_FLAG_FLIP_PAGES);
 
             // Flip pages faster if the book is requested to be closed
-            if (work->flags & NECRO_WORK_FLAG_CLOSE) {
+            if (BITS_HAS(work->flags, NECRO_WORK_FLAG_CLOSE)) {
                 work->time_before_flipping_another_page = 10;
                 work->pages_to_flip_before_closing++;
             } else {
@@ -174,12 +177,12 @@ void Necro_loop(Necronomicon* self) {
     }
 
     // Destroy all pages and force despawning the necronomicon
-    if (work->flags & NECRO_WORK_FLAG_DESTROY_NECRO) {
+    if (BITS_HAS(work->flags, NECRO_WORK_FLAG_DESTROY_NECRO)) {
         for (i = 0; i < NECRO_NUM_PAGES(self); i++) {
             page = self->pages[i];
             if (page != NULL) {
-                page->flags &= ~PAGE_FLAG_ANIMATE;
-                page->flags |= PAGE_FLAG_DESTROY_PAGE;
+                BITS_UNSET(page->flags, PAGE_FLAG_ANIMATE);
+                BITS_SET(page->flags, PAGE_FLAG_DESTROY_PAGE);
             }
         }
         GO_TO_FUNC_NOW(self, necro_functions, NECRO_DESTROY);
@@ -206,10 +209,10 @@ void Necro_close(Necronomicon* self) {
             if (self->pages[i] != NULL) {
                 destroy_first_page = FALSE;
                 page               = self->pages[i];
-                if (page->flags & PAGE_FLAG_ANIM_END_KEYFRAME) {
+                if (BITS_HAS(page->flags, PAGE_FLAG_ANIM_END_KEYFRAME)) {
                     page = self->pages[0];
-                    page->flags &= ~PAGE_FLAG_ANIMATE;
-                    page->flags |= PAGE_FLAG_DESTROY_PAGE;
+                    BITS_UNSET(page->flags, PAGE_FLAG_ANIMATE);
+                    BITS_SET(page->flags, PAGE_FLAG_DESTROY_PAGE);
                     self->pages[0] = self->pages[i];
                     self->pages[i] = NULL;
                 }
@@ -220,8 +223,8 @@ void Necro_close(Necronomicon* self) {
         if (destroy_first_page) {
             work->last_page_flipped = TRUE;
             page                    = self->pages[0];
-            page->flags &= ~PAGE_FLAG_ANIMATE;
-            page->flags |= PAGE_FLAG_DESTROY_PAGE;
+            BITS_UNSET(page->flags, PAGE_FLAG_ANIMATE);
+            BITS_SET(page->flags, PAGE_FLAG_DESTROY_PAGE);
             self->pages[0] = NULL;
         }
     }
@@ -238,7 +241,7 @@ void Necro_close(Necronomicon* self) {
         /**
          * Calculate a random position for the book once it closes,
          * likely to make it shake after it fully closes.
-
+         *
          * This goes unused because a condition is never executed (see below)
          */
         if (self->pages[0] == NULL) {
@@ -287,11 +290,11 @@ void Necro_finishedClosing(Necronomicon* self) {
     /**
      * @note This condition always passes
      */
-    if ((work->flags & NECRO_WORK_FLAG_DONT_FLIP_PAGES_BEFORE_CLOSING) | TRUE) {
+    if (BITS_HAS(work->flags, NECRO_WORK_FLAG_DONT_FLIP_PAGES_BEFORE_CLOSING) | TRUE) {
         work->necro_destroy_delay_time = 8;
     }
 
-    if (work->flags & NECRO_WORK_FLAG_DESTROY_NECRO) {
+    if (BITS_HAS(work->flags, NECRO_WORK_FLAG_DESTROY_NECRO)) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
@@ -304,22 +307,23 @@ void Necro_finishedClosing(Necronomicon* self) {
 
     // Destroy the necronomicon when pressing the `B` or `START` buttons
     if (work->necro_destroy_delay_time >= 8) {
-        work->flags &= ~NECRO_WORK_FLAG_CLOSE;
+        BITS_UNSET(work->flags, NECRO_WORK_FLAG_CLOSE);
         if (CONT_BTNS_PRESSED(CONT_0, B_BUTTON | START_BUTTON | RECENTER_BUTTON)) {
             (*object_curLevel_goToNextFuncAndClearTimer)(
                 self->header.current_function, &self->header.function_info_ID
             );
         }
 
-        /**
+    }
+    /**
      * @note This part of the code is never reached because of the condition that always passes
      *       (see above)
      */
-    } else {
+    else {
         /**
          * Calculate a random position for the book once it closes,
          * likely to make it shake after it fully closes.
-
+         *
          * This goes unused because a condition is never executed (see below)
          */
         (*guRandom)();
