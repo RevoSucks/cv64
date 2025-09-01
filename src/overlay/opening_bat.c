@@ -70,7 +70,7 @@ void OpeningBat_init(OpeningBat* self) {
     u16 variable_1;
     OpeningBatDataInner* inner = &data->inner;
 
-    if ((*Actor_getPosAndVariable1)(self, &position, &variable_1) == FALSE) {
+    if ((*Actor_getPosAndVariable1)((Actor*) self, &position, &variable_1) == FALSE) {
         GO_TO_FUNC_NOW(self, openingBat_functions, OPENINGBAT_DESTROY);
         return;
     }
@@ -81,7 +81,7 @@ void OpeningBat_init(OpeningBat* self) {
         return;
     }
     model = (*Model_buildHierarchy)(
-        FIG_TYPE_HIERARCHY_NODE, lighting->model_light, &openingBat_hierarchy
+        FIG_TYPE_HIERARCHY_NODE, (Model*) lighting->model_light, &openingBat_hierarchy
     );
     self->model  = model;
     inner->model = model;
@@ -90,7 +90,7 @@ void OpeningBat_init(OpeningBat* self) {
         return;
     }
     model->dlist = FIG_APPLY_VARIABLE_TEXTURE_AND_PALETTE((u32) &OPENINGBAT_DLIST);
-    model->type |= -FIG_TYPE_HIDE;
+    BITS_SET(model->type, -FIG_TYPE_HIDE);
     model->material_dlist = (*osVirtualToPhysical)(openingBat_materialDlist);
     model->palette        = 0;
     model->position.x     = position.x;
@@ -100,6 +100,10 @@ void OpeningBat_init(OpeningBat* self) {
     (*modelLighting_createList)(
         lighting, SIZE_AND_LIST_INDEX(sizeof(point_light_list_t), 1), &model->position
     );
+    /**
+     * @note Taking the address of `inner->animMgr` yields an `animationMgr**`, and not an
+     * `animationMgr*` as `animationMgr_create` expects, but this is necessary for matching code.
+     */
     (*animationMgr_create)(&inner->animMgr, OPENINGBAT_NUMBER_OF_LIMBS, 12, NULL, 0);
     (*object_curLevel_goToNextFuncAndClearTimer)(
         self->header.current_function, &self->header.function_info_ID
@@ -109,8 +113,8 @@ void OpeningBat_init(OpeningBat* self) {
 void OpeningBat_loop(OpeningBat* self) {
     Model* model = self->model;
 
-    model->type &= FIG_TYPE_SHOW;
-    if (!(sys.cutscene_flags & CUTSCENE_FLAG_PLAYING)) {
+    BITS_ASSIGN_MASK(model->type, FIG_TYPE_SHOW);
+    if (BITS_NOT_HAS(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING)) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
