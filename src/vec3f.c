@@ -180,7 +180,7 @@ void func_80011914_12514(Vec3f* dest, Vec3f* src, Vec3f* rotation, s32 angle) {
     Mat4f mtx;
 
     guAlignF(mtx, FIXED_TO_DEG(angle), rotation->x, rotation->y, rotation->z);
-    func_80011880(dest, src, mtx);
+    func_80011880(dest, src, &mtx);
 }
 
 // Possibly subtractProjectedVector

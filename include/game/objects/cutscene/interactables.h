@@ -2,7 +2,7 @@
 #define INTERACTABLES_H
 
 #include "gfx/model.h"
-#include "objects/effect/pickableItemFlash.h"
+#include "objects/effect/pickable_item_flash.h"
 #include "objects/menu/mfds.h"
 #include "actor.h"
 #include "item.h"
@@ -17,7 +17,7 @@
 
 // Variable 1: ID + 1 in `interactables_settings` to get the settings from
 #define INTERACTABLES_SETTINGS_ENTRY_ID(id) (id - 1)
-#define INTERACTABLES_VARIABLE_1(id)        (id + 1) // Used in the `interactables`'s actor settings
+#define INTERACTABLES_VARIABLE_1(id)        (id + 1) // Used in the `interactables`'s actor config
 
 // Variable 2:
 // Items: Upper 2-bytes of the event flag
@@ -254,7 +254,7 @@ typedef struct Interactable {
     s16 trigger_X_size;
     s16 trigger_Z_size;
     union {
-        pickableItemFlash* flash;
+        PickableItemFlash* flash;
         MfdsState* textbox;
     };
     Vec3f position;

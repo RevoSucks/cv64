@@ -4,7 +4,6 @@
  * This file has the code that handles the Necronomicon's individual pages.
  */
 
-#include "cv64.h"
 #include "objects/menu/page.h"
 
 // clang-format off
@@ -58,53 +57,54 @@ u8 page_flip_anim_rot_data[9][28] = {
     { 0x80, 0x20, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00 }
 };
 
-page_func_t page_functions[] = {
-    page_isWorkCreated,
-    page_init,
-    page_loop,
-    page_destroy
+PageFunc page_functions[] = {
+    Page_isWorkCreated,
+    Page_init,
+    Page_loop,
+    Page_destroy
 };
 
 // clang-format on
 
-void page_entrypoint(page* self) {
+void Page_entrypoint(Page* self) {
     ENTER(self, page_functions);
 }
 
-void page_isWorkCreated(page* self) {
-    if (self->work != NULL) {
-        (*object_curLevel_goToNextFuncAndClearTimer)(
-            self->header.current_function, &self->header.function_info_ID
-        );
-    }
+void Page_isWorkCreated(Page* self) {
+    if (self->work == NULL)
+        return;
+
+    (*object_curLevel_goToNextFuncAndClearTimer)(
+        self->header.current_function, &self->header.function_info_ID
+    );
 }
 
-void page_init(page* self) {
+void Page_init(Page* self) {
     Model* model;
     animationMgr* animMgr             = &self->animMgr;
     animation_info* current_anim_info = &animMgr->current_anim;
-    page_work* work                   = self->work;
+    PageWork* work                    = self->work;
     u8 page_type                      = GET_PAGE_TYPE(work->flags);
 
     // Create the model (each page has a different texture)
     switch (page_type) {
         default:
             break;
-        case PAGE_1:
+        case PAGE_FLAG_PAGE_1:
             model       = (*Model_buildHierarchy)(FIG_TYPE_HIERARCHY_NODE, NULL, &page_1_hierarchy);
             self->model = model;
             model->position.x = work->position.x;
             model->position.y = work->position.y;
             model->position.z = work->position.z;
             break;
-        case PAGE_2:
+        case PAGE_FLAG_PAGE_2:
             model       = (*Model_buildHierarchy)(FIG_TYPE_HIERARCHY_NODE, NULL, &page_2_hierarchy);
             self->model = model;
             model->position.x = work->position.x;
             model->position.y = work->position.y;
             model->position.z = work->position.z;
             break;
-        case PAGE_3:
+        case PAGE_FLAG_PAGE_3:
             model       = (*Model_buildHierarchy)(FIG_TYPE_HIERARCHY_NODE, NULL, &page_3_hierarchy);
             self->model = model;
             model->position.x = work->position.x;
@@ -115,13 +115,16 @@ void page_init(page* self) {
 
     // Assign the model's lighting
     // Set model flags, size and visibility
-    (*figure_setChild)(model, work->page_light);
+    (*figure_setChild)((FigureHeader*) model, (FigureHeader*) work->page_light);
+
     BITS_SET(model->flags, FIG_FLAG_0080);
+
     model->size.z = 1.0f;
     model->size.y = 1.0f;
     model->size.x = 1.0f;
-    if (work->flags & PAGE_HIDE) {
-        (*figure_hideSelfAndChildren)(model, 0);
+
+    if (BITS_HAS(work->flags, PAGE_FLAG_HIDE)) {
+        (*figure_hideSelfAndChildren)((FigureHeader*) model, 0);
     }
 
     // Setup animation
@@ -131,52 +134,52 @@ void page_init(page* self) {
     );
     (*animationInfo_animateFrame)(current_anim_info, model);
 
-    self->field_0x6C = 1;
+    self->page_flipped_once = TRUE;
     (*object_curLevel_goToNextFuncAndClearTimer)(
         self->header.current_function, &self->header.function_info_ID
     );
 }
 
-void page_loop(page* self) {
+void Page_loop(Page* self) {
     Model* model;
     u8 work_flags;
-    page_work* work                   = self->work;
+    PageWork* work                    = self->work;
     animationMgr* animMgr             = &self->animMgr;
     animation_info* current_anim_info = &animMgr->current_anim;
     s8 anim_state;
 
-    if (work->flags & ANIMATE) {
+    if (BITS_HAS(work->flags, PAGE_FLAG_ANIMATE)) {
         model = self->model;
         // Pause the page animation if it's invisible
-        if (work->flags & PAGE_HIDE) {
-            current_anim_info->flags |= ANIM_INFO_FLAG_PAUSE;
+        if (BITS_HAS(work->flags, PAGE_FLAG_HIDE)) {
+            BITS_SET(current_anim_info->flags, ANIM_INFO_FLAG_PAUSE);
         }
 
         anim_state = (*animationInfo_animateFrame)(current_anim_info, model);
         // Animation has ended overall
         if (anim_state == -1) {
-            work->flags = work->flags & ~ANIMATE;
-            if (work->flags & DESTROY_AFTER_ANIMATION_FINISHES) {
-                work->flags = work->flags | DESTROY_PAGE;
+            BITS_UNSET(work->flags, PAGE_FLAG_ANIMATE);
+            if (BITS_HAS(work->flags, PAGE_FLAG_DESTROY_AFTER_ANIMATION_FINISHES)) {
+                BITS_SET(work->flags, PAGE_FLAG_DESTROY_PAGE);
             }
         }
         work_flags = work->flags;
         // Reached the end of the animation's current keyframe
         if (anim_state == 1) {
-            work->flags = work_flags | PAGE_ANIM_END_KEYFRAME;
-            if (self->field_0x6C != 0) {
-                self->field_0x6C = 0;
+            work->flags = work_flags | PAGE_FLAG_ANIM_END_KEYFRAME;
+            if (self->page_flipped_once) {
+                self->page_flipped_once = FALSE;
             }
         } else {
-            work->flags = work_flags & ~PAGE_ANIM_END_KEYFRAME;
+            work->flags = work_flags & ~PAGE_FLAG_ANIM_END_KEYFRAME;
         }
-    } else if (work->flags & DESTROY_PAGE) {
+    } else if (BITS_HAS(work->flags, PAGE_FLAG_DESTROY_PAGE)) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
     }
 }
 
-void page_destroy(page* self) {
+void Page_destroy(Page* self) {
     self->header.destroy(self);
 }

@@ -17,7 +17,9 @@ if(Python_FOUND)
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
   # Build Torch
-  execute_process(COMMAND make -C ${TOOLS_DIR}/Torch type=release WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+  execute_process(COMMAND ${CMAKE_COMMAND} -S ${TOOLS_DIR}/Torch -B ${TOOLS_DIR}/Torch/build -G Ninja
+                          -DCMAKE_BUILD_TYPE=Release WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+  execute_process(COMMAND ${CMAKE_COMMAND} --build ${TOOLS_DIR}/Torch/build WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
   # Run Splat
   execute_process(

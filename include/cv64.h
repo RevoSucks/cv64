@@ -2,7 +2,6 @@
 #define CV64_H
 
 #include "bit.h"
-#include "gfx/model.h"
 #include "math.h"
 #include "nisitenma_ichigo.h"
 #include <ultra64.h>
@@ -18,12 +17,19 @@ typedef u8 Addr[];
 extern u32 D_80092F50;
 extern Gfx* gDisplayListHead; // 0x800B49E0
 extern u32 map_misc_event_flags;
+extern u16 item_pickables_text[];
 extern u32 map_text_segment_address[28]; // 0x8016D008
 /**
  * If set to `TRUE`, the dynamic map lighting won't be updated
  * (for example, when transitioning from day to night)
  */
 extern u32 dont_update_map_lighting;
+
+typedef enum TimeOfDay {
+    TIME_DAY,
+    TIME_EVENING_MORNING,
+    TIME_NIGHT
+} TimeOfDay;
 
 typedef enum cv64_moon_visibility {
     MOON_VISIBILITY_DAY   = 0, // Moon is invisible
@@ -64,19 +70,19 @@ typedef enum MenuID {
     MENU_ID_GAME_OVER   = 14
 } MenuID;
 
-extern void end_master_display_list();
+extern void end_master_display_list(void);
 extern s32 menuButton_selectNextOption(s32* option, s16* param_2, s16 number_of_options);
-extern void func_800010A0_1CA0();
-extern void func_8001248C_1308C();
-extern void func_8000C6D0();
-extern void updateGameSound();
-extern void figure_update();
-extern void drawFog();
-extern void func_80005658();
+extern void func_800010A0_1CA0(void);
+extern void func_8001248C_1308C(void);
+extern void func_8000C6D0(void);
+extern void updateGameSound(void);
+extern void drawFog(void);
+extern void func_80005658(void);
 extern u32 getMapEventFlagID(s16 stage_ID);
 s32 func_8001A250_1AE50(s32* arg0, u16* arg1, s16 arg2);
 extern void func_80066400(s32);
-extern void Map_SetCameraParams();
+extern void Map_SetCameraParams(void);
+extern void player_status_init(void);
 
 #define NPTR 0
 // Gets the offset of a struct member variable
@@ -84,7 +90,6 @@ extern void Map_SetCameraParams();
 #define ARRAY_COUNT(arr)        (s32)(sizeof(arr) / sizeof(arr[0])) // Get number of elements in the array
 #define ARRAY_START(arr)        &arr[0]                             // Get start address of array
 #define ARRAY_END(arr)          &arr[ARRAY_COUNT(arr)]              // Get end address of array
-#define NUM_GRAPHIC_BUFFERS     2
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -165,6 +170,14 @@ extern void Map_SetCameraParams();
  */
 #define GET_MAP_MESSAGE_POOL_PTR()                                                                 \
     (*NisitenmaIchigoFiles_segmentToVirtual)(                                                      \
+        map_text_segment_address[sys.SaveStruct_gameplay.map], MAP_ASSETS_FILE_ID                  \
+    )
+
+/**
+ * Same as `GET_MAP_MESSAGE_POOL_PTR`, but this is not accessed through a function pointer
+ */
+#define GET_MAP_MESSAGE_POOL_PTR_NO_FUNC_PTR()                                                     \
+    NisitenmaIchigoFiles_segmentToVirtual(                                                         \
         map_text_segment_address[sys.SaveStruct_gameplay.map], MAP_ASSETS_FILE_ID                  \
     )
 

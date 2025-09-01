@@ -8,40 +8,40 @@
 typedef struct {
     u8 field_0x00[8];
     Model* model;
-    modelLighting* lighting;
+    ModelLighting* lighting;
     animationMgr* animMgr;
-} openingBatDataInner;
+} OpeningBatDataInner;
 
 typedef struct {
     u8 field_0x00[4];
-    openingBatDataInner inner;
+    OpeningBatDataInner inner;
     u8 field_0x18[144];
-} openingBatData;
+} OpeningBatData;
 
 // ID: 0x20A6
-typedef struct {
+typedef struct OpeningBat {
     ObjectHeader header;
     u8 field_0x20[4];
     Model* model;
-    openingBatData* data;
+    OpeningBatData* data;
     u8 field_0x2C[68];
     ActorConfig* settings;
-} openingBat;
+} OpeningBat;
 
-void openingBat_entrypoint(openingBat* self);
-void openingBat_createData(openingBat* self);
-void openingBat_init(openingBat* self);
-void openingBat_loop(openingBat* self);
-void openingBat_destroy(openingBat* self);
+void OpeningBat_entrypoint(OpeningBat* self);
+void OpeningBat_createData(OpeningBat* self);
+void OpeningBat_init(OpeningBat* self);
+void OpeningBat_loop(OpeningBat* self);
+void OpeningBat_destroy(OpeningBat* self);
 
-typedef void (*openingBat_func_t)(openingBat*);
+typedef void (*OpeningBatFunc)(OpeningBat*);
 
-typedef enum openingBat_func_id {
+typedef enum OpeningBatFuncID {
     OPENINGBAT_CREATEDATA,
     OPENINGBAT_INIT,
     OPENINGBAT_LOOP,
     OPENINGBAT_DESTROY
-} openingBat_func_id_t;
+} OpeningBatFuncID;
 
 extern const u32 OPENINGBAT_DLIST;
 

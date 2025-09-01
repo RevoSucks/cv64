@@ -6,6 +6,7 @@
 #include "map_actor_model.h"
 #include "math.h"
 #include "nisitenma_ichigo.h"
+#include "objects/menu/mini_scroll.h"
 #include <ultra64.h>
 
 typedef struct Model {
@@ -38,7 +39,10 @@ typedef struct Model {
     Angle field41_0x52;
     Vec3f size;
     MapActorModel* map_actor_model;
-    Mat4f matrix;
+    union {
+        Mat4f matrix;
+        MiniScrollParameters mini_scroll_params;
+    };
 } Model;
 
 typedef struct actorPositionalData {
@@ -48,7 +52,8 @@ typedef struct actorPositionalData {
 
 extern void Model_setPosVec3s(Model* self, Vec3* position);
 extern void Model_copyPositionalData(Model*, actorPositionalData*);
-extern void Model_setMapActorModel(Model*, u32*);
+extern void Model_copyPosToVec3f(Model*, Vec3f*);
+extern void Model_setMapActorModelNoCollision(Model*, u32*);
 extern Model* Model_createAndSetChild(u32 type, void* parent);
 extern Model* Model_createNextNode(u32 parent_type, void* parent);
 extern Model* Model_buildHierarchy(u32 type, Model* self, Hierarchy* mdl_hierarchy);

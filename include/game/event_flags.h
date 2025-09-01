@@ -127,4 +127,13 @@
 #define EVENT_FLAG_TOWER_SCIENCE_GET_KEY2 0x00000002
 #define EVENT_FLAG_TOWER_SCIENCE_GET_KEY3 0x00000004
 
+/*
+ * `map_misc_event_flags` flags ID
+ *
+ * These flags are used by map-specific objects to track events temporarily
+ * while inside the map
+ */
+// HONMARU 5F
+#define HONMARU_5F_FLAG_PLAYER_IS_INSIDE_ELEVATOR 1
+
 #endif

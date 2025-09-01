@@ -1,5 +1,5 @@
 /**
- * @file openingBat.c
+ * @file opening_bat.c
  *
  * Creates and initializes the bats seen in the opening cutscene
  * (the one with the camera moving around the castle).
@@ -8,7 +8,7 @@
  * said cutscene's overlay.
  */
 
-#include "objects/enemy/openingBat.h"
+#include "objects/enemy/opening_bat.h"
 #include "system_work.h"
 
 // clang-format off
@@ -34,23 +34,23 @@ Gfx openingBat_materialDlist[] = {
     gsSPEndDisplayList(),
 };
 
-openingBat_func_t openingBat_functions[] = {
-    openingBat_createData,
-    openingBat_init,
-    openingBat_loop,
-    openingBat_destroy
+OpeningBatFunc openingBat_functions[] = {
+    OpeningBat_createData,
+    OpeningBat_init,
+    OpeningBat_loop,
+    OpeningBat_destroy
 };
 
 // clang-format on
 
-void openingBat_entrypoint(openingBat* self) {
+void OpeningBat_entrypoint(OpeningBat* self) {
     ENTER(self, openingBat_functions);
 }
 
-void openingBat_createData(openingBat* self) {
-    openingBatData* data;
+void OpeningBat_createData(OpeningBat* self) {
+    OpeningBatData* data;
 
-    data       = (openingBatData*) (*fig_allocate)(FIG_TYPE_DATA);
+    data       = (OpeningBatData*) (*fig_allocate)(FIG_TYPE_DATA);
     self->data = data;
     if (D_80092F50 < 68) {
         GO_TO_FUNC_NOW(self, openingBat_functions, OPENINGBAT_DESTROY);
@@ -61,16 +61,16 @@ void openingBat_createData(openingBat* self) {
     }
 }
 
-void openingBat_init(openingBat* self) {
-    openingBatData* data = self->data;
+void OpeningBat_init(OpeningBat* self) {
+    OpeningBatData* data = self->data;
     s32 temp1;
-    modelLighting* lighting;
+    ModelLighting* lighting;
     Model* model;
     Vec3f position;
     u16 variable_1;
-    openingBatDataInner* inner = &data->inner;
+    OpeningBatDataInner* inner = &data->inner;
 
-    if ((*Actor_getPosAndVariable1)(self, &position, &variable_1) == FALSE) {
+    if ((*Actor_getPosAndVariable1)((Actor*) self, &position, &variable_1) == FALSE) {
         GO_TO_FUNC_NOW(self, openingBat_functions, OPENINGBAT_DESTROY);
         return;
     }
@@ -81,7 +81,7 @@ void openingBat_init(openingBat* self) {
         return;
     }
     model = (*Model_buildHierarchy)(
-        FIG_TYPE_HIERARCHY_NODE, lighting->model_light, &openingBat_hierarchy
+        FIG_TYPE_HIERARCHY_NODE, (Model*) lighting->model_light, &openingBat_hierarchy
     );
     self->model  = model;
     inner->model = model;
@@ -90,7 +90,7 @@ void openingBat_init(openingBat* self) {
         return;
     }
     model->dlist = FIG_APPLY_VARIABLE_TEXTURE_AND_PALETTE((u32) &OPENINGBAT_DLIST);
-    model->type |= -FIG_TYPE_HIDE;
+    BITS_SET(model->type, -FIG_TYPE_HIDE);
     model->material_dlist = (*osVirtualToPhysical)(openingBat_materialDlist);
     model->palette        = 0;
     model->position.x     = position.x;
@@ -100,23 +100,27 @@ void openingBat_init(openingBat* self) {
     (*modelLighting_createList)(
         lighting, SIZE_AND_LIST_INDEX(sizeof(point_light_list_t), 1), &model->position
     );
+    /**
+     * @note Taking the address of `inner->animMgr` yields an `animationMgr**`, and not an
+     * `animationMgr*` as `animationMgr_create` expects, but this is necessary for matching code.
+     */
     (*animationMgr_create)(&inner->animMgr, OPENINGBAT_NUMBER_OF_LIMBS, 12, NULL, 0);
     (*object_curLevel_goToNextFuncAndClearTimer)(
         self->header.current_function, &self->header.function_info_ID
     );
 }
 
-void openingBat_loop(openingBat* self) {
+void OpeningBat_loop(OpeningBat* self) {
     Model* model = self->model;
 
-    model->type &= FIG_TYPE_SHOW;
-    if (!(sys.cutscene_flags & CUTSCENE_FLAG_PLAYING)) {
+    BITS_ASSIGN_MASK(model->type, FIG_TYPE_SHOW);
+    if (BITS_NOT_HAS(sys.cutscene_flags, CUTSCENE_FLAG_PLAYING)) {
         (*object_curLevel_goToNextFuncAndClearTimer)(
             self->header.current_function, &self->header.function_info_ID
         );
     }
 }
 
-void openingBat_destroy(openingBat* self) {
+void OpeningBat_destroy(OpeningBat* self) {
     self->header.destroy(self);
 }

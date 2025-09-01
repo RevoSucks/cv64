@@ -6,6 +6,7 @@
  */
 
 #include "cv64.h"
+#include "gfx/model.h"
 #include "objects/effect/effect_manager.h"
 
 // clang-format off

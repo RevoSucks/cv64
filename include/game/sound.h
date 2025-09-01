@@ -20,19 +20,22 @@ play_sound_in_position_and_set_volume(u16 sound_ID, Vec3f* position, f32 volume_
 extern u8 func_800139D4(u16 sound_ID, f32, f32 volume);
 extern u8 isValidBGM(u16 bgm_ID);
 extern u8 setBGM(u16 bgm_ID);
-extern u8 resetCurrentBGMAndStopBGM();
-extern u32 setPreviousBGMAndStopBGM();
+extern u8 resetCurrentBGMAndStopBGM(void);
+extern u32 setPreviousBGMAndStopBGM(void);
 extern u32 setNewBGM(u16 bgm_ID);
-extern u8 isBGMNotNothing();
+extern u8 isBGMNotNothing(void);
 extern u32 isBGMPlaying(u16 bgm_ID);
 extern u8 wasMusicPlaying();
 extern u8 pauseBGM(s32 setAudioToStandby);
 extern u8 decreaseBGMVolume(s32 decreaseAudioVolume);
 extern u8 increaseBGMSpeed(s32 increaseBGMSpeed);
-extern u16 getCurrentBGM();
-extern u8 resetCurrentBGM();
-extern u32 setPreviousBGM();
+extern u16 getCurrentBGM(void);
+extern u8 resetCurrentBGM(void);
+extern u32 setPreviousBGM(void);
 extern s32 audioControlFadeOutType_setType(u32 type);
+extern u8 isSoundVolumeDecreased(void);
+extern void decreaseSoundVolume(u8 decrease);
+extern void prepareSoundForPlay_defaultSettings(u32 sound_ID);
 
 // Sound IDs (officially referred to as "sound codes")
 #define SD_INVALID 0x000
@@ -69,13 +72,18 @@ extern s32 audioControlFadeOutType_setType(u32 type);
 
 #define SD_TRIGGER_BOTTOM_ELEVATOR_ACTIVATOR 0x119
 #define SD_TOU_TURO_DOOR_CLOSE               0x11B
+#define SD_ELEVATOR_ACTIVATE                 0x154
+#define SD_ELEVATOR_MOVING                   0x178
 #define SD_LIBRARY_PIECE_SET                 0x1A0
 #define SD_RENON_BRIEFCASE_SPIN_1            0x21A
 #define SD_RENON_BRIEFCASE_SPIN_2            0x21B
+#define SD_REINHARDT_HEALTH_RECOVERY         0x257
+#define SD_CARRIE_HEALTH_RECOVERY            0x258
 #define SD_ROSE_DOOR_CLOSE                   0x27B
 #define SD_ROSE_DOOR_CLOSING                 0x29B
 #define SD_CARRIE_BLESSING                   0x2E4
 #define SD_REINHARDT_BLESSING                0x2E5
 #define SD_2E9                               0x2E9
+#define SD_CLOCK_TICKING                     0x2DC
 
 #endif

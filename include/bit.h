@@ -26,5 +26,9 @@
  * Unset `bits` in `value`.
  */
 #define BITS_UNSET(value, bits) ((value) &= ~(bits))
+/**
+ * Toggle `bits` in `value`.
+ */
+#define BITS_TOGGLE(value, bits) ((value) ^= (bits))
 
 #endif
