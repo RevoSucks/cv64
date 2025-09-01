@@ -19,10 +19,10 @@
  * @bug
  *      All of these functions are meant to return a value. However, many of these don't return
  *      a default value if the conditions said functions impose are not meant, leading to undefined behaviour.
- *      For example, `gameplayCommonTextbox_prepare` does not return anything if `common_textbox` is `NULL`
+ *      For example, `GameplayCommonTextbox_prepare` does not return anything if `common_textbox` is `NULL`
  *
  *      Other functions will attempt to use an unitialized variable if some conditions are not met.
- *      For example, in `gameplayCommonTextbox_prepare`, if the `gameplay_menu_mgr` variable is NULL,
+ *      For example, in `GameplayCommonTextbox_prepare`, if the `gameplay_menu_mgr` variable is NULL,
  *      then the function will still use the `common_textbox` variable, which in this case is not initialized,
  *      leading to undefined behaviour.
  */
@@ -38,7 +38,7 @@ u16 you_cannot_carry_more_items_text[] = {
 /**
  * Returns the gameplay common textbox's instance if it's closed
  */
-MfdsState* gameplayCommonTextbox_getIfClosed() {
+MfdsState* GameplayCommonTextbox_getIfClosed() {
     MfdsState* common_textbox;
     GameplayMenuManager* gameplay_menu_mgr;
 
@@ -61,7 +61,7 @@ MfdsState* gameplayCommonTextbox_getIfClosed() {
 /**
  * Closes the gameplay common textbox
  */
-MfdsState* gameplayCommonTextbox_close() {
+MfdsState* GameplayCommonTextbox_close() {
     MfdsState* common_textbox;
     GameplayMenuManager* gameplay_menu_mgr;
 
@@ -85,7 +85,7 @@ MfdsState* gameplayCommonTextbox_close() {
 /**
  * Opens the gameplay common textbox with the passed parameters
  */
-MfdsState* gameplayCommonTextbox_prepare(
+MfdsState* GameplayCommonTextbox_prepare(
     u16* text_ptr, u32 flags, u8 line, u16 width, u8 palette, s16 X_pos, s16 Y_pos, u8 display_time
 ) {
     MfdsState* common_textbox;
@@ -127,7 +127,7 @@ MfdsState* gameplayCommonTextbox_prepare(
  *
  * Returns -1 if the inventory for the specified item is full
  */
-MfdsState* gameplayCommonTextbox_addItemAndPrepareName(s32 item) {
+MfdsState* GameplayCommonTextbox_addItemAndPrepareName(s32 item) {
     MfdsState* common_textbox;
     GameplayMenuManager* gameplay_menu_mgr;
 
@@ -195,7 +195,7 @@ MfdsState* gameplayCommonTextbox_addItemAndPrepareName(s32 item) {
  * Opens the gameplay common textbox to display a message
  * from the map assets file's text pool, given its ID within said pool
  */
-MfdsState* gameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
+MfdsState* GameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
     MfdsState* common_textbox;
     GameplayMenuManager* gameplay_menu_mgr;
 
@@ -243,7 +243,7 @@ MfdsState* gameplayCommonTextbox_getMapMessage(u16 id, u8 display_time) {
  * For example, those that prompt the player to make a selection, or to manually advance
  * the textbox.
  */
-MfdsState* gameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id, u8 palette) {
+MfdsState* GameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id, u8 palette) {
     MfdsState* common_textbox;
     GameplayMenuManager* gameplay_menu_mgr;
 
@@ -281,12 +281,12 @@ MfdsState* gameplayCommonTextbox_getMessageFromPool(u16* message_pool_ptr, u8 id
 /**
  * Returns `TRUE` if the gameplay common textbox's window is opened
  */
-u32 gameplayCommonTextbox_lensAreOpened() {
+u32 GameplayCommonTextbox_lensAreOpened() {
     ObjMfds* common_textbox;
     WindowWork* lens;
     u32 flags;
 
-    common_textbox = gameplayCommonTextbox_getObjectFromList();
+    common_textbox = GameplayCommonTextbox_getObjectFromList();
     lens           = common_textbox->window;
     if (lens != NULL) {
         flags = lens->flags;
@@ -301,12 +301,12 @@ u32 gameplayCommonTextbox_lensAreOpened() {
 /**
  * Returns `TRUE` if the gameplay common textbox's window is closed
  */
-u32 gameplayCommonTextbox_lensAreClosed() {
+u32 GameplayCommonTextbox_lensAreClosed() {
     ObjMfds* common_textbox;
     WindowWork* lens;
     u32 flags;
 
-    common_textbox = gameplayCommonTextbox_getObjectFromList();
+    common_textbox = GameplayCommonTextbox_getObjectFromList();
     lens           = common_textbox->window;
     if (lens != NULL) {
         flags = lens->flags;
@@ -321,7 +321,7 @@ u32 gameplayCommonTextbox_lensAreClosed() {
  * Finds and returns the gameplay common textbox's object starting from a specific spot
  * in the objects array
  */
-ObjMfds* gameplayCommonTextbox_getObject(s32 id, Object* current_object) {
+ObjMfds* GameplayCommonTextbox_getObject(s32 id, Object* current_object) {
     MfdsState* textbox;
 
     BITS_ASSIGN_MASK(id, 0x7FF);
@@ -341,6 +341,6 @@ ObjMfds* gameplayCommonTextbox_getObject(s32 id, Object* current_object) {
 /**
  * Finds and returns the gameplay common textbox's object in the objects array
  */
-ObjMfds* gameplayCommonTextbox_getObjectFromList() {
-    return gameplayCommonTextbox_getObject(MENU_MFDS, ARRAY_START(objects_array) - 1);
+ObjMfds* GameplayCommonTextbox_getObjectFromList() {
+    return GameplayCommonTextbox_getObject(MENU_MFDS, ARRAY_START(objects_array) - 1);
 }

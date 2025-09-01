@@ -156,7 +156,7 @@ void GameplayMenuManager_outsideMenuLoop(GameplayMenuManager* self) {
          */
         if (BITS_HAS(self->common_textbox->flags, MFDS_FLAG_OPEN_TEXTBOX)) {
             self->hide_common_textbox_window = TRUE;
-            gameplayCommonTextbox_close();
+            GameplayCommonTextbox_close();
             BITS_SET(self->common_textbox->flags, MFDS_FLAG_HIDE_TEXTBOX);
         } else {
             self->hide_common_textbox_window = FALSE;
@@ -176,8 +176,8 @@ void GameplayMenuManager_initMenu(GameplayMenuManager* self) {
      * Hide the common gameplay textbox's lens if opened
      */
     if (self->hide_common_textbox_window) {
-        if (gameplayCommonTextbox_lensAreClosed() == FALSE) {
-            BITS_SET(gameplayCommonTextbox_getObjectFromList()->window->flags, WINDOW_HIDE);
+        if (GameplayCommonTextbox_lensAreClosed() == FALSE) {
+            BITS_SET(GameplayCommonTextbox_getObjectFromList()->window->flags, WINDOW_HIDE);
         }
         self->hide_common_textbox_window = FALSE;
     }
