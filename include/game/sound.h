@@ -72,6 +72,8 @@ extern void prepareSoundForPlay_defaultSettings(u32 sound_ID);
 
 #define SD_TRIGGER_BOTTOM_ELEVATOR_ACTIVATOR 0x119
 #define SD_TOU_TURO_DOOR_CLOSE               0x11B
+#define SD_ELEVATOR_ACTIVATE                 0x154
+#define SD_ELEVATOR_MOVING                   0x178
 #define SD_LIBRARY_PIECE_SET                 0x1A0
 #define SD_RENON_BRIEFCASE_SPIN_1            0x21A
 #define SD_RENON_BRIEFCASE_SPIN_2            0x21B

@@ -43,8 +43,12 @@ extern u8 Actor_getPosAndVariable1(Actor* actor, Vec3f* position, u16* variable_
 extern void Actor_updateAnimParamsWhenDiffRotationPtrs(
     actorVisualData* visualdata, void* translation_data, void* rotation_data, f32 speed
 );
+extern s32
+Actor_moveActorUntilEndpoint(Model* actor_model, Model* actor_being_moved, Vec3f* moving_endpoint);
 
 extern void StageProp_Loop(Actor* self);
 extern void StageProp_Destroy(Actor* self);
+
+typedef void (*moveActorFunction)(Actor*, Model*);
 
 #endif
