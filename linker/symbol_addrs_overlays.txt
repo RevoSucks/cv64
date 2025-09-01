@@ -187,11 +187,11 @@ D_0F001350                                   = 0x0F001350; // type:f32 segment:n
 
 // src/overlay/opening_bat.c ====================================================
 // .text
-openingBat_entrypoint    = 0x0F000000; // type:func segment:ni_ovl_opening_bat
-openingBat_createData    = 0x0F000070; // type:func segment:ni_ovl_opening_bat
-openingBat_init          = 0x0F00012C; // type:func segment:ni_ovl_opening_bat
-openingBat_loop          = 0x0F0003B0; // type:func segment:ni_ovl_opening_bat
-openingBat_destroy       = 0x0F000400; // type:func segment:ni_ovl_opening_bat
+OpeningBat_entrypoint    = 0x0F000000; // type:func segment:ni_ovl_opening_bat
+OpeningBat_createData    = 0x0F000070; // type:func segment:ni_ovl_opening_bat
+OpeningBat_init          = 0x0F00012C; // type:func segment:ni_ovl_opening_bat
+OpeningBat_loop          = 0x0F0003B0; // type:func segment:ni_ovl_opening_bat
+OpeningBat_destroy       = 0x0F000400; // type:func segment:ni_ovl_opening_bat
 // .data
 openingBat_hierarchy     = 0x0F000430; // segment:ni_ovl_opening_bat size:0x40
 openingBat_materialDlist = 0x0F000470; // segment:ni_ovl_opening_bat size:0x30

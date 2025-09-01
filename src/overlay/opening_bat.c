@@ -35,22 +35,22 @@ Gfx openingBat_materialDlist[] = {
 };
 
 OpeningBatFunc openingBat_functions[] = {
-    openingBat_createData,
-    openingBat_init,
-    openingBat_loop,
-    openingBat_destroy
+    OpeningBat_createData,
+    OpeningBat_init,
+    OpeningBat_loop,
+    OpeningBat_destroy
 };
 
 // clang-format on
 
-void openingBat_entrypoint(OpeningBat* self) {
+void OpeningBat_entrypoint(OpeningBat* self) {
     ENTER(self, openingBat_functions);
 }
 
-void openingBat_createData(OpeningBat* self) {
-    openingBatData* data;
+void OpeningBat_createData(OpeningBat* self) {
+    OpeningBatData* data;
 
-    data       = (openingBatData*) (*fig_allocate)(FIG_TYPE_DATA);
+    data       = (OpeningBatData*) (*fig_allocate)(FIG_TYPE_DATA);
     self->data = data;
     if (D_80092F50 < 68) {
         GO_TO_FUNC_NOW(self, openingBat_functions, OPENINGBAT_DESTROY);
@@ -61,14 +61,14 @@ void openingBat_createData(OpeningBat* self) {
     }
 }
 
-void openingBat_init(OpeningBat* self) {
-    openingBatData* data = self->data;
+void OpeningBat_init(OpeningBat* self) {
+    OpeningBatData* data = self->data;
     s32 temp1;
     ModelLighting* lighting;
     Model* model;
     Vec3f position;
     u16 variable_1;
-    openingBatDataInner* inner = &data->inner;
+    OpeningBatDataInner* inner = &data->inner;
 
     if ((*Actor_getPosAndVariable1)(self, &position, &variable_1) == FALSE) {
         GO_TO_FUNC_NOW(self, openingBat_functions, OPENINGBAT_DESTROY);
@@ -106,7 +106,7 @@ void openingBat_init(OpeningBat* self) {
     );
 }
 
-void openingBat_loop(OpeningBat* self) {
+void OpeningBat_loop(OpeningBat* self) {
     Model* model = self->model;
 
     model->type &= FIG_TYPE_SHOW;
@@ -117,6 +117,6 @@ void openingBat_loop(OpeningBat* self) {
     }
 }
 
-void openingBat_destroy(OpeningBat* self) {
+void OpeningBat_destroy(OpeningBat* self) {
     self->header.destroy(self);
 }

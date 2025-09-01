@@ -10,29 +10,29 @@ typedef struct {
     Model* model;
     ModelLighting* lighting;
     animationMgr* animMgr;
-} openingBatDataInner;
+} OpeningBatDataInner;
 
 typedef struct {
     u8 field_0x00[4];
-    openingBatDataInner inner;
+    OpeningBatDataInner inner;
     u8 field_0x18[144];
-} openingBatData;
+} OpeningBatData;
 
 // ID: 0x20A6
 typedef struct OpeningBat {
     ObjectHeader header;
     u8 field_0x20[4];
     Model* model;
-    openingBatData* data;
+    OpeningBatData* data;
     u8 field_0x2C[68];
     ActorConfig* settings;
 } OpeningBat;
 
-void openingBat_entrypoint(OpeningBat* self);
-void openingBat_createData(OpeningBat* self);
-void openingBat_init(OpeningBat* self);
-void openingBat_loop(OpeningBat* self);
-void openingBat_destroy(OpeningBat* self);
+void OpeningBat_entrypoint(OpeningBat* self);
+void OpeningBat_createData(OpeningBat* self);
+void OpeningBat_init(OpeningBat* self);
+void OpeningBat_loop(OpeningBat* self);
+void OpeningBat_destroy(OpeningBat* self);
 
 typedef void (*OpeningBatFunc)(OpeningBat*);
 
