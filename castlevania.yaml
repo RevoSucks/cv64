@@ -23,6 +23,9 @@ options:
   disassemble_all: false
   migrate_rodata_to_functions: false
   find_file_boundaries: true
+  asm_path: asm
+  src_path: src
+  nonmatchings_path: nonmatchings
   header_encoding: ASCII
   generated_c_preamble: |
     #include "cv64.h"

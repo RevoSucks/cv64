@@ -148,7 +148,7 @@ void CSFilmReel_Init(CSFilmReel* self) {
     );
 }
 #else
-    #pragma GLOBAL_ASM("../asm/nonmatchings/overlay/cs_film_reel/CSFilmReel_Init.s")
+    #pragma GLOBAL_ASM("asm/nonmatchings/overlay/cs_film_reel/CSFilmReel_Init.s")
 #endif
 
 void CSFilmReel_Loop(CSFilmReel* self) {
