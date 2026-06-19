@@ -1832,6 +1832,7 @@ atariDataWork_init = 0x80040734;
 atariOnlyWork_init = 0x8004083c;
 atariWork_markForDeletion = 0x800409dc;
 atariBaseWork_destroy = 0x800409ec;
+func_80040B10_41710 = 0x80040B10; // size:0x134
 magicBall_hitWallCheck = 0x800586cc;
 magicBall_setColor = 0x8005a38c;
 createEffectObject = 0x8005afcc;
