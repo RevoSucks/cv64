@@ -383,7 +383,7 @@ cv64_ovl_elevatortxt_funcs       = 0x0E000400; // segment:ni_ovl_bottom_elevator
 cv64_ovl_titledemo_entrypoint = 0x0F000000; // type:func segment:ni_ovl_title_demo
 cv64_ovl_titledemo_init       = 0x0F000070; // type:func segment:ni_ovl_title_demo
 cv64_ovl_titledemo_loop       = 0x0F000238; // type:func segment:ni_ovl_title_demo
-cv64_ovl_titledemo_exit       = 0x0F000574; // type:func segment:ni_ovl_title_demo
+//cv64_ovl_titledemo_exit       = 0x0F000574; // defined:true type:func segment:ni_ovl_title_demo
 // .data
 controller_data_REINHARDT     = 0x0F000670; // segment:ni_ovl_title_demo size:0x1072
 controller_data_CARRIE        = 0x0F0016E4; // segment:ni_ovl_title_demo size:0xD52
@@ -545,3 +545,8 @@ D_0F0031D0                          = 0x0F0031D0; // type:f32 segment:ni_ovl_pau
 D_0F0031D4                          = 0x0F0031D4; // type:f32 segment:ni_ovl_pause_menu
 D_0F0031D8                          = 0x0F0031D8; // type:f32 segment:ni_ovl_pause_menu
 // End of src/overlay/pause_menu.c =============================================
+
+// misc symbols
+D_0F007258_C9CDF8                   = 0x0F007258; // ignore:true type:u32 segment:ni_ovl_cerberus
+func_0F007258_CC7308                = 0x0F007258; // type:func segment:ni_ovl_behemoth
+func_0F000574_CED404                = 0x0F000574; // type:func segment:ni_ovl_ghost
