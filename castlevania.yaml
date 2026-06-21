@@ -2136,7 +2136,7 @@ segments:
       - [0x00D235F0, asm, overlay/vincent_npc]
       - [0x00D25410, data, overlay/vincent_npc]
 
-  - name: ni_A7C0FE
+  - name: ni_ovl_A7C0FE
     type: code
     # start: 0x00A7C0FE
     start: 0x00D25CA0
@@ -2146,7 +2146,7 @@ segments:
       - [0x00D25CA0, asm, overlay/A7C0FE]
       - [0x00D267F0, data, overlay/A7C0FE]
 
-  - name: ni_A7C8C4
+  - name: ni_ovl_A7C8C4
     type: code
     # start: 0x00A7C8C4
     start: 0x00D26970
@@ -2156,7 +2156,7 @@ segments:
       - [0x00D26970, asm, overlay/A7C8C4]
       - [0x00D27EF0, data, overlay/A7C8C4]
 
-  - name: ni_A7D81A
+  - name: ni_ovl_A7D81A
     type: code
     # start: 0x00A7D81A
     start: 0x00D281A0
@@ -2166,7 +2166,7 @@ segments:
       - [0x00D281A0, asm, overlay/A7D81A]
       - [0x00D28550, data, overlay/A7D81A]
 
-  - name: ni_A7DBB0
+  - name: ni_ovl_A7DBB0
     type: code
     # start: 0x00A7DBB0
     start: 0x00D28600
@@ -2176,7 +2176,7 @@ segments:
       - [0x00D28600, asm, overlay/A7DBB0]
       - [0x00D28E00, data, overlay/A7DBB0]
 
-  - name: ni_A7E2DA
+  - name: ni_ovl_A7E2DA
     type: code
     # start: 0x00A7E2DA
     start: 0x00D28FE0
@@ -2246,7 +2246,7 @@ segments:
       - [0x00D65290, asm, overlay/true_dracula]
       - [0x00D6D120, data, overlay/true_dracula]
 
-  - name: ni_AB029E
+  - name: ni_ovl_AB029E
     type: code
     # start: 0x00AB029E
     start: 0x00D6F6D0
@@ -2256,7 +2256,7 @@ segments:
       - [0x00D6F6D0, asm, overlay/AB029E]
       - [0x00D70C00, data, overlay/AB029E]
 
-  - name: ni_AB10D4
+  - name: ni_ovl_AB10D4
     type: code
     # start: 0x00AB10D4
     start: 0x00D70CA0
@@ -2305,7 +2305,7 @@ segments:
     subsegments:
       - [0x00DA6B60, c, overlay/demon_dracula_assets_loader]
 
-  - name: ni_AD7B28
+  - name: ni_ovl_AD7B28
     type: code
     # start: 0x00AD7B28
     start: 0x00DA6B70
@@ -2315,7 +2315,7 @@ segments:
       - [0x00DA6B70, asm, overlay/AD7B28]
       - [0x00DB1690, data, overlay/AD7B28]
 
-  - name: ni_AE04FC
+  - name: ni_ovl_AE04FC
     type: code
     # start: 0x00AE04FC
     start: 0x00DB1C90
@@ -2335,7 +2335,7 @@ segments:
       - [0x00DB91F0, asm, overlay/gilles_de_rais_boss]
       - [0x00DC5670, data, overlay/gilles_de_rais_boss]
 
-  - name: ni_AF1332
+  - name: ni_ovl_AF1332
     type: code
     # start: 0x00AF1332
     start: 0x00DCA500
@@ -2365,7 +2365,7 @@ segments:
       - [0x00DE5760, asm, overlay/death]
       - [0x00DFA790, data, overlay/death]
 
-  - name: ni_B175D4
+  - name: ni_ovl_B175D4
     type: code
     # start: 0x00B175D4
     start: 0x00E00200
@@ -2405,7 +2405,7 @@ segments:
       - [0x00E22AA0, asm, overlay/actrise_boss]
       - [0x00E2CE90, data, overlay/actrise_boss]
 
-  - name: ni_B3A734
+  - name: ni_ovl_B3A734
     type: code
     # start: 0x00B3A734
     start: 0x00E2EB00
@@ -2415,7 +2415,7 @@ segments:
       - [0x00E2EB00, asm, overlay/B3A734]
       - [0x00E38B90, data, overlay/B3A734]
 
-  - name: ni_B42D50
+  - name: ni_ovl_B42D50
     type: code
     # start: 0x00B42D50
     start: 0x00E395E0
@@ -2425,7 +2425,7 @@ segments:
       - [0x00E395E0, asm, overlay/B42D50]
       - [0x00E3B2C0, data, overlay/B42D50]
 
-  - name: ni_B44694
+  - name: ni_ovl_B44694
     type: code
     # start: 0x00B44694
     start: 0x00E3B5B0
@@ -2435,7 +2435,7 @@ segments:
       - [0x00E3B5B0, asm, overlay/B44694]
       - [0x00E3B990, data, overlay/B44694]
 
-  - name: ni_B449CE
+  - name: ni_ovl_B449CE
     type: code
     # start: 0x00B449CE
     start: 0x00E3BA60
@@ -2445,7 +2445,7 @@ segments:
       - [0x00E3BA60, asm, overlay/B449CE]
       - [0x00E3EAF0, data, overlay/B449CE]
 
-  - name: ni_B47542
+  - name: ni_ovl_B47542
     type: code
     # start: 0x00B47542
     start: 0x00E3ED50
@@ -2465,7 +2465,7 @@ segments:
       - [0x00E40080, asm, overlay/hell_knight_static]
       - [0x00E40880, data, overlay/hell_knight_static]
 
-  - name: ni_gondola_pathway_data_loader
+  - name: ni_ovl_gondola_pathway_data_loader
     type: code
     # start: 0x00B48BE0
     start: 0x00E40A30
@@ -2485,7 +2485,7 @@ segments:
       - [0x00E4DD00, asm, overlay/mini_scroll]
       - [0x00E4EFF0, data, overlay/mini_scroll]
 
-  - name: ni_B50812
+  - name: ni_ovl_B50812
     type: code
     # start: 0x00B50812
     start: 0x00E4F320
@@ -2495,7 +2495,7 @@ segments:
       - [0x00E4F320, asm, overlay/B50812]
       - [0x00E4FBE0, data, overlay/B50812]
 
-  - name: ni_B5140E
+  - name: ni_ovl_B5140E
     type: code
     # start: 0x00B5140E
     start: 0x00E509C0
@@ -2515,7 +2515,7 @@ segments:
       - [0x00E50D40, asm, overlay/title_screen]
       - [0x00E526A0, data, overlay/title_screen]
 
-  - name: ni_B528BA
+  - name: ni_ovl_B528BA
     type: code
     # start: 0x00B528BA
     start: 0x00E52700
@@ -2525,7 +2525,7 @@ segments:
       - [0x00E52700, asm, overlay/B528BA]
       - [0x00E52BE0, data, overlay/B528BA]
 
-  - name: ni_B52BE4
+  - name: ni_ovl_B52BE4
     type: code
     # start: 0x00B52BE4
     start: 0x00E52C10
@@ -2598,7 +2598,7 @@ segments:
       - [0x00E5C1D0, asm, overlay/save_game_results]
       - [0x00E5C650, data, overlay/save_game_results]
 
-  - name: ni_B59058
+  - name: ni_ovl_B59058
     type: code
     # start: 0x00B59058
     start: 0x00E5CF30
@@ -2650,7 +2650,7 @@ segments:
       - [0x00E60A70, .data, overlay/entrance_map_name_display]
       - [0x00E60DA0, .rodata, overlay/entrance_map_name_display]
 
-  - name: ni_B5B5D0
+  - name: ni_ovl_B5B5D0
     type: code
     # start: 0x00B5B5D0
     start: 0x00E60DB0
@@ -2742,7 +2742,7 @@ segments:
       - [0x00E639F0, c, overlay/textbox/nitro_disposal]
       - [0x00E63DF0, .data, overlay/textbox/nitro_disposal]
 
-  - name: ni_explosive_wall_spot
+  - name: ni_ovl_explosive_wall_spot
     type: code
     # start: 0x00B5DBAE
     start: 0x00E63E10
@@ -3363,6 +3363,7 @@ segments:
     subsegments:
       - [0x00ED7B80, asm, overlay/cutscene_63]
       - [0x00ED8DF0, data, overlay/cutscene_63]
+      - [0x00EDA570, rodata, overlay/cutscene_63]
 
   # End of compressed files
 
