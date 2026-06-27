@@ -2414,6 +2414,7 @@ lever_main_entrypoint = 0x80160304;
 lever_raisedUp = 0x80160390;
 lever_pull = 0x80160408;
 lever_doNothing = 0x80160500;
+func_80160594_E3784 = 0x80160594;
 riverWater_init = 0x801606a0;
 riverWater_destroy = 0x80160a88;
 miniElevator_entrypoint = 0x80161bd0;
